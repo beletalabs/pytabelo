@@ -32,6 +32,17 @@ class Window(QMainWindow):
         self._loadSettings()
 
 
+    def closeEvent(self, event):
+
+        if True:
+            # Store application properties
+            self._saveSettings()
+
+            event.accept()
+        else:
+            event.ignore()
+
+
     def _loadSettings(self):
 
         settings = QSettings()
@@ -45,3 +56,12 @@ class Window(QMainWindow):
             availableGeometry = self.screen().availableGeometry()
             self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
             self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
+
+
+    def _saveSettings(self):
+
+        settings = QSettings()
+
+        # Application properties: Geometry
+        geometry = self.saveGeometry()
+        settings.setValue("Application/Geometry", geometry)
