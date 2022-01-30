@@ -20,6 +20,7 @@
 
 import sys
 
+from PySide2.QtCore import QCommandLineParser
 from PySide2.QtWidgets import QApplication
 
 from window import Window
@@ -27,12 +28,19 @@ from window import Window
 
 if __name__ == "__main__":
 
-    app = QApplication([])
+    app = QApplication(sys.argv)
     app.setOrganizationName("Tabelo")
     app.setOrganizationDomain("https://github.com/tabeloapp")
     app.setApplicationName("Tabelo-QtPy")
     app.setApplicationDisplayName("Tabelo-QtPy")
     app.setApplicationVersion("0.1.0")
+
+    # Command line
+    parser = QCommandLineParser()
+    parser.setApplicationDescription("{0} - A table editor".format(app.applicationName()))
+    parser.addHelpOption()
+    parser.addVersionOption()
+    parser.process(app)
 
     window = Window()
     window.show()
