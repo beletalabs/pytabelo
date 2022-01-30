@@ -20,6 +20,7 @@
 
 import sys
 
+from PySide2.QtCore import QByteArray, QSettings
 from PySide2.QtWidgets import QMainWindow
 
 
@@ -27,3 +28,20 @@ class Window(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self._loadSettings()
+
+
+    def _loadSettings(self):
+
+        settings = QSettings()
+
+        # Application properties: Geometry
+        geometry = settings.value("Application/Geometry", QByteArray())
+        if not geometry.isEmpty():
+            self.restoreGeometry(geometry)
+        else:
+            # Center window
+            availableGeometry = self.screen().availableGeometry()
+            self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
+            self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
