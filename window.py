@@ -57,6 +57,11 @@ class Window(QMainWindow):
             self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
             self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
 
+        # Application properties: State
+        state = settings.value("Application/State", QByteArray())
+        if not state.isEmpty():
+            self.restoreState(state)
+
 
     def _saveSettings(self):
 
