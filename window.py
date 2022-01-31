@@ -150,9 +150,16 @@ class Window(QMainWindow):
         actionToolButtonStyleIconOnly.setToolTip(self.tr("Only display the icon"))
         actionToolButtonStyleIconOnly.setData(Qt.ToolButtonIconOnly)
 
+        actionToolButtonStyleTextOnly = QAction(self.tr("Text Only"), self)
+        actionToolButtonStyleTextOnly.setObjectName("actionToolButtonStyleTextOnly")
+        actionToolButtonStyleTextOnly.setCheckable(True)
+        actionToolButtonStyleTextOnly.setToolTip(self.tr("Only display the text"))
+        actionToolButtonStyleTextOnly.setData(Qt.ToolButtonTextOnly)
+
         self._actionsToolButtonStyle = QActionGroup(self)
         self._actionsToolButtonStyle.setObjectName("actionsToolButtonStyle")
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleIconOnly)
+        self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextOnly)
         self._actionsToolButtonStyle.triggered.connect(self._onActionsToolButtonStyleTriggered)
 
 
