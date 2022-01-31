@@ -20,9 +20,9 @@
 
 import sys
 
-from PySide2.QtCore import QByteArray, QSettings
+from PySide2.QtCore import QByteArray, QSettings, Qt
 from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QAction, QApplication, QMainWindow, QMenu
+from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu
 
 from about_dialog import AboutDialog
 
@@ -141,6 +141,13 @@ class Window(QMainWindow):
         self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
         self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
 
+        #
+        # Action group: Tool Button Style
+
+        self._actionsToolButtonStyle = QActionGroup(self)
+        self._actionsToolButtonStyle.setObjectName("actionsToolButtonStyle")
+        self._actionsToolButtonStyle.triggered.connect(self._onActionsToolButtonStyleTriggered)
+
 
     def _createMenuBar(self):
 
@@ -158,6 +165,8 @@ class Window(QMainWindow):
         menuToolbars.setObjectName("menuToolbars")
         menuToolbars.addAction(self._actionToolbarApplication)
         menuToolbars.addAction(self._actionToolbarView)
+        menuToolbars.addSection(self.tr("Tool Button Style"))
+        menuToolbars.addActions(self._actionsToolButtonStyle.actions())
 
         menuView = self.menuBar().addMenu(self.tr("View"))
         menuView.setObjectName("menuView")
@@ -191,3 +200,11 @@ class Window(QMainWindow):
 
         dialog = AboutDialog(self)
         dialog.open()
+
+
+    def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
+
+        style = Qt.ToolButtonStyle(actionToolButtonStyle.data())
+
+        self._toolbarApplication.setToolButtonStyle(style)
+        self._toolbarView.setToolButtonStyle(style)
