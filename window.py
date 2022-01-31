@@ -73,6 +73,9 @@ class Window(QMainWindow):
         state = settings.value("Application/State", QByteArray())
         if not state.isEmpty():
             self.restoreState(state)
+        else:
+            # Show toolbars
+            self._toolbarApplication.setVisible(True)
 
 
     def _saveSettings(self):
@@ -107,6 +110,15 @@ class Window(QMainWindow):
         self._actionQuit.setToolTip(self.tr("Quit the application"))
         self._actionQuit.triggered.connect(self.close)
 
+        #
+        # Actions: View
+
+        self._actionToolbarApplication = QAction(self.tr("Show Application Toolbar"), self)
+        self._actionToolbarApplication.setObjectName("actionToolbarApplication")
+        self._actionToolbarApplication.setCheckable(True)
+        self._actionToolbarApplication.setToolTip(self.tr("Display the Application toolbar"))
+        self._actionToolbarApplication.toggled.connect(lambda checked: self._toolbarApplication.setVisible(checked))
+
 
     def _createMenuBar(self):
 
@@ -122,6 +134,7 @@ class Window(QMainWindow):
 
         menuToolbars = QMenu(self.tr("Toolbars"), self)
         menuToolbars.setObjectName("menuToolbars")
+        menuToolbars.addAction(self._actionToolbarApplication)
 
         menuView = self.menuBar().addMenu(self.tr("View"))
         menuView.setObjectName("menuView")
@@ -142,6 +155,7 @@ class Window(QMainWindow):
         self._toolbarApplication.addAction(self._actionAbout)
         self._toolbarApplication.addSeparator()
         self._toolbarApplication.addAction(self._actionQuit)
+        self._toolbarApplication.visibilityChanged.connect(lambda visible: self._actionToolbarApplication.setChecked(visible))
 
         # Toolbar: View
         self._toolbarView = self.addToolBar(self.tr("View"))
