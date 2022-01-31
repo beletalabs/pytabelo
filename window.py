@@ -117,6 +117,10 @@ class Window(QMainWindow):
         menuApplication.addSeparator()
         menuApplication.addAction(self._actionQuit)
 
+        # Menu: View
+        menuView = self.menuBar().addMenu(self.tr("View"))
+        menuView.setObjectName("menuView")
+
 
     def _createStatusBar(self):
 
