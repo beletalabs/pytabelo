@@ -34,6 +34,7 @@ class Window(QMainWindow):
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
+        self._createMenuBar()
         self._createStatusBar()
 
         self._loadSettings()
@@ -81,6 +82,13 @@ class Window(QMainWindow):
         # Application properties: State
         state = self.saveState()
         settings.setValue("Application/State", state)
+
+
+    def _createMenuBar(self):
+
+        # Menu: Application
+        menuApplication = self.menuBar().addMenu(self.tr("Application"))
+        menuApplication.setObjectName("menuApplication")
 
 
     def _createStatusBar(self):
