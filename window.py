@@ -96,6 +96,10 @@ class Window(QMainWindow):
         state = self.saveState()
         settings.setValue("Application/State", state)
 
+        # Application properties: Status Bar
+        visible = self._statusbar.isVisible()
+        settings.setValue("Application/StatusBar", visible)
+
 
     def _createActions(self):
 
