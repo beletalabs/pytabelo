@@ -168,12 +168,19 @@ class Window(QMainWindow):
         actionToolButtonStyleTextUnderIcon.setToolTip(self.tr("The text appears under the icon"))
         actionToolButtonStyleTextUnderIcon.setData(Qt.ToolButtonTextUnderIcon)
 
+        actionToolButtonStyleFollowStyle = QAction(self.tr("Follow Style"), self)
+        actionToolButtonStyleFollowStyle.setObjectName("actionToolButtonStyleFollowStyle")
+        actionToolButtonStyleFollowStyle.setCheckable(True)
+        actionToolButtonStyleFollowStyle.setToolTip(self.tr("Follow the style"))
+        actionToolButtonStyleFollowStyle.setData(Qt.ToolButtonFollowStyle)
+
         self._actionsToolButtonStyle = QActionGroup(self)
         self._actionsToolButtonStyle.setObjectName("actionsToolButtonStyle")
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleIconOnly)
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextOnly)
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextBesideIcon)
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextUnderIcon)
+        self._actionsToolButtonStyle.addAction(actionToolButtonStyleFollowStyle)
         self._actionsToolButtonStyle.triggered.connect(self._onActionsToolButtonStyleTriggered)
 
 
