@@ -34,6 +34,8 @@ class Window(QMainWindow):
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
+        self._createStatusBar()
+
         self._loadSettings()
 
 
@@ -79,3 +81,9 @@ class Window(QMainWindow):
         # Application properties: State
         state = self.saveState()
         settings.setValue("Application/State", state)
+
+
+    def _createStatusBar(self):
+
+        self._statusbar = self.statusBar()
+        self._statusbar.showMessage(self.tr("Ready"), 3000)
