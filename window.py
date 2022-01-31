@@ -21,13 +21,18 @@
 import sys
 
 from PySide2.QtCore import QByteArray, QSettings
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMainWindow
+
+import icons_rc
 
 
 class Window(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
         self._loadSettings()
 

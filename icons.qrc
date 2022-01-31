@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons/apps/16">
+        <file alias="tabelo.svg">icons/apps/16/tabelo.svg</file>
+    </qresource>
+    <qresource prefix="/icons/apps/22">
+        <file alias="tabelo.svg">icons/apps/22/tabelo.svg</file>
+    </qresource>
+</RCC>
