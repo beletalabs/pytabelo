@@ -21,8 +21,8 @@
 import sys
 
 from PySide2.QtCore import QByteArray, QSettings
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtGui import QIcon, QKeySequence
+from PySide2.QtWidgets import QAction, QMainWindow
 
 import icons_rc
 
@@ -34,6 +34,7 @@ class Window(QMainWindow):
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
+        self._createActions()
         self._createMenuBar()
         self._createStatusBar()
         self._createToolBars()
@@ -85,11 +86,25 @@ class Window(QMainWindow):
         settings.setValue("Application/State", state)
 
 
+    def _createActions(self):
+
+        #
+        # Actions: Application
+
+        self._actionQuit = QAction(self.tr("Quit"), self)
+        self._actionQuit.setObjectName("actionQuit")
+        self._actionQuit.setIcon(QIcon.fromTheme("application-exit", QIcon(":/icons/actions/16/application-exit.svg")))
+        self._actionQuit.setShortcut(QKeySequence.Quit)
+        self._actionQuit.setToolTip(self.tr("Quit the application"))
+        self._actionQuit.triggered.connect(self.close)
+
+
     def _createMenuBar(self):
 
         # Menu: Application
         menuApplication = self.menuBar().addMenu(self.tr("Application"))
         menuApplication.setObjectName("menuApplication")
+        menuApplication.addAction(self._actionQuit)
 
 
     def _createStatusBar(self):
@@ -103,3 +118,4 @@ class Window(QMainWindow):
         # Toolbar: Application
         self._toolbarApplication = self.addToolBar(self.tr("Application"))
         self._toolbarApplication.setObjectName("toolbarApplication")
+        self._toolbarApplication.addAction(self._actionQuit)
