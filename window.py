@@ -76,6 +76,7 @@ class Window(QMainWindow):
         else:
             # Show toolbars
             self._toolbarApplication.setVisible(True)
+            self._toolbarView.setVisible(False)
 
 
     def _saveSettings(self):
@@ -119,6 +120,12 @@ class Window(QMainWindow):
         self._actionToolbarApplication.setToolTip(self.tr("Display the Application toolbar"))
         self._actionToolbarApplication.toggled.connect(lambda checked: self._toolbarApplication.setVisible(checked))
 
+        self._actionToolbarView = QAction(self.tr("Show View Toolbar"), self)
+        self._actionToolbarView.setObjectName("actionToolbarView")
+        self._actionToolbarView.setCheckable(True)
+        self._actionToolbarView.setToolTip(self.tr("Display the View toolbar"))
+        self._actionToolbarView.toggled.connect(lambda checked: self._toolbarView.setVisible(checked))
+
 
     def _createMenuBar(self):
 
@@ -135,6 +142,7 @@ class Window(QMainWindow):
         menuToolbars = QMenu(self.tr("Toolbars"), self)
         menuToolbars.setObjectName("menuToolbars")
         menuToolbars.addAction(self._actionToolbarApplication)
+        menuToolbars.addAction(self._actionToolbarView)
 
         menuView = self.menuBar().addMenu(self.tr("View"))
         menuView.setObjectName("menuView")
@@ -160,6 +168,7 @@ class Window(QMainWindow):
         # Toolbar: View
         self._toolbarView = self.addToolBar(self.tr("View"))
         self._toolbarView.setObjectName("toolbarView")
+        self._toolbarView.visibilityChanged.connect(lambda visible: self._actionToolbarView.setChecked(visible))
 
 
     def _onActionAboutTriggered(self):
