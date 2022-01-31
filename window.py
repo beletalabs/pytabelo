@@ -78,6 +78,11 @@ class Window(QMainWindow):
             self._toolbarApplication.setVisible(True)
             self._toolbarView.setVisible(False)
 
+        # Application properties: Status Bar
+        visible = settings.value("Application/StatusBar", True, type=bool)
+        self._statusbar.setVisible(visible)
+        self._actionStatusbar.setChecked(visible)
+
 
     def _saveSettings(self):
 
