@@ -137,6 +137,10 @@ class Window(QMainWindow):
         self._toolbarApplication.addSeparator()
         self._toolbarApplication.addAction(self._actionQuit)
 
+        # Toolbar: View
+        self._toolbarView = self.addToolBar(self.tr("View"))
+        self._toolbarView.setObjectName("toolbarView")
+
 
     def _onActionAboutTriggered(self):
 
