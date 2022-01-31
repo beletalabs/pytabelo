@@ -83,6 +83,10 @@ class Window(QMainWindow):
         self._statusbar.setVisible(visible)
         self._actionStatusbar.setChecked(visible)
 
+        # Application properties: Tool Button Style
+        style = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
+        self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(style))
+
 
     def _saveSettings(self):
 
@@ -229,6 +233,15 @@ class Window(QMainWindow):
         self._toolbarView = self.addToolBar(self.tr("View"))
         self._toolbarView.setObjectName("toolbarView")
         self._toolbarView.visibilityChanged.connect(lambda visible: self._actionToolbarView.setChecked(visible))
+
+
+    def _updateActionsToolButtonStyle(self, toolButtonStyle):
+
+        for action in self._actionsToolButtonStyle.actions():
+            if Qt.ToolButtonStyle(action.data()) == toolButtonStyle:
+                action.setChecked(True)
+                self._onActionsToolButtonStyleTriggered(action)
+                break
 
 
     def _onActionAboutTriggered(self):
