@@ -104,6 +104,10 @@ class Window(QMainWindow):
         visible = self._statusbar.isVisible()
         settings.setValue("Application/StatusBar", visible)
 
+        # Application properties: Tool Button Style
+        style = self._actionsToolButtonStyle.checkedAction().data()
+        settings.setValue("Application/ToolButtonStyle", style)
+
 
     def _createActions(self):
 
