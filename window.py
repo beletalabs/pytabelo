@@ -36,6 +36,7 @@ class Window(QMainWindow):
 
         self._createMenuBar()
         self._createStatusBar()
+        self._createToolBars()
 
         self._loadSettings()
 
@@ -95,3 +96,10 @@ class Window(QMainWindow):
 
         self._statusbar = self.statusBar()
         self._statusbar.showMessage(self.tr("Ready"), 3000)
+
+
+    def _createToolBars(self):
+
+        # Toolbar: Application
+        self._toolbarApplication = self.addToolBar(self.tr("Application"))
+        self._toolbarApplication.setObjectName("toolbarApplication")
