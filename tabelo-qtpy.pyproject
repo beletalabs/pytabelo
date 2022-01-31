@@ -1,5 +1,6 @@
 {
     "files": [
+        "about_dialog.py",
         "icons.qrc",
         "main.py",
         "window.py"

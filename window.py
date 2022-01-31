@@ -24,6 +24,8 @@ from PySide2.QtCore import QByteArray, QSettings
 from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QAction, QApplication, QMainWindow
 
+from about_dialog import AboutDialog
+
 import icons_rc
 
 
@@ -134,4 +136,5 @@ class Window(QMainWindow):
 
     def _onActionAboutTriggered(self):
 
-        pass
+        dialog = AboutDialog(self)
+        dialog.open()
