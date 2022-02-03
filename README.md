@@ -1,7 +1,12 @@
 
 # Tabelo-QtPy
 
-An open source table editor based on QtPy.
+A table editor based on Qt for Python.
+
+
+## Description
+
+Tabelo-QtPy is an open source table editor written in Python using the Python bindings for the Qt framework.
 
 
 ## Copyright
