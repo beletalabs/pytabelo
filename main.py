@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # Command line
     parser = QCommandLineParser()
-    parser.setApplicationDescription("{0} - A table editor".format(app.applicationName()))
+    parser.setApplicationDescription("{0} - A table editor based on Qt for Python".format(app.applicationName()))
     parser.addHelpOption()
     parser.addVersionOption()
     parser.process(app)
