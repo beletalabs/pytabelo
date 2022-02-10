@@ -18,8 +18,6 @@
 # along with Tabelo-QtPy.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import sys
-
 from PySide2.QtCore import QByteArray, QSettings, Qt
 from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu
@@ -59,31 +57,31 @@ class Window(QMainWindow):
 
         settings = QSettings()
 
-        # Application properties: Geometry
+        # Application property: Geometry
         geometry = settings.value("Application/Geometry", QByteArray())
         if not geometry.isEmpty():
             self.restoreGeometry(geometry)
         else:
-            # Center window
+            # Default: Center window
             availableGeometry = self.screen().availableGeometry()
             self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
             self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
 
-        # Application properties: State
+        # Application property: State
         state = settings.value("Application/State", QByteArray())
         if not state.isEmpty():
             self.restoreState(state)
         else:
-            # Show toolbars
+            # Default: Show/hide toolbars
             self._toolbarApplication.setVisible(True)
             self._toolbarView.setVisible(False)
 
-        # Application properties: Status Bar
+        # Application property: Status Bar
         visible = settings.value("Application/StatusBar", True, type=bool)
         self._statusbar.setVisible(visible)
         self._actionStatusbar.setChecked(visible)
 
-        # Application properties: Tool Button Style
+        # Application property: Tool Button Style
         style = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
         self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(style))
 
@@ -92,19 +90,19 @@ class Window(QMainWindow):
 
         settings = QSettings()
 
-        # Application properties: Geometry
+        # Application property: Geometry
         geometry = self.saveGeometry()
         settings.setValue("Application/Geometry", geometry)
 
-        # Application properties: State
+        # Application property: State
         state = self.saveState()
         settings.setValue("Application/State", state)
 
-        # Application properties: Status Bar
+        # Application property: Status Bar
         visible = self._statusbar.isVisible()
         settings.setValue("Application/StatusBar", visible)
 
-        # Application properties: Tool Button Style
+        # Application property: Tool Button Style
         style = self._actionsToolButtonStyle.checkedAction().data()
         settings.setValue("Application/ToolButtonStyle", style)
 
@@ -128,6 +126,7 @@ class Window(QMainWindow):
         self._actionQuit.setToolTip(self.tr("Quit the application"))
         self._actionQuit.triggered.connect(self.close)
 
+
         #
         # Actions: View
 
@@ -148,6 +147,7 @@ class Window(QMainWindow):
         self._actionStatusbar.setCheckable(True)
         self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
         self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
+
 
         #
         # Action group: Tool Button Style
@@ -201,8 +201,9 @@ class Window(QMainWindow):
         menuApplication.addSeparator()
         menuApplication.addAction(self._actionQuit)
 
+
         #
-        # Menu: View
+        # Menus: View
 
         menuToolbars = QMenu(self.tr("Toolbars"), self)
         menuToolbars.setObjectName("menuToolbars")
