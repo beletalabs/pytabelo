@@ -164,6 +164,12 @@ class Window(QMainWindow):
         self._actionToolbarFormat.setToolTip(self.tr("Display the Format toolbar"))
         self._actionToolbarFormat.toggled.connect(lambda checked: self._toolbarFormat.setVisible(checked))
 
+        self._actionToolbarTools = QAction(self.tr("Show Tools Toolbar"), self)
+        self._actionToolbarTools.setObjectName("actionToolbarTools")
+        self._actionToolbarTools.setCheckable(True)
+        self._actionToolbarTools.setToolTip(self.tr("Display the Tools toolbar"))
+        self._actionToolbarTools.toggled.connect(lambda checked: self._toolbarTools.setVisible(checked))
+
         self._actionStatusbar = QAction(self.tr("Show Status Bar"), self)
         self._actionStatusbar.setObjectName("actionStatusbar")
         self._actionStatusbar.setCheckable(True)
@@ -242,6 +248,7 @@ class Window(QMainWindow):
         menuToolbars.addAction(self._actionToolbarEdit)
         menuToolbars.addAction(self._actionToolbarView)
         menuToolbars.addAction(self._actionToolbarFormat)
+        menuToolbars.addAction(self._actionToolbarTools)
         menuToolbars.addSection(self.tr("Tool Button Style"))
         menuToolbars.addActions(self._actionsToolButtonStyle.actions())
 
@@ -299,6 +306,7 @@ class Window(QMainWindow):
         # Toolbar: Tools
         self._toolbarTools = self.addToolBar(self.tr("Tools"))
         self._toolbarTools.setObjectName("toolbarTools")
+        self._toolbarTools.visibilityChanged.connect(lambda visible: self._actionToolbarTools.setChecked(visible))
 
 
     def _updateActionsToolButtonStyle(self, toolButtonStyle):
