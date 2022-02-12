@@ -242,6 +242,11 @@ class Window(QMainWindow):
         menuView.addAction(self._actionStatusbar)
 
 
+        # Menu: Format
+        menuFormat = self.menuBar().addMenu(self.tr("Format"))
+        menuFormat.setObjectName("menuFormat")
+
+
     def _createStatusBar(self):
 
         self._statusbar = self.statusBar()
