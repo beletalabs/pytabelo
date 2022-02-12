@@ -134,16 +134,6 @@ class Window(QMainWindow):
 
 
         #
-        # Actions: View
-
-        self._actionStatusbar = QAction(self.tr("Show Status Bar"), self)
-        self._actionStatusbar.setObjectName("actionStatusbar")
-        self._actionStatusbar.setCheckable(True)
-        self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
-        self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
-
-
-        #
         # Actions: Appearance
 
         self._actionToolbarApplication = QAction(self.tr("Show Application Toolbar"), self)
@@ -193,6 +183,12 @@ class Window(QMainWindow):
         self._actionToolbarHelp.setCheckable(True)
         self._actionToolbarHelp.setToolTip(self.tr("Display the Help toolbar"))
         self._actionToolbarHelp.toggled.connect(lambda checked: self._toolbarHelp.setVisible(checked))
+
+        self._actionStatusbar = QAction(self.tr("Show Status Bar"), self)
+        self._actionStatusbar.setObjectName("actionStatusbar")
+        self._actionStatusbar.setCheckable(True)
+        self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
+        self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
 
 
         #
@@ -258,7 +254,6 @@ class Window(QMainWindow):
         # Menu: View
         menuView = self.menuBar().addMenu(self.tr("View"))
         menuView.setObjectName("menuView")
-        menuView.addAction(self._actionStatusbar)
 
         # Menu: Format
         menuFormat = self.menuBar().addMenu(self.tr("Format"))
@@ -287,6 +282,8 @@ class Window(QMainWindow):
         menuAppearance.addAction(self._actionToolbarAppearance)
         menuAppearance.addAction(self._actionToolbarHelp)
         menuAppearance.addMenu(menuToolButtonStyle)
+        menuAppearance.addSeparator()
+        menuAppearance.addAction(self._actionStatusbar)
 
 
         # Menu: Help
