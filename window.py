@@ -254,6 +254,10 @@ class Window(QMainWindow):
         menuFormat = self.menuBar().addMenu(self.tr("Format"))
         menuFormat.setObjectName("menuFormat")
 
+        # Menu: Tools
+        menuTools = self.menuBar().addMenu(self.tr("Tools"))
+        menuTools.setObjectName("menuTools")
+
 
     def _createStatusBar(self):
 
