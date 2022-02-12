@@ -212,6 +212,10 @@ class Window(QMainWindow):
         menuFile = self.menuBar().addMenu(self.tr("File"))
         menuFile.setObjectName("menuFile")
 
+        # Menu: Edit
+        menuEdit = self.menuBar().addMenu(self.tr("Edit"))
+        menuEdit.setObjectName("menuEdit")
+
 
         #
         # Menus: View
