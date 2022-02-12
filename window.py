@@ -300,7 +300,7 @@ class Window(QMainWindow):
     def _createToolBars(self):
 
         # Toolbar: Application
-        self._toolbarApplication = self.addToolBar(self.tr("Application"))
+        self._toolbarApplication = self.addToolBar(self.tr("Application Toolbar"))
         self._toolbarApplication.setObjectName("toolbarApplication")
         self._toolbarApplication.addAction(self._actionAbout)
         self._toolbarApplication.addSeparator()
@@ -308,37 +308,37 @@ class Window(QMainWindow):
         self._toolbarApplication.visibilityChanged.connect(lambda visible: self._actionToolbarApplication.setChecked(visible))
 
         # Toolbar: File
-        self._toolbarFile = self.addToolBar(self.tr("File"))
+        self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
         self._toolbarFile.visibilityChanged.connect(lambda visible: self._actionToolbarFile.setChecked(visible))
 
         # Toolbar: Edit
-        self._toolbarEdit = self.addToolBar(self.tr("Edit"))
+        self._toolbarEdit = self.addToolBar(self.tr("Edit Toolbar"))
         self._toolbarEdit.setObjectName("toolbarEdit")
         self._toolbarEdit.visibilityChanged.connect(lambda visible: self._actionToolbarEdit.setChecked(visible))
 
         # Toolbar: View
-        self._toolbarView = self.addToolBar(self.tr("View"))
+        self._toolbarView = self.addToolBar(self.tr("View Toolbar"))
         self._toolbarView.setObjectName("toolbarView")
         self._toolbarView.visibilityChanged.connect(lambda visible: self._actionToolbarView.setChecked(visible))
 
         # Toolbar: Format
-        self._toolbarFormat = self.addToolBar(self.tr("Format"))
+        self._toolbarFormat = self.addToolBar(self.tr("Format Toolbar"))
         self._toolbarFormat.setObjectName("toolbarFormat")
         self._toolbarFormat.visibilityChanged.connect(lambda visible: self._actionToolbarFormat.setChecked(visible))
 
         # Toolbar: Tools
-        self._toolbarTools = self.addToolBar(self.tr("Tools"))
+        self._toolbarTools = self.addToolBar(self.tr("Tools Toolbar"))
         self._toolbarTools.setObjectName("toolbarTools")
         self._toolbarTools.visibilityChanged.connect(lambda visible: self._actionToolbarTools.setChecked(visible))
 
         # Toolbar: Appearance
-        self._toolbarAppearance = self.addToolBar(self.tr("Appearance"))
+        self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.visibilityChanged.connect(lambda visible: self._actionToolbarAppearance.setChecked(visible))
 
         # Toolbar: Help
-        self._toolbarHelp = self.addToolBar(self.tr("Help"))
+        self._toolbarHelp = self.addToolBar(self.tr("Help Toolbar"))
         self._toolbarHelp.setObjectName("toolbarHelp")
         self._toolbarHelp.visibilityChanged.connect(lambda visible: self._actionToolbarHelp.setChecked(visible))
 
