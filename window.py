@@ -178,6 +178,12 @@ class Window(QMainWindow):
         self._actionToolbarAppearance.setToolTip(self.tr("Display the Appearance toolbar"))
         self._actionToolbarAppearance.toggled.connect(lambda checked: self._toolbarAppearance.setVisible(checked))
 
+        self._actionToolbarHelp = QAction(self.tr("Show Help Toolbar"), self)
+        self._actionToolbarHelp.setObjectName("actionToolbarHelp")
+        self._actionToolbarHelp.setCheckable(True)
+        self._actionToolbarHelp.setToolTip(self.tr("Display the Help toolbar"))
+        self._actionToolbarHelp.toggled.connect(lambda checked: self._toolbarHelp.setVisible(checked))
+
         self._actionStatusbar = QAction(self.tr("Show Status Bar"), self)
         self._actionStatusbar.setObjectName("actionStatusbar")
         self._actionStatusbar.setCheckable(True)
@@ -258,6 +264,7 @@ class Window(QMainWindow):
         menuToolbars.addAction(self._actionToolbarFormat)
         menuToolbars.addAction(self._actionToolbarTools)
         menuToolbars.addAction(self._actionToolbarAppearance)
+        menuToolbars.addAction(self._actionToolbarHelp)
         menuToolbars.addSection(self.tr("Tool Button Style"))
         menuToolbars.addActions(self._actionsToolButtonStyle.actions())
 
@@ -333,6 +340,7 @@ class Window(QMainWindow):
         # Toolbar: Help
         self._toolbarHelp = self.addToolBar(self.tr("Help"))
         self._toolbarHelp.setObjectName("toolbarHelp")
+        self._toolbarHelp.visibilityChanged.connect(lambda visible: self._actionToolbarHelp.setChecked(visible))
 
 
     def _updateActionsToolButtonStyle(self, toolButtonStyle):
