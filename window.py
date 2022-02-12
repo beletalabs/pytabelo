@@ -144,6 +144,12 @@ class Window(QMainWindow):
         self._actionToolbarFile.setToolTip(self.tr("Display the File toolbar"))
         self._actionToolbarFile.toggled.connect(lambda checked: self._toolbarFile.setVisible(checked))
 
+        self._actionToolbarEdit = QAction(self.tr("Show Edit Toolbar"), self)
+        self._actionToolbarEdit.setObjectName("actionToolbarEdit")
+        self._actionToolbarEdit.setCheckable(True)
+        self._actionToolbarEdit.setToolTip(self.tr("Display the Edit toolbar"))
+        self._actionToolbarEdit.toggled.connect(lambda checked: self._toolbarEdit.setVisible(checked))
+
         self._actionToolbarView = QAction(self.tr("Show View Toolbar"), self)
         self._actionToolbarView.setObjectName("actionToolbarView")
         self._actionToolbarView.setCheckable(True)
@@ -225,6 +231,7 @@ class Window(QMainWindow):
         menuToolbars.setObjectName("menuToolbars")
         menuToolbars.addAction(self._actionToolbarApplication)
         menuToolbars.addAction(self._actionToolbarFile)
+        menuToolbars.addAction(self._actionToolbarEdit)
         menuToolbars.addAction(self._actionToolbarView)
         menuToolbars.addSection(self.tr("Tool Button Style"))
         menuToolbars.addActions(self._actionsToolButtonStyle.actions())
@@ -259,6 +266,7 @@ class Window(QMainWindow):
         # Toolbar: Edit
         self._toolbarEdit = self.addToolBar(self.tr("Edit"))
         self._toolbarEdit.setObjectName("toolbarEdit")
+        self._toolbarEdit.visibilityChanged.connect(lambda visible: self._actionToolbarEdit.setChecked(visible))
 
         # Toolbar: View
         self._toolbarView = self.addToolBar(self.tr("View"))
