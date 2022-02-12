@@ -77,6 +77,7 @@ class Window(QMainWindow):
             self._toolbarFile.setVisible(True)
             self._toolbarEdit.setVisible(True)
             self._toolbarView.setVisible(False)
+            self._toolbarFormat.setVisible(True)
 
         # Application property: Status Bar
         visible = settings.value("Application/StatusBar", True, type=bool)
@@ -278,6 +279,10 @@ class Window(QMainWindow):
         self._toolbarView.setObjectName("toolbarView")
         self._toolbarView.visibilityChanged.connect(lambda visible: self._actionToolbarView.setChecked(visible))
 
+        # Toolbar: Format
+        self._toolbarFormat = self.addToolBar(self.tr("Format"))
+        self._toolbarFormat.setObjectName("toolbarFormat")
+
 
     def _updateActionsToolButtonStyle(self, toolButtonStyle):
 
@@ -302,3 +307,4 @@ class Window(QMainWindow):
         self._toolbarFile.setToolButtonStyle(style)
         self._toolbarEdit.setToolButtonStyle(style)
         self._toolbarView.setToolButtonStyle(style)
+        self._toolbarFormat.setToolButtonStyle(style)
