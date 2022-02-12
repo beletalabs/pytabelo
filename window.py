@@ -74,6 +74,7 @@ class Window(QMainWindow):
         else:
             # Default: Show/hide toolbars
             self._toolbarApplication.setVisible(True)
+            self._toolbarFile.setVisible(True)
             self._toolbarView.setVisible(False)
 
         # Application property: Status Bar
@@ -238,6 +239,10 @@ class Window(QMainWindow):
         self._toolbarApplication.addAction(self._actionQuit)
         self._toolbarApplication.visibilityChanged.connect(lambda visible: self._actionToolbarApplication.setChecked(visible))
 
+        # Toolbar: File
+        self._toolbarFile = self.addToolBar(self.tr("File"))
+        self._toolbarFile.setObjectName("toolbarFile")
+
         # Toolbar: View
         self._toolbarView = self.addToolBar(self.tr("View"))
         self._toolbarView.setObjectName("toolbarView")
@@ -264,4 +269,5 @@ class Window(QMainWindow):
         style = Qt.ToolButtonStyle(actionToolButtonStyle.data())
 
         self._toolbarApplication.setToolButtonStyle(style)
+        self._toolbarFile.setToolButtonStyle(style)
         self._toolbarView.setToolButtonStyle(style)
