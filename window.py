@@ -76,7 +76,7 @@ class Window(QMainWindow):
             self._toolbarApplication.setVisible(True)
             self._toolbarFile.setVisible(True)
             self._toolbarEdit.setVisible(True)
-            self._toolbarView.setVisible(False)
+            self._toolbarView.setVisible(True)
             self._toolbarFormat.setVisible(True)
             self._toolbarTools.setVisible(True)
             self._toolbarAppearance.setVisible(False)
