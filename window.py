@@ -201,6 +201,10 @@ class Window(QMainWindow):
         menuApplication.addSeparator()
         menuApplication.addAction(self._actionQuit)
 
+        # Menu: File
+        menuFile = self.menuBar().addMenu(self.tr("File"))
+        menuFile.setObjectName("menuFile")
+
 
         #
         # Menus: View
