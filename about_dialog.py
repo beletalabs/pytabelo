@@ -31,16 +31,24 @@ class AboutDialog(QDialog):
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(self.tr("About {0}").format(QApplication.applicationName()))
 
+
+        #
+        # Content
+
+        text = "<html><body>"
+        text += self.tr("<p>{0} is an open source table editor written in Python using the Python bindings for the Qt framework.</p>").format(QApplication.applicationName())
+        text += self.tr("<p>Copyright &copy; 2022 <a href=\"{0}\" title=\"Visit organization's homepage\">{1}</a>.</p>").format(QApplication.organizationDomain(), QApplication.organizationName())
+        text += self.tr("<p>This application is licensed under the terms of the <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\" title=\"Visit license's homepage\">GNU General Public License, version 3</a>.</p>")
+        text += "</body></html>"
+
         textBox = QTextBrowser()
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
         textBox.setOpenExternalLinks(True)
-        textBox.setHtml(self.tr("<html><body>"
-            "<p>{0} is an open source table editor written in Python using the Python bindings for the Qt framework.</p>"
-            "<p>Copyright &copy; 2022 <a href=\"{1}\" title=\"Visit organization's homepage\">{2}</a>.</p>"
-            "<p>This application is licensed under the terms of the <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\" title=\"Visit license's homepage\">GNU General Public License, version 3</a>.</p>"
-            "</body></html>").format(QApplication.applicationName(), QApplication.organizationDomain(), QApplication.organizationName()))
+        textBox.setHtml(text)
 
+
+        # Button box
         buttonBox = QDialogButtonBox(QDialogButtonBox.Close)
         buttonBox.rejected.connect(self.close)
 
