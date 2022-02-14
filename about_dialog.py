@@ -27,7 +27,7 @@ class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setMinimumSize(320, 160)
+        self.setMinimumSize(480, 320)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(self.tr("About {0}").format(QApplication.applicationName()))
 
