@@ -125,6 +125,11 @@ class Window(QMainWindow):
         self._actionAbout.setToolTip(self.tr("Brief description of the application"))
         self._actionAbout.triggered.connect(self._onActionAboutTriggered)
 
+        self._actionColophon = QAction(self.tr("Colophon"), self)
+        self._actionColophon.setObjectName("actionColophon")
+        self._actionColophon.setToolTip(self.tr("Lengthy description of the application"))
+        self._actionColophon.triggered.connect(self._onActionColophonTriggered)
+
         self._actionQuit = QAction(self.tr("Quit"), self)
         self._actionQuit.setObjectName("actionQuit")
         self._actionQuit.setIcon(QIcon.fromTheme("application-exit", QIcon(":/icons/actions/16/application-exit.svg")))
@@ -240,6 +245,7 @@ class Window(QMainWindow):
         menuApplication = self.menuBar().addMenu(self.tr("Application"))
         menuApplication.setObjectName("menuApplication")
         menuApplication.addAction(self._actionAbout)
+        menuApplication.addAction(self._actionColophon)
         menuApplication.addSeparator()
         menuApplication.addAction(self._actionQuit)
 
@@ -356,6 +362,11 @@ class Window(QMainWindow):
 
         dialog = AboutDialog(self)
         dialog.open()
+
+
+    def _onActionColophonTriggered(self):
+
+        pass
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
