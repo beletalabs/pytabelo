@@ -23,6 +23,7 @@ from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu
 
 from about_dialog import AboutDialog
+from colophon_dialog import ColophonDialog
 
 import icons_rc
 
@@ -366,7 +367,8 @@ class Window(QMainWindow):
 
     def _onActionColophonTriggered(self):
 
-        pass
+        dialog = ColophonDialog(self)
+        dialog.open()
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):

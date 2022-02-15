@@ -1,6 +1,7 @@
 {
     "files": [
         "about_dialog.py",
+        "colophon_dialog.py",
         "icons.qrc",
         "main.py",
         "window.py"
