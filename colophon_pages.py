@@ -52,3 +52,35 @@ class ColophonPageAbout(QWidget):
     def title(self):
 
         return self.tr("About")
+
+
+#
+#
+# Colophon page: Authors
+#
+
+class ColophonPageAuthors(QWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        text = "<html><body><dl>"
+        text += self.tr("<dt><strong>naracanto</strong></dt>")
+        text += self.tr("<dd>Created and developed by <a href=\"https://naracanto.com\" title=\"Visit author's homepage\">naracanto</a>.</dd>")
+        text += "</dl></body></html>"
+
+        textBox = QTextBrowser()
+        textBox.setFrameStyle(QFrame.NoFrame)
+        textBox.setStyleSheet("background-color:transparent;")
+        textBox.setOpenExternalLinks(True)
+        textBox.setHtml(text)
+
+        # Main layout
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(textBox)
+        self.setLayout(mainLayout)
+
+
+    def title(self):
+
+        return self.tr("Authors")
