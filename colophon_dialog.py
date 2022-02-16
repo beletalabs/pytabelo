@@ -21,7 +21,7 @@
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog, QDialogButtonBox, QTabWidget, QVBoxLayout
 
-from colophon_pages import ColophonPageAbout, ColophonPageAuthors
+from colophon_pages import ColophonPageAbout, ColophonPageAuthors, ColophonPageCredits
 
 
 class ColophonDialog(QDialog):
@@ -39,10 +39,12 @@ class ColophonDialog(QDialog):
 
         pageAbout = ColophonPageAbout()
         pageAuthors = ColophonPageAuthors()
+        pageCredits = ColophonPageCredits()
 
         tabBox = QTabWidget()
         tabBox.addTab(pageAbout, pageAbout.title())
         tabBox.addTab(pageAuthors, pageAuthors.title())
+        tabBox.addTab(pageCredits, pageCredits.title())
 
 
         # Button box
