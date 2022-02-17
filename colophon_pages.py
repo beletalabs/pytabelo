@@ -159,3 +159,36 @@ class ColophonPageEnvironment(QWidget):
     def title(self):
 
         return self.tr("Environment")
+
+
+#
+#
+# Colophon page: License
+#
+
+class ColophonPageLicense(QWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        text = "<html><body>"
+        text += self.tr("<p>{0} is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>").format(QApplication.applicationName())
+        text += self.tr("<p>{0} is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>").format(QApplication.applicationName())
+        text += self.tr("<p>You should have received a copy of the GNU General Public License along with {0}. If not, see <a href=\"https://www.gnu.org/licenses/\" title=\"Visit license's homepage\">https://www.gnu.org/licenses/</a>.</p>").format(QApplication.applicationName())
+        text += "</body></html>"
+
+        textBox = QTextBrowser()
+        textBox.setFrameStyle(QFrame.NoFrame)
+        textBox.setStyleSheet("background-color:transparent;")
+        textBox.setOpenExternalLinks(True)
+        textBox.setHtml(text)
+
+        # Main layout
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(textBox)
+        self.setLayout(mainLayout)
+
+
+    def title(self):
+
+        return self.tr("License")
