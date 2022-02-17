@@ -18,10 +18,34 @@
 # along with Tabelo-QtPy.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtWidgets import QWidget
+from PySide2.QtCore import Qt
+from PySide2.QtSvg import QSvgWidget
+from PySide2.QtWidgets import QApplication, QGridLayout, QLabel, QWidget
+
+import icons_rc
 
 
 class DialogHeaderBox(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        logo = QSvgWidget()
+        logo.load(":/icons/apps/22/tabelo.svg")
+
+        title = QLabel("<strong style=\"font-size:large;\">{0}</strong>".format(QApplication.applicationName()))
+        version = QLabel(QApplication.applicationVersion())
+        subtitle = QLabel(self.tr("A table editor based on Qt for Python"))
+
+        # Main layout
+        mainLayout = QGridLayout()
+        mainLayout.addWidget(logo, 0, 0, 2, 1)
+        mainLayout.addWidget(title, 0, 1, 1, 1)
+        mainLayout.addWidget(version, 0, 2, 1, 1, Qt.AlignBottom)
+        mainLayout.addWidget(subtitle, 1, 1, 1, 2)
+        mainLayout.setColumnStretch(2, 1)
+        self.setLayout(mainLayout)
+
+        # Logo size
+        height = title.sizeHint().height() + mainLayout.verticalSpacing() + subtitle.sizeHint().height()
+        logo.setFixedSize(height, height)
