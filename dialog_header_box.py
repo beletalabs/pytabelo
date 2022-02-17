@@ -28,7 +28,7 @@ import icons_rc
 class DialogHeaderBox(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         logo = QSvgWidget()
         logo.load(":/icons/apps/22/tabelo.svg")

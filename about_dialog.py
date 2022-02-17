@@ -28,7 +28,7 @@ from dialog_header_box import DialogHeaderBox
 class AboutDialog(QDialog):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         self.setMinimumSize(480, 320)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
@@ -46,7 +46,8 @@ class AboutDialog(QDialog):
         buttonBox.rejected.connect(self.close)
 
         # Main layout
-        layout = QVBoxLayout(self)
-        layout.addWidget(headerBox)
-        layout.addWidget(pageAbout)
-        layout.addWidget(buttonBox)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(headerBox)
+        mainLayout.addWidget(pageAbout)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)

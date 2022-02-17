@@ -33,7 +33,7 @@ from PySide2.QtWidgets import QApplication, QFrame, QTextBrowser, QVBoxLayout, Q
 class ColophonPageAbout(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         text = "<html><body>"
         text += self.tr("<p>{0} is an open source table editor written in Python using the Python bindings for the Qt framework.</p>").format(QApplication.applicationName())
@@ -42,10 +42,10 @@ class ColophonPageAbout(QWidget):
         text += "</body></html>"
 
         textBox = QTextBrowser()
+        textBox.setHtml(text)
+        textBox.setOpenExternalLinks(True)
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
-        textBox.setOpenExternalLinks(True)
-        textBox.setHtml(text)
 
         # Main layout
         mainLayout = QVBoxLayout()
@@ -66,7 +66,7 @@ class ColophonPageAbout(QWidget):
 class ColophonPageAuthors(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         text = "<html><body><dl>"
         text += self.tr("<dt><strong>naracanto</strong></dt>")
@@ -74,10 +74,10 @@ class ColophonPageAuthors(QWidget):
         text += "</dl></body></html>"
 
         textBox = QTextBrowser()
+        textBox.setHtml(text)
+        textBox.setOpenExternalLinks(True)
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
-        textBox.setOpenExternalLinks(True)
-        textBox.setHtml(text)
 
         # Main layout
         mainLayout = QVBoxLayout()
@@ -98,7 +98,7 @@ class ColophonPageAuthors(QWidget):
 class ColophonPageCredits(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         text = "<html><body><dl>"
         text += self.tr("<dt><strong>BreezeIcons project</strong></dt>")
@@ -107,10 +107,10 @@ class ColophonPageCredits(QWidget):
         text += "</dl></body></html>"
 
         textBox = QTextBrowser()
+        textBox.setHtml(text)
+        textBox.setOpenExternalLinks(True)
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
-        textBox.setOpenExternalLinks(True)
-        textBox.setHtml(text)
 
         # Main layout
         mainLayout = QVBoxLayout()
@@ -131,7 +131,7 @@ class ColophonPageCredits(QWidget):
 class ColophonPageEnvironment(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         text = "<html><body><dl>"
         text += self.tr("<dt><strong>Application version</strong></dt>")
@@ -145,10 +145,10 @@ class ColophonPageEnvironment(QWidget):
         text += "</dl></body></html>"
 
         textBox = QTextBrowser()
+        textBox.setHtml(text)
+        textBox.setOpenExternalLinks(True)
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
-        textBox.setOpenExternalLinks(True)
-        textBox.setHtml(text)
 
         # Main layout
         mainLayout = QVBoxLayout()
@@ -169,7 +169,7 @@ class ColophonPageEnvironment(QWidget):
 class ColophonPageLicense(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         text = "<html><body>"
         text += self.tr("<p>{0} is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>").format(QApplication.applicationName())
@@ -178,10 +178,10 @@ class ColophonPageLicense(QWidget):
         text += "</body></html>"
 
         textBox = QTextBrowser()
+        textBox.setHtml(text)
+        textBox.setOpenExternalLinks(True)
         textBox.setFrameStyle(QFrame.NoFrame)
         textBox.setStyleSheet("background-color:transparent;")
-        textBox.setOpenExternalLinks(True)
-        textBox.setHtml(text)
 
         # Main layout
         mainLayout = QVBoxLayout()
