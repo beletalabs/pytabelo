@@ -3,6 +3,7 @@
         "about_dialog.py",
         "colophon_dialog.py",
         "colophon_pages.py",
+        "dialog_header_box.py",
         "icons.qrc",
         "main.py",
         "window.py"

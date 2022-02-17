@@ -22,6 +22,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog, QDialogButtonBox, QTabWidget, QVBoxLayout
 
 from colophon_pages import ColophonPageAbout, ColophonPageAuthors, ColophonPageCredits, ColophonPageEnvironment, ColophonPageLicense
+from dialog_header_box import DialogHeaderBox
 
 
 class ColophonDialog(QDialog):
@@ -32,6 +33,9 @@ class ColophonDialog(QDialog):
         self.setMinimumSize(640, 480)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(self.tr("Colophon"))
+
+        # Header box
+        headerBox = DialogHeaderBox()
 
 
         #
@@ -57,5 +61,6 @@ class ColophonDialog(QDialog):
 
         # Main layout
         layout = QVBoxLayout(self)
+        layout.addWidget(headerBox)
         layout.addWidget(tabBox)
         layout.addWidget(buttonBox)
