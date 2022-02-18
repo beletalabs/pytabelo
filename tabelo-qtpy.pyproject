@@ -6,6 +6,7 @@
         "dialog_header_box.py",
         "icons.qrc",
         "main.py",
+        "preferences_dialog.py",
         "window.py"
     ]
 }

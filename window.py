@@ -24,6 +24,7 @@ from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, 
 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
+from preferences_dialog import PreferencesDialog
 
 import icons_rc
 
@@ -382,7 +383,8 @@ class Window(QMainWindow):
 
     def _onActionPreferencesTriggered(self):
 
-        pass
+        dialog = PreferencesDialog(self)
+        dialog.open()
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
