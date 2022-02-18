@@ -131,6 +131,12 @@ class Window(QMainWindow):
         self._actionColophon.setToolTip(self.tr("Lengthy description of the application"))
         self._actionColophon.triggered.connect(self._onActionColophonTriggered)
 
+        self._actionPreferences = QAction(self.tr("Preferences…"), self)
+        self._actionPreferences.setObjectName("actionPreferences")
+        self._actionPreferences.setIcon(QIcon.fromTheme("configure", QIcon(":/icons/actions/16/configure.svg")))
+        self._actionPreferences.setToolTip(self.tr("Customize the appearance and behavior of the application"))
+        self._actionPreferences.triggered.connect(self._onActionPreferencesTriggered)
+
         self._actionQuit = QAction(self.tr("Quit"), self)
         self._actionQuit.setObjectName("actionQuit")
         self._actionQuit.setIcon(QIcon.fromTheme("application-exit", QIcon(":/icons/actions/16/application-exit.svg")))
@@ -248,6 +254,8 @@ class Window(QMainWindow):
         menuApplication.addAction(self._actionAbout)
         menuApplication.addAction(self._actionColophon)
         menuApplication.addSeparator()
+        menuApplication.addAction(self._actionPreferences)
+        menuApplication.addSeparator()
         menuApplication.addAction(self._actionQuit)
 
         # Menu: File
@@ -310,6 +318,7 @@ class Window(QMainWindow):
         self._toolbarApplication = self.addToolBar(self.tr("Application Toolbar"))
         self._toolbarApplication.setObjectName("toolbarApplication")
         self._toolbarApplication.addAction(self._actionAbout)
+        self._toolbarApplication.addAction(self._actionPreferences)
         self._toolbarApplication.addSeparator()
         self._toolbarApplication.addAction(self._actionQuit)
         self._toolbarApplication.visibilityChanged.connect(lambda visible: self._actionToolbarApplication.setChecked(visible))
@@ -369,6 +378,11 @@ class Window(QMainWindow):
 
         dialog = ColophonDialog(self)
         dialog.open()
+
+
+    def _onActionPreferencesTriggered(self):
+
+        pass
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
