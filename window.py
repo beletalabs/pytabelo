@@ -149,6 +149,16 @@ class Window(QMainWindow):
         #
         # Actions: Appearance
 
+        self._actionMenubar = QAction(self.tr("Show Menu Bar"), self)
+        self._actionMenubar.setObjectName("actionMenubar")
+        self._actionMenubar.setCheckable(True)
+        self._actionMenubar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
+        self._actionMenubar.setIconText("Menu Bar")
+        self._actionMenubar.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_M))
+        self._actionMenubar.setToolTip(self.tr("Display the Menu bar"))
+        self._actionMenubar.toggled.connect(lambda checked: self.menuBar().setVisible(checked))
+        self.addAction(self._actionMenubar)
+
         self._actionToolbarApplication = QAction(self.tr("Show Application Toolbar"), self)
         self._actionToolbarApplication.setObjectName("actionToolbarApplication")
         self._actionToolbarApplication.setCheckable(True)
@@ -289,6 +299,8 @@ class Window(QMainWindow):
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appearance"))
         menuAppearance.setObjectName("menuAppearance")
+        menuAppearance.addAction(self._actionMenubar)
+        menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionToolbarApplication)
         menuAppearance.addAction(self._actionToolbarFile)
         menuAppearance.addAction(self._actionToolbarEdit)
@@ -352,6 +364,7 @@ class Window(QMainWindow):
         # Toolbar: Appearance
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
+        self._toolbarAppearance.addAction(self._actionMenubar)
         self._toolbarAppearance.visibilityChanged.connect(lambda visible: self._actionToolbarAppearance.setChecked(visible))
 
         # Toolbar: Help

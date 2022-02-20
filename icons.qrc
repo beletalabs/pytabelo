@@ -2,6 +2,7 @@
     <qresource prefix="/icons/actions/16">
         <file alias="application-exit.svg">icons/actions/16/application-exit.svg</file>
         <file alias="configure.svg">icons/actions/16/configure.svg</file>
+        <file alias="show-menu.svg">icons/actions/16/show-menu.svg</file>
     </qresource>
     <qresource prefix="/icons/apps/16">
         <file alias="tabelo.svg">icons/apps/16/tabelo.svg</file>
