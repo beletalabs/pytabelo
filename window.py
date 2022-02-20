@@ -84,6 +84,11 @@ class Window(QMainWindow):
             self._toolbarAppearance.setVisible(False)
             self._toolbarHelp.setVisible(False)
 
+        # Application property: Menu Bar
+        visibleMenuBar = settings.value("Application/MenuBar", True, type=bool)
+        self.menuBar().setVisible(visibleMenuBar)
+        self._actionMenubar.setChecked(visibleMenuBar)
+
         # Application property: Status Bar
         visible = settings.value("Application/StatusBar", True, type=bool)
         self._statusbar.setVisible(visible)
