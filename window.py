@@ -111,6 +111,10 @@ class Window(QMainWindow):
         state = self.saveState()
         settings.setValue("Application/State", state)
 
+        # Application property: Menu Bar
+        visibleMenuBar = self.menuBar().isVisible()
+        settings.setValue("Application/MenuBar", visibleMenuBar)
+
         # Application property: Status Bar
         visible = self._statusbar.isVisible()
         settings.setValue("Application/StatusBar", visible)
