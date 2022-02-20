@@ -43,6 +43,8 @@ class Window(QMainWindow):
 
         self._loadSettings()
 
+        self._updateActionFullScreen()
+
 
     def closeEvent(self, event):
 
@@ -222,6 +224,14 @@ class Window(QMainWindow):
         self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
         self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
 
+        self._actionFullScreen = QAction(self)
+        self._actionFullScreen.setObjectName("actionFullScreen")
+        self._actionFullScreen.setCheckable(True)
+        self._actionFullScreen.setIconText(self.tr("Full Screen"))
+        self._actionFullScreen.setShortcuts([QKeySequence(Qt.Key_F11), QKeySequence.FullScreen])
+        self._actionFullScreen.triggered.connect(self._onActionFullScreenTriggered)
+        self.addAction(self._actionFullScreen)
+
 
         #
         # Action group: Tool Button Style
@@ -321,6 +331,8 @@ class Window(QMainWindow):
         menuAppearance.addMenu(menuToolButtonStyle)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionStatusbar)
+        menuAppearance.addSeparator()
+        menuAppearance.addAction(self._actionFullScreen)
 
 
         # Menu: Help
@@ -374,6 +386,8 @@ class Window(QMainWindow):
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionMenubar)
+        self._toolbarAppearance.addSeparator()
+        self._toolbarAppearance.addAction(self._actionFullScreen)
         self._toolbarAppearance.visibilityChanged.connect(lambda visible: self._actionToolbarAppearance.setChecked(visible))
 
         # Toolbar: Help
@@ -389,6 +403,20 @@ class Window(QMainWindow):
                 action.setChecked(True)
                 self._onActionsToolButtonStyleTriggered(action)
                 break
+
+
+    def _updateActionFullScreen(self):
+
+        if not self.isFullScreen():
+            self._actionFullScreen.setText(self.tr("Full Screen Mode"))
+            self._actionFullScreen.setIcon(QIcon.fromTheme("view-fullscreen", QIcon(":/icons/actions/16/view-fullscreen.svg")))
+            self._actionFullScreen.setChecked(False)
+            self._actionFullScreen.setToolTip(self.tr("Display the window in full screen"))
+        else:
+            self._actionFullScreen.setText(self.tr("Exit Full Screen Mode"))
+            self._actionFullScreen.setIcon(QIcon.fromTheme("view-restore", QIcon(":/icons/actions/16/view-restore.svg")))
+            self._actionFullScreen.setChecked(True)
+            self._actionFullScreen.setToolTip(self.tr("Exit the full screen mode"))
 
 
     def _onActionAboutTriggered(self):
@@ -421,3 +449,13 @@ class Window(QMainWindow):
         self._toolbarTools.setToolButtonStyle(style)
         self._toolbarAppearance.setToolButtonStyle(style)
         self._toolbarHelp.setToolButtonStyle(style)
+
+
+    def _onActionFullScreenTriggered(self):
+
+        if not self.isFullScreen():
+            self.setWindowState(self.windowState() | Qt.WindowFullScreen)
+        else:
+            self.setWindowState(self.windowState() & ~Qt.WindowFullScreen)
+
+        self._updateActionFullScreen()
