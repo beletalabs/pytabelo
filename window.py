@@ -155,6 +155,7 @@ class Window(QMainWindow):
         self._actionQuit.setShortcut(QKeySequence.Quit)
         self._actionQuit.setToolTip(self.tr("Quit the application"))
         self._actionQuit.triggered.connect(self.close)
+        self.addAction(self._actionQuit)
 
 
         #
