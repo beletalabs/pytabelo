@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 #
-# Copyright 2022 Tabelo, <https://github.com/tabeloapp>.
+# Copyright 2022 naracanto <https://naracanto.github.io>.
 #
 # This file is part of Tabelo-QtPy, <https://github.com/tabeloapp/tabelo-qtpy>.
 #

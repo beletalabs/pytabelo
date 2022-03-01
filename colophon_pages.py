@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 #
-# Copyright 2022 Tabelo, <https://github.com/tabeloapp>.
+# Copyright 2022 naracanto <https://naracanto.github.io>.
 #
 # This file is part of Tabelo-QtPy, <https://github.com/tabeloapp/tabelo-qtpy>.
 #
@@ -70,7 +70,7 @@ class ColophonPageAuthors(QWidget):
 
         text = "<html><body><dl>"
         text += self.tr("<dt><strong>naracanto</strong></dt>")
-        text += self.tr("<dd>Created and developed by <a href=\"https://naracanto.com\" title=\"Visit author's homepage\">naracanto</a>.</dd>")
+        text += self.tr("<dd>Created and developed by <a href=\"https://naracanto.github.io\" title=\"Visit author's homepage\">naracanto</a>.</dd>")
         text += "</dl></body></html>"
 
         textBox = QTextBrowser()
