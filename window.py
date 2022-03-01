@@ -2,7 +2,7 @@
 #
 # Copyright 2022 naracanto <https://naracanto.github.io>.
 #
-# This file is part of Tabelo-QtPy, <https://github.com/tabeloapp/tabelo-qtpy>.
+# This file is part of Tabelo-QtPy <https://github.com/tabelolabs/tabelo-qtpy>.
 #
 # Tabelo-QtPy is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
