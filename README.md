@@ -25,7 +25,7 @@ Qt 5.13 or older:
 
 ## Copyright
 
-Copyright &copy; 2022 [naracanto](https://naracanto.com).
+Copyright &copy; 2022 [naracanto](https://naracanto.github.io). All rights reserved.
 
 
 ## License
