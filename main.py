@@ -23,7 +23,7 @@ import sys
 from PySide2.QtCore import QCommandLineParser
 from PySide2.QtWidgets import QApplication
 
-from window import Window
+from main_window import MainWindow
 
 
 if __name__ == "__main__":
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.addVersionOption()
     parser.process(app)
 
-    window = Window()
+    window = MainWindow()
     window.show()
 
     sys.exit(app.exec_())

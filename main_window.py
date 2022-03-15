@@ -29,7 +29,7 @@ from preferences_dialog import PreferencesDialog
 import icons_rc
 
 
-class Window(QMainWindow):
+class MainWindow(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
