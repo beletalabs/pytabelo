@@ -434,7 +434,9 @@ class MainWindow(QMainWindow):
     def _createDocument(self):
 
         document = MdiDocument()
-        self._documentsArea.addSubWindow(document)
+
+        subWindow = self._documentsArea.addSubWindow(document)
+        subWindow.setWindowIcon(QIcon())
 
         return document
 
