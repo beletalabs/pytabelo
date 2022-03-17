@@ -8,6 +8,7 @@
         "main.py",
         "main_window.py",
         "mdi_area.py",
-        "preferences_dialog.py"
+        "preferences_dialog.py",
+        "tabular_document.py"
     ]
 }
