@@ -24,6 +24,7 @@ from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, 
 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
+from mdi_area import MdiArea
 from preferences_dialog import PreferencesDialog
 
 import icons_rc
@@ -35,6 +36,13 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
+
+        self._documentsArea = MdiArea()
+        self._documentsArea.setViewMode(MdiArea.TabbedView)
+        self._documentsArea.setDocumentMode(True)
+        self._documentsArea.setTabsClosable(True)
+        self._documentsArea.setTabsMovable(True)
+        self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
 
