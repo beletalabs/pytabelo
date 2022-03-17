@@ -2,6 +2,7 @@
     <qresource prefix="/icons/actions/16">
         <file alias="application-exit.svg">icons/actions/16/application-exit.svg</file>
         <file alias="configure.svg">icons/actions/16/configure.svg</file>
+        <file alias="document-new.svg">icons/actions/16/document-new.svg</file>
         <file alias="show-menu.svg">icons/actions/16/show-menu.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/16/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/16/view-restore.svg</file>
@@ -9,6 +10,7 @@
     <qresource prefix="/icons/actions/22">
         <file alias="application-exit.svg">icons/actions/22/application-exit.svg</file>
         <file alias="configure.svg">icons/actions/22/configure.svg</file>
+        <file alias="document-new.svg">icons/actions/22/document-new.svg</file>
         <file alias="show-menu.svg">icons/actions/22/show-menu.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/22/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/22/view-restore.svg</file>

@@ -114,11 +114,21 @@ class MainWindow(QMainWindow):
         #
         # File
 
+        self._actionNew = QAction(self.tr("New"), self)
+        self._actionNew.setObjectName("actionNew")
+        self._actionNew.setIcon(QIcon.fromTheme("document-new", QIcon(":/icons/actions/16/document-new.svg")))
+        self._actionNew.setShortcut(QKeySequence.New)
+        self._actionNew.setToolTip(self.tr("Create new document"))
+        self._actionNew.triggered.connect(self._onActionNewTriggered)
+        self.addAction(self._actionNew)
+
         menuFile = self.menuBar().addMenu(self.tr("File"))
         menuFile.setObjectName("menuFile")
+        menuFile.addAction(self._actionNew)
 
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
+        self._toolbarFile.addAction(self._actionNew)
         self._toolbarFile.visibilityChanged.connect(lambda visible: self._actionToolbarFile.setChecked(visible))
 
 
@@ -436,6 +446,11 @@ class MainWindow(QMainWindow):
 
         dialog = PreferencesDialog(self)
         dialog.open()
+
+
+    def _onActionNewTriggered(self):
+
+        pass
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
