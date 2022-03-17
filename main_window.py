@@ -25,6 +25,7 @@ from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
 from mdi_area import MdiArea
+from mdi_document import MdiDocument
 from preferences_dialog import PreferencesDialog
 
 import icons_rc
@@ -430,6 +431,14 @@ class MainWindow(QMainWindow):
             self._actionFullScreen.setToolTip(self.tr("Exit the full screen mode"))
 
 
+    def _createDocument(self):
+
+        document = MdiDocument()
+        self._documentsArea.addSubWindow(document)
+
+        return document
+
+
     def _onActionAboutTriggered(self):
 
         dialog = AboutDialog(self)
@@ -450,7 +459,8 @@ class MainWindow(QMainWindow):
 
     def _onActionNewTriggered(self):
 
-        pass
+        document = self._createDocument()
+        document.show()
 
 
     def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
