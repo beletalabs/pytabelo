@@ -343,6 +343,29 @@ class MainWindow(QMainWindow):
         self._statusbar.showMessage(self.tr("Ready"), 3000)
 
 
+    def _updateActionsToolButtonStyle(self, toolButtonStyle):
+
+        for action in self._actionsToolButtonStyle.actions():
+            if Qt.ToolButtonStyle(action.data()) == toolButtonStyle:
+                action.setChecked(True)
+                self._onActionsToolButtonStyleTriggered(action)
+                break
+
+
+    def _updateActionFullScreen(self):
+
+        if not self.isFullScreen():
+            self._actionFullScreen.setText(self.tr("Full Screen Mode"))
+            self._actionFullScreen.setIcon(QIcon.fromTheme("view-fullscreen", QIcon(":/icons/actions/16/view-fullscreen.svg")))
+            self._actionFullScreen.setChecked(False)
+            self._actionFullScreen.setToolTip(self.tr("Display the window in full screen"))
+        else:
+            self._actionFullScreen.setText(self.tr("Exit Full Screen Mode"))
+            self._actionFullScreen.setIcon(QIcon.fromTheme("view-restore", QIcon(":/icons/actions/16/view-restore.svg")))
+            self._actionFullScreen.setChecked(True)
+            self._actionFullScreen.setToolTip(self.tr("Exit the full screen mode"))
+
+
     def _loadSettings(self):
 
         settings = QSettings()
@@ -410,29 +433,6 @@ class MainWindow(QMainWindow):
         # Application property: Tool Button Style
         style = self._actionsToolButtonStyle.checkedAction().data()
         settings.setValue("Application/ToolButtonStyle", style)
-
-
-    def _updateActionsToolButtonStyle(self, toolButtonStyle):
-
-        for action in self._actionsToolButtonStyle.actions():
-            if Qt.ToolButtonStyle(action.data()) == toolButtonStyle:
-                action.setChecked(True)
-                self._onActionsToolButtonStyleTriggered(action)
-                break
-
-
-    def _updateActionFullScreen(self):
-
-        if not self.isFullScreen():
-            self._actionFullScreen.setText(self.tr("Full Screen Mode"))
-            self._actionFullScreen.setIcon(QIcon.fromTheme("view-fullscreen", QIcon(":/icons/actions/16/view-fullscreen.svg")))
-            self._actionFullScreen.setChecked(False)
-            self._actionFullScreen.setToolTip(self.tr("Display the window in full screen"))
-        else:
-            self._actionFullScreen.setText(self.tr("Exit Full Screen Mode"))
-            self._actionFullScreen.setIcon(QIcon.fromTheme("view-restore", QIcon(":/icons/actions/16/view-restore.svg")))
-            self._actionFullScreen.setChecked(True)
-            self._actionFullScreen.setToolTip(self.tr("Exit the full screen mode"))
 
 
     def _createDocument(self):
