@@ -73,17 +73,20 @@ class MainWindow(QMainWindow):
         self._actionAbout.setIcon(QIcon(":/icons/apps/16/tabelo.svg"))
         self._actionAbout.setIconText(self.tr("About"))
         self._actionAbout.setToolTip(self.tr("Brief description of the application"))
+        self._actionAbout.setMenuRole(QAction.AboutRole)
         self._actionAbout.triggered.connect(self._onActionAboutTriggered)
 
         self._actionColophon = QAction(self.tr("Colophon"), self)
         self._actionColophon.setObjectName("actionColophon")
         self._actionColophon.setToolTip(self.tr("Lengthy description of the application"))
+        self._actionColophon.setMenuRole(QAction.ApplicationSpecificRole)
         self._actionColophon.triggered.connect(self._onActionColophonTriggered)
 
         self._actionPreferences = QAction(self.tr("Preferences…"), self)
         self._actionPreferences.setObjectName("actionPreferences")
         self._actionPreferences.setIcon(QIcon.fromTheme("configure", QIcon(":/icons/actions/16/configure.svg")))
         self._actionPreferences.setToolTip(self.tr("Customize the appearance and behavior of the application"))
+        self._actionPreferences.setMenuRole(QAction.PreferencesRole)
         self._actionPreferences.triggered.connect(self._onActionPreferencesTriggered)
 
         self._actionQuit = QAction(self.tr("Quit"), self)
@@ -91,6 +94,7 @@ class MainWindow(QMainWindow):
         self._actionQuit.setIcon(QIcon.fromTheme("application-exit", QIcon(":/icons/actions/16/application-exit.svg")))
         self._actionQuit.setShortcut(QKeySequence.Quit)
         self._actionQuit.setToolTip(self.tr("Quit the application"))
+        self._actionQuit.setMenuRole(QAction.QuitRole)
         self._actionQuit.triggered.connect(self.close)
         self.addAction(self._actionQuit)
 
