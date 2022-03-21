@@ -2,7 +2,7 @@
 #
 # Copyright 2022 naracanto <https://naracanto.github.io>.
 #
-# This file is part of Tabelo-QtPy <https://github.com/tabelolabs/tabelo-qtpy>.
+# This file is part of Tabelo-QtPy <https://github.com/cutelabs/tabelo-qtpy>.
 #
 # Tabelo-QtPy is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ from main_window import MainWindow
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-    app.setOrganizationName("Tabelo Labs")
-    app.setOrganizationDomain("https://tabelolabs.github.io")
+    app.setOrganizationName("Cute Labs")
+    app.setOrganizationDomain("https://cutelabs.github.io")
     app.setApplicationName("Tabelo-QtPy")
     app.setApplicationDisplayName("Tabelo-QtPy")
     app.setApplicationVersion("0.1.0")
