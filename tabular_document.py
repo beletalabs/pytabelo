@@ -4,10 +4,13 @@
 #
 # This file is part of PyTabelo <https://github.com/cutelabs/pytabelo>.
 #
+# PyTabelo is an open source table editor written in Python using
+# the Python bindings for the Qt framework.
+#
 # PyTabelo is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
 #
 # PyTabelo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
