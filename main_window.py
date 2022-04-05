@@ -81,6 +81,7 @@ class MainWindow(QMainWindow):
 
         self._actionColophon = QAction(self.tr("Colophon"), self)
         self._actionColophon.setObjectName("actionColophon")
+        self._actionColophon.setIcon(QIcon.fromTheme("help-about", QIcon(":/icons/actions/16/help-about.svg")))
         self._actionColophon.setToolTip(self.tr("Lengthy description of the application"))
         self._actionColophon.setMenuRole(QAction.ApplicationSpecificRole)
         self._actionColophon.triggered.connect(self._onActionColophonTriggered)
