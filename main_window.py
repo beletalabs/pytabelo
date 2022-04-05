@@ -37,7 +37,7 @@ import icons_rc
 class MainWindow(QMainWindow):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(parent=parent)
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
@@ -52,7 +52,8 @@ class MainWindow(QMainWindow):
 
         self._loadSettings()
 
-        self._updateActionFullScreen()
+        self._actionViewFullScreen.setChecked(self.isFullScreen())
+        self._updateActionViewFullScreen()
 
 
     def closeEvent(self, event):
@@ -71,29 +72,29 @@ class MainWindow(QMainWindow):
         #
         # Application
 
-        self._actionAbout = QAction(self.tr("About {0}").format(QApplication.applicationName()), self)
+        self._actionAbout = QAction(self.tr("&About {0}").format(QApplication.applicationName()), self)
         self._actionAbout.setObjectName("actionAbout")
         self._actionAbout.setIcon(QIcon(":/icons/apps/16/tabelo.svg"))
         self._actionAbout.setIconText(self.tr("About"))
         self._actionAbout.setToolTip(self.tr("Brief description of the application"))
         self._actionAbout.setMenuRole(QAction.AboutRole)
-        self._actionAbout.triggered.connect(self._onActionAboutTriggered)
+        self._actionAbout.triggered.connect(self._slotAbout)
 
-        self._actionColophon = QAction(self.tr("Colophon"), self)
+        self._actionColophon = QAction(self.tr("&Colophon"), self)
         self._actionColophon.setObjectName("actionColophon")
         self._actionColophon.setIcon(QIcon.fromTheme("help-about", QIcon(":/icons/actions/16/help-about.svg")))
         self._actionColophon.setToolTip(self.tr("Lengthy description of the application"))
         self._actionColophon.setMenuRole(QAction.ApplicationSpecificRole)
-        self._actionColophon.triggered.connect(self._onActionColophonTriggered)
+        self._actionColophon.triggered.connect(self._slotColophon)
 
-        self._actionPreferences = QAction(self.tr("Preferences…"), self)
+        self._actionPreferences = QAction(self.tr("&Preferences..."), self)
         self._actionPreferences.setObjectName("actionPreferences")
         self._actionPreferences.setIcon(QIcon.fromTheme("configure", QIcon(":/icons/actions/16/configure.svg")))
         self._actionPreferences.setToolTip(self.tr("Customize the appearance and behavior of the application"))
         self._actionPreferences.setMenuRole(QAction.PreferencesRole)
-        self._actionPreferences.triggered.connect(self._onActionPreferencesTriggered)
+        self._actionPreferences.triggered.connect(self._slotPreferences)
 
-        self._actionQuit = QAction(self.tr("Quit"), self)
+        self._actionQuit = QAction(self.tr("&Quit"), self)
         self._actionQuit.setObjectName("actionQuit")
         self._actionQuit.setIcon(QIcon.fromTheme("application-exit", QIcon(":/icons/actions/16/application-exit.svg")))
         self._actionQuit.setShortcut(QKeySequence.Quit)
@@ -102,7 +103,7 @@ class MainWindow(QMainWindow):
         self._actionQuit.triggered.connect(self.close)
         self.addAction(self._actionQuit)
 
-        menuApplication = self.menuBar().addMenu(self.tr("Application"))
+        menuApplication = self.menuBar().addMenu(self.tr("&Application"))
         menuApplication.setObjectName("menuApplication")
         menuApplication.addAction(self._actionAbout)
         menuApplication.addAction(self._actionColophon)
@@ -117,164 +118,150 @@ class MainWindow(QMainWindow):
         self._toolbarApplication.addAction(self._actionPreferences)
         self._toolbarApplication.addSeparator()
         self._toolbarApplication.addAction(self._actionQuit)
-        self._toolbarApplication.visibilityChanged.connect(lambda visible: self._actionToolbarApplication.setChecked(visible))
 
 
         #
         # File
 
-        self._actionNew = QAction(self.tr("New"), self)
+        self._actionNew = QAction(self.tr("&New"), self)
         self._actionNew.setObjectName("actionNew")
         self._actionNew.setIcon(QIcon.fromTheme("document-new", QIcon(":/icons/actions/16/document-new.svg")))
         self._actionNew.setShortcut(QKeySequence.New)
         self._actionNew.setToolTip(self.tr("Create new document"))
-        self._actionNew.triggered.connect(self._onActionNewTriggered)
+        self._actionNew.triggered.connect(self._slotNew)
         self.addAction(self._actionNew)
 
-        menuFile = self.menuBar().addMenu(self.tr("File"))
+        menuFile = self.menuBar().addMenu(self.tr("&File"))
         menuFile.setObjectName("menuFile")
         menuFile.addAction(self._actionNew)
 
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
         self._toolbarFile.addAction(self._actionNew)
-        self._toolbarFile.visibilityChanged.connect(lambda visible: self._actionToolbarFile.setChecked(visible))
 
 
         #
         # Edit
 
-        menuEdit = self.menuBar().addMenu(self.tr("Edit"))
+        menuEdit = self.menuBar().addMenu(self.tr("&Edit"))
         menuEdit.setObjectName("menuEdit")
 
         self._toolbarEdit = self.addToolBar(self.tr("Edit Toolbar"))
         self._toolbarEdit.setObjectName("toolbarEdit")
-        self._toolbarEdit.visibilityChanged.connect(lambda visible: self._actionToolbarEdit.setChecked(visible))
 
 
         #
         # View
 
-        menuView = self.menuBar().addMenu(self.tr("View"))
+        menuView = self.menuBar().addMenu(self.tr("&View"))
         menuView.setObjectName("menuView")
 
         self._toolbarView = self.addToolBar(self.tr("View Toolbar"))
         self._toolbarView.setObjectName("toolbarView")
-        self._toolbarView.visibilityChanged.connect(lambda visible: self._actionToolbarView.setChecked(visible))
 
 
         #
         # Format
 
-        menuFormat = self.menuBar().addMenu(self.tr("Format"))
+        menuFormat = self.menuBar().addMenu(self.tr("F&ormat"))
         menuFormat.setObjectName("menuFormat")
 
         self._toolbarFormat = self.addToolBar(self.tr("Format Toolbar"))
         self._toolbarFormat.setObjectName("toolbarFormat")
-        self._toolbarFormat.visibilityChanged.connect(lambda visible: self._actionToolbarFormat.setChecked(visible))
 
 
         #
         # Tools
 
-        menuTools = self.menuBar().addMenu(self.tr("Tools"))
+        menuTools = self.menuBar().addMenu(self.tr("&Tools"))
         menuTools.setObjectName("menuTools")
 
         self._toolbarTools = self.addToolBar(self.tr("Tools Toolbar"))
         self._toolbarTools.setObjectName("toolbarTools")
-        self._toolbarTools.visibilityChanged.connect(lambda visible: self._actionToolbarTools.setChecked(visible))
 
 
         #
         # Appearance
 
-        self._actionMenubar = QAction(self.tr("Show Menu Bar"), self)
-        self._actionMenubar.setObjectName("actionMenubar")
-        self._actionMenubar.setCheckable(True)
-        self._actionMenubar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
-        self._actionMenubar.setIconText("Menu Bar")
-        self._actionMenubar.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_M))
-        self._actionMenubar.setToolTip(self.tr("Display the Menu bar"))
-        self._actionMenubar.toggled.connect(lambda checked: self.menuBar().setVisible(checked))
-        self.addAction(self._actionMenubar)
+        self._actionShowMenubar = QAction(self.tr("Show &Menubar"), self)
+        self._actionShowMenubar.setObjectName("actionShowMenubar")
+        self._actionShowMenubar.setCheckable(True)
+        self._actionShowMenubar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
+        self._actionShowMenubar.setIconText("Menubar")
+        self._actionShowMenubar.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_M))
+        self._actionShowMenubar.setToolTip(self.tr("Show the menubar"))
+        self._actionShowMenubar.toggled.connect(self.menuBar().setVisible)
+        self.addAction(self._actionShowMenubar)
 
-        self._actionToolbarApplication = QAction(self.tr("Show Application Toolbar"), self)
-        self._actionToolbarApplication.setObjectName("actionToolbarApplication")
-        self._actionToolbarApplication.setCheckable(True)
-        self._actionToolbarApplication.setToolTip(self.tr("Display the Application toolbar"))
-        self._actionToolbarApplication.toggled.connect(lambda checked: self._toolbarApplication.setVisible(checked))
+        self._actionShowToolbarApplication = QAction(self.tr("Show &Application Toolbar"), self)
+        self._actionShowToolbarApplication.setObjectName("actionShowToolbarApplication")
+        self._actionShowToolbarApplication.setCheckable(True)
+        self._actionShowToolbarApplication.setToolTip(self.tr("Show the Application toolbar"))
 
-        self._actionToolbarFile = QAction(self.tr("Show File Toolbar"), self)
-        self._actionToolbarFile.setObjectName("actionToolbarFile")
-        self._actionToolbarFile.setCheckable(True)
-        self._actionToolbarFile.setToolTip(self.tr("Display the File toolbar"))
-        self._actionToolbarFile.toggled.connect(lambda checked: self._toolbarFile.setVisible(checked))
+        self._actionShowToolbarFile = QAction(self.tr("Show &File Toolbar"), self)
+        self._actionShowToolbarFile.setObjectName("actionShowToolbarFile")
+        self._actionShowToolbarFile.setCheckable(True)
+        self._actionShowToolbarFile.setToolTip(self.tr("Show the File toolbar"))
 
-        self._actionToolbarEdit = QAction(self.tr("Show Edit Toolbar"), self)
-        self._actionToolbarEdit.setObjectName("actionToolbarEdit")
-        self._actionToolbarEdit.setCheckable(True)
-        self._actionToolbarEdit.setToolTip(self.tr("Display the Edit toolbar"))
-        self._actionToolbarEdit.toggled.connect(lambda checked: self._toolbarEdit.setVisible(checked))
+        self._actionShowToolbarEdit = QAction(self.tr("Show &Edit Toolbar"), self)
+        self._actionShowToolbarEdit.setObjectName("actionShowToolbarEdit")
+        self._actionShowToolbarEdit.setCheckable(True)
+        self._actionShowToolbarEdit.setToolTip(self.tr("Show the Edit toolbar"))
 
-        self._actionToolbarView = QAction(self.tr("Show View Toolbar"), self)
-        self._actionToolbarView.setObjectName("actionToolbarView")
-        self._actionToolbarView.setCheckable(True)
-        self._actionToolbarView.setToolTip(self.tr("Display the View toolbar"))
-        self._actionToolbarView.toggled.connect(lambda checked: self._toolbarView.setVisible(checked))
+        self._actionShowToolbarView = QAction(self.tr("Show &View Toolbar"), self)
+        self._actionShowToolbarView.setObjectName("actionShowToolbarView")
+        self._actionShowToolbarView.setCheckable(True)
+        self._actionShowToolbarView.setToolTip(self.tr("Show the View toolbar"))
 
-        self._actionToolbarFormat = QAction(self.tr("Show Format Toolbar"), self)
-        self._actionToolbarFormat.setObjectName("actionToolbarFormat")
-        self._actionToolbarFormat.setCheckable(True)
-        self._actionToolbarFormat.setToolTip(self.tr("Display the Format toolbar"))
-        self._actionToolbarFormat.toggled.connect(lambda checked: self._toolbarFormat.setVisible(checked))
+        self._actionShowToolbarFormat = QAction(self.tr("Show F&ormat Toolbar"), self)
+        self._actionShowToolbarFormat.setObjectName("actionShowToolbarFormat")
+        self._actionShowToolbarFormat.setCheckable(True)
+        self._actionShowToolbarFormat.setToolTip(self.tr("Show the Format toolbar"))
 
-        self._actionToolbarTools = QAction(self.tr("Show Tools Toolbar"), self)
-        self._actionToolbarTools.setObjectName("actionToolbarTools")
-        self._actionToolbarTools.setCheckable(True)
-        self._actionToolbarTools.setToolTip(self.tr("Display the Tools toolbar"))
-        self._actionToolbarTools.toggled.connect(lambda checked: self._toolbarTools.setVisible(checked))
+        self._actionShowToolbarTools = QAction(self.tr("Show &Tools Toolbar"), self)
+        self._actionShowToolbarTools.setObjectName("actionShowToolbarTools")
+        self._actionShowToolbarTools.setCheckable(True)
+        self._actionShowToolbarTools.setToolTip(self.tr("Show the Tools toolbar"))
 
-        self._actionToolbarAppearance = QAction(self.tr("Show Appearance Toolbar"), self)
-        self._actionToolbarAppearance.setObjectName("actionToolbarAppearance")
-        self._actionToolbarAppearance.setCheckable(True)
-        self._actionToolbarAppearance.setToolTip(self.tr("Display the Appearance toolbar"))
-        self._actionToolbarAppearance.toggled.connect(lambda checked: self._toolbarAppearance.setVisible(checked))
+        self._actionShowToolbarAppearance = QAction(self.tr("Show Appea&rance Toolbar"), self)
+        self._actionShowToolbarAppearance.setObjectName("actionShowToolbarAppearance")
+        self._actionShowToolbarAppearance.setCheckable(True)
+        self._actionShowToolbarAppearance.setToolTip(self.tr("Show the Appearance toolbar"))
 
-        self._actionToolbarHelp = QAction(self.tr("Show Help Toolbar"), self)
-        self._actionToolbarHelp.setObjectName("actionToolbarHelp")
-        self._actionToolbarHelp.setCheckable(True)
-        self._actionToolbarHelp.setToolTip(self.tr("Display the Help toolbar"))
-        self._actionToolbarHelp.toggled.connect(lambda checked: self._toolbarHelp.setVisible(checked))
+        self._actionShowToolbarHelp = QAction(self.tr("Show &Help Toolbar"), self)
+        self._actionShowToolbarHelp.setObjectName("actionShowToolbarHelp")
+        self._actionShowToolbarHelp.setCheckable(True)
+        self._actionShowToolbarHelp.setToolTip(self.tr("Show the Help toolbar"))
 
-        actionToolButtonStyleIconOnly = QAction(self.tr("Icon Only"), self)
+        actionToolButtonStyleIconOnly = QAction(self.tr("&Icon Only"), self)
         actionToolButtonStyleIconOnly.setObjectName("actionToolButtonStyleIconOnly")
         actionToolButtonStyleIconOnly.setCheckable(True)
         actionToolButtonStyleIconOnly.setToolTip(self.tr("Only display the icon"))
         actionToolButtonStyleIconOnly.setData(Qt.ToolButtonIconOnly)
 
-        actionToolButtonStyleTextOnly = QAction(self.tr("Text Only"), self)
+        actionToolButtonStyleTextOnly = QAction(self.tr("&Text Only"), self)
         actionToolButtonStyleTextOnly.setObjectName("actionToolButtonStyleTextOnly")
         actionToolButtonStyleTextOnly.setCheckable(True)
         actionToolButtonStyleTextOnly.setToolTip(self.tr("Only display the text"))
         actionToolButtonStyleTextOnly.setData(Qt.ToolButtonTextOnly)
 
-        actionToolButtonStyleTextBesideIcon = QAction(self.tr("Text Beside Icon"), self)
+        actionToolButtonStyleTextBesideIcon = QAction(self.tr("Text &Beside Icon"), self)
         actionToolButtonStyleTextBesideIcon.setObjectName("actionToolButtonStyleTextBesideIcon")
         actionToolButtonStyleTextBesideIcon.setCheckable(True)
         actionToolButtonStyleTextBesideIcon.setToolTip(self.tr("The text appears beside the icon"))
         actionToolButtonStyleTextBesideIcon.setData(Qt.ToolButtonTextBesideIcon)
 
-        actionToolButtonStyleTextUnderIcon = QAction(self.tr("Text Under Icon"), self)
+        actionToolButtonStyleTextUnderIcon = QAction(self.tr("Text &Under Icon"), self)
         actionToolButtonStyleTextUnderIcon.setObjectName("actionToolButtonStyleTextUnderIcon")
         actionToolButtonStyleTextUnderIcon.setCheckable(True)
         actionToolButtonStyleTextUnderIcon.setToolTip(self.tr("The text appears under the icon"))
         actionToolButtonStyleTextUnderIcon.setData(Qt.ToolButtonTextUnderIcon)
 
-        actionToolButtonStyleFollowStyle = QAction(self.tr("Follow Style"), self)
-        actionToolButtonStyleFollowStyle.setObjectName("actionToolButtonStyleFollowStyle")
-        actionToolButtonStyleFollowStyle.setCheckable(True)
-        actionToolButtonStyleFollowStyle.setToolTip(self.tr("Follow the style"))
-        actionToolButtonStyleFollowStyle.setData(Qt.ToolButtonFollowStyle)
+        actionToolButtonStyleDefault = QAction(self.tr("&Default"), self)
+        actionToolButtonStyleDefault.setObjectName("actionToolButtonStyleDefault")
+        actionToolButtonStyleDefault.setCheckable(True)
+        actionToolButtonStyleDefault.setToolTip(self.tr("Follow the theme style"))
+        actionToolButtonStyleDefault.setData(Qt.ToolButtonFollowStyle)
 
         self._actionsToolButtonStyle = QActionGroup(self)
         self._actionsToolButtonStyle.setObjectName("actionsToolButtonStyle")
@@ -282,99 +269,118 @@ class MainWindow(QMainWindow):
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextOnly)
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextBesideIcon)
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleTextUnderIcon)
-        self._actionsToolButtonStyle.addAction(actionToolButtonStyleFollowStyle)
-        self._actionsToolButtonStyle.triggered.connect(self._onActionsToolButtonStyleTriggered)
+        self._actionsToolButtonStyle.addAction(actionToolButtonStyleDefault)
+        self._actionsToolButtonStyle.triggered.connect(self._slotToolButtonStyle)
 
-        self._actionStatusbar = QAction(self.tr("Show Status Bar"), self)
-        self._actionStatusbar.setObjectName("actionStatusbar")
-        self._actionStatusbar.setCheckable(True)
-        self._actionStatusbar.setToolTip(self.tr("Display the Status bar"))
-        self._actionStatusbar.toggled.connect(lambda checked: self._statusbar.setVisible(checked))
+        self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
+        self._actionShowStatusbar.setObjectName("actionShowStatusbar")
+        self._actionShowStatusbar.setCheckable(True)
+        self._actionShowStatusbar.setToolTip(self.tr("Show the Statusbar"))
+        self._actionShowStatusbar.toggled.connect(self.statusBar().setVisible)
 
-        self._actionFullScreen = QAction(self)
-        self._actionFullScreen.setObjectName("actionFullScreen")
-        self._actionFullScreen.setCheckable(True)
-        self._actionFullScreen.setIconText(self.tr("Full Screen"))
-        self._actionFullScreen.setShortcuts([QKeySequence(Qt.Key_F11), QKeySequence.FullScreen])
-        self._actionFullScreen.triggered.connect(self._onActionFullScreenTriggered)
-        self.addAction(self._actionFullScreen)
+        self._actionViewFullScreen = QAction(self)
+        self._actionViewFullScreen.setObjectName("actionViewFullScreen")
+        self._actionViewFullScreen.setCheckable(True)
+        self._actionViewFullScreen.setShortcuts([QKeySequence(Qt.Key_F11), QKeySequence.FullScreen])
+        self._actionViewFullScreen.toggled.connect(self._slotViewFullScreen)
+        self.addAction(self._actionViewFullScreen)
 
-        menuToolButtonStyle = QMenu(self.tr("Tool Button Style"), self)
+        menuToolButtonStyle = QMenu(self.tr("Tool Button St&yle"), self)
         menuToolButtonStyle.setObjectName("menuToolButtonStyle")
+        menuToolButtonStyle.addSection(self.tr("Text Position"))
         menuToolButtonStyle.addActions(self._actionsToolButtonStyle.actions())
 
-        menuAppearance = self.menuBar().addMenu(self.tr("Appearance"))
+        menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
-        menuAppearance.addAction(self._actionMenubar)
+        menuAppearance.addAction(self._actionShowMenubar)
         menuAppearance.addSeparator()
-        menuAppearance.addAction(self._actionToolbarApplication)
-        menuAppearance.addAction(self._actionToolbarFile)
-        menuAppearance.addAction(self._actionToolbarEdit)
-        menuAppearance.addAction(self._actionToolbarView)
-        menuAppearance.addAction(self._actionToolbarFormat)
-        menuAppearance.addAction(self._actionToolbarTools)
-        menuAppearance.addAction(self._actionToolbarAppearance)
-        menuAppearance.addAction(self._actionToolbarHelp)
+        menuAppearance.addAction(self._actionShowToolbarApplication)
+        menuAppearance.addAction(self._actionShowToolbarFile)
+        menuAppearance.addAction(self._actionShowToolbarEdit)
+        menuAppearance.addAction(self._actionShowToolbarView)
+        menuAppearance.addAction(self._actionShowToolbarFormat)
+        menuAppearance.addAction(self._actionShowToolbarTools)
+        menuAppearance.addAction(self._actionShowToolbarAppearance)
+        menuAppearance.addAction(self._actionShowToolbarHelp)
         menuAppearance.addMenu(menuToolButtonStyle)
         menuAppearance.addSeparator()
-        menuAppearance.addAction(self._actionStatusbar)
+        menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
-        menuAppearance.addAction(self._actionFullScreen)
+        menuAppearance.addAction(self._actionViewFullScreen)
 
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
-        self._toolbarAppearance.addAction(self._actionMenubar)
+        self._toolbarAppearance.addAction(self._actionShowMenubar)
         self._toolbarAppearance.addSeparator()
-        self._toolbarAppearance.addAction(self._actionFullScreen)
-        self._toolbarAppearance.visibilityChanged.connect(lambda visible: self._actionToolbarAppearance.setChecked(visible))
+        self._toolbarAppearance.addAction(self._actionViewFullScreen)
 
 
         #
         # Help
 
-        menuHelp = self.menuBar().addMenu(self.tr("Help"))
+        menuHelp = self.menuBar().addMenu(self.tr("&Help"))
         menuHelp.setObjectName("menuHelp")
 
         self._toolbarHelp = self.addToolBar(self.tr("Help Toolbar"))
         self._toolbarHelp.setObjectName("toolbarHelp")
-        self._toolbarHelp.visibilityChanged.connect(lambda visible: self._actionToolbarHelp.setChecked(visible))
+
+
+        # Connect toolbars with the corresponding actions
+        self._toolbarApplication.visibilityChanged.connect(self._actionShowToolbarApplication.setChecked)
+        self._actionShowToolbarApplication.toggled.connect(self._toolbarApplication.setVisible)
+        self._toolbarFile.visibilityChanged.connect(self._actionShowToolbarFile.setChecked)
+        self._actionShowToolbarFile.toggled.connect(self._toolbarFile.setVisible)
+        self._toolbarEdit.visibilityChanged.connect(self._actionShowToolbarEdit.setChecked)
+        self._actionShowToolbarEdit.toggled.connect(self._toolbarEdit.setVisible)
+        self._toolbarView.visibilityChanged.connect(self._actionShowToolbarView.setChecked)
+        self._actionShowToolbarView.toggled.connect(self._toolbarView.setVisible)
+        self._toolbarFormat.visibilityChanged.connect(self._actionShowToolbarFormat.setChecked)
+        self._actionShowToolbarFormat.toggled.connect(self._toolbarFormat.setVisible)
+        self._toolbarTools.visibilityChanged.connect(self._actionShowToolbarTools.setChecked)
+        self._actionShowToolbarTools.toggled.connect(self._toolbarTools.setVisible)
+        self._toolbarAppearance.visibilityChanged.connect(self._actionShowToolbarAppearance.setChecked)
+        self._actionShowToolbarAppearance.toggled.connect(self._toolbarAppearance.setVisible)
+        self._toolbarHelp.visibilityChanged.connect(self._actionShowToolbarHelp.setChecked)
+        self._actionShowToolbarHelp.toggled.connect(self._toolbarHelp.setVisible)
 
 
         #
         # Statusbar
 
-        self._statusbar = self.statusBar()
-        self._statusbar.showMessage(self.tr("Ready"), 3000)
+        self.statusBar().showMessage(self.tr("Ready"), 3000)
 
 
-    def _updateActionsToolButtonStyle(self, toolButtonStyle):
+    def _updateActionsToolButtonStyle(self, style):
 
         for action in self._actionsToolButtonStyle.actions():
-            if Qt.ToolButtonStyle(action.data()) == toolButtonStyle:
+            if Qt.ToolButtonStyle(action.data()) == style:
                 action.setChecked(True)
-                self._onActionsToolButtonStyleTriggered(action)
+                self._slotToolButtonStyle(action)
                 break
 
 
-    def _updateActionFullScreen(self):
+    def _updateActionViewFullScreen(self):
 
-        if not self.isFullScreen():
-            self._actionFullScreen.setText(self.tr("Full Screen Mode"))
-            self._actionFullScreen.setIcon(QIcon.fromTheme("view-fullscreen", QIcon(":/icons/actions/16/view-fullscreen.svg")))
-            self._actionFullScreen.setChecked(False)
-            self._actionFullScreen.setToolTip(self.tr("Display the window in full screen"))
+        if not self._actionViewFullScreen.isChecked():
+            self._actionViewFullScreen.setText(self.tr("Full &Screen Mode"))
+            self._actionViewFullScreen.setIcon(QIcon.fromTheme("view-fullscreen", QIcon(":/icons/actions/16/view-fullscreen.svg")))
+            self._actionViewFullScreen.setIconText(self.tr("Full Screen"))
+            self._actionViewFullScreen.setToolTip(self.tr("Display the window in full screen"))
         else:
-            self._actionFullScreen.setText(self.tr("Exit Full Screen Mode"))
-            self._actionFullScreen.setIcon(QIcon.fromTheme("view-restore", QIcon(":/icons/actions/16/view-restore.svg")))
-            self._actionFullScreen.setChecked(True)
-            self._actionFullScreen.setToolTip(self.tr("Exit the full screen mode"))
+            self._actionViewFullScreen.setText(self.tr("Exit Full &Screen Mode"))
+            self._actionViewFullScreen.setIcon(QIcon.fromTheme("view-restore", QIcon(":/icons/actions/16/view-restore.svg")))
+            self._actionViewFullScreen.setIconText(self.tr("Full Screen"))
+            self._actionViewFullScreen.setToolTip(self.tr("Exit full screen mode"))
 
 
     def _loadSettings(self):
 
         settings = QSettings()
 
-        # Application property: Geometry
+
+        #
+        # Application properties
+
         geometry = settings.value("Application/Geometry", QByteArray())
         if not geometry.isEmpty():
             self.restoreGeometry(geometry)
@@ -384,7 +390,6 @@ class MainWindow(QMainWindow):
             self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
             self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
 
-        # Application property: State
         state = settings.value("Application/State", QByteArray())
         if not state.isEmpty():
             self.restoreState(state)
@@ -399,17 +404,14 @@ class MainWindow(QMainWindow):
             self._toolbarAppearance.setVisible(False)
             self._toolbarHelp.setVisible(False)
 
-        # Application property: Menu Bar
-        visibleMenuBar = settings.value("Application/MenuBar", True, type=bool)
-        self.menuBar().setVisible(visibleMenuBar)
-        self._actionMenubar.setChecked(visibleMenuBar)
+        visible = settings.value("Application/ShowMenubar", True, type=bool)
+        self.menuBar().setVisible(visible)
+        self._actionShowMenubar.setChecked(visible)
 
-        # Application property: Status Bar
-        visible = settings.value("Application/StatusBar", True, type=bool)
-        self._statusbar.setVisible(visible)
-        self._actionStatusbar.setChecked(visible)
+        visible = settings.value("Application/ShowStatusbar", True, type=bool)
+        self.statusBar().setVisible(visible)
+        self._actionShowStatusbar.setChecked(visible)
 
-        # Application property: Tool Button Style
         style = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
         self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(style))
 
@@ -418,21 +420,21 @@ class MainWindow(QMainWindow):
 
         settings = QSettings()
 
-        # Application property: Geometry
+
+        #
+        # Application properties
+
         geometry = self.saveGeometry()
         settings.setValue("Application/Geometry", geometry)
 
-        # Application property: State
         state = self.saveState()
         settings.setValue("Application/State", state)
 
-        # Application property: Menu Bar
-        visibleMenuBar = self.menuBar().isVisible()
-        settings.setValue("Application/MenuBar", visibleMenuBar)
+        visible = self.menuBar().isVisible()
+        settings.setValue("Application/ShowMenubar", visible)
 
-        # Application property: Status Bar
-        visible = self._statusbar.isVisible()
-        settings.setValue("Application/StatusBar", visible)
+        visible = self.statusBar().isVisible()
+        settings.setValue("Application/ShowStatusbar", visible)
 
         # Application property: Tool Button Style
         style = self._actionsToolButtonStyle.checkedAction().data()
@@ -449,33 +451,33 @@ class MainWindow(QMainWindow):
         return document
 
 
-    def _onActionAboutTriggered(self):
+    def _slotAbout(self):
 
         dialog = AboutDialog(self)
         dialog.open()
 
 
-    def _onActionColophonTriggered(self):
+    def _slotColophon(self):
 
         dialog = ColophonDialog(self)
         dialog.open()
 
 
-    def _onActionPreferencesTriggered(self):
+    def _slotPreferences(self):
 
         dialog = PreferencesDialog(self)
         dialog.open()
 
 
-    def _onActionNewTriggered(self):
+    def _slotNew(self):
 
         document = self._createDocument()
         document.show()
 
 
-    def _onActionsToolButtonStyleTriggered(self, actionToolButtonStyle):
+    def _slotToolButtonStyle(self, action):
 
-        style = Qt.ToolButtonStyle(actionToolButtonStyle.data())
+        style = Qt.ToolButtonStyle(action.data())
 
         self._toolbarApplication.setToolButtonStyle(style)
         self._toolbarFile.setToolButtonStyle(style)
@@ -487,11 +489,11 @@ class MainWindow(QMainWindow):
         self._toolbarHelp.setToolButtonStyle(style)
 
 
-    def _onActionFullScreenTriggered(self):
+    def _slotViewFullScreen(self, checked):
 
-        if not self.isFullScreen():
+        if checked:
             self.setWindowState(self.windowState() | Qt.WindowFullScreen)
         else:
             self.setWindowState(self.windowState() & ~Qt.WindowFullScreen)
 
-        self._updateActionFullScreen()
+        self._updateActionViewFullScreen()
