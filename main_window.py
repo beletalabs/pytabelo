@@ -272,6 +272,45 @@ class MainWindow(QMainWindow):
         self._actionsToolButtonStyle.addAction(actionToolButtonStyleDefault)
         self._actionsToolButtonStyle.triggered.connect(self._slotToolButtonStyle)
 
+        actionToolButtonSizeSmall = QAction(self.tr("&Small (16x16)"), self)
+        actionToolButtonSizeSmall.setObjectName("actionToolButtonSizeSmall")
+        actionToolButtonSizeSmall.setCheckable(True)
+        actionToolButtonSizeSmall.setToolTip(self.tr("Show icons in small size"))
+        actionToolButtonSizeSmall.setData(16)
+
+        actionToolButtonSizeMedium = QAction(self.tr("&Medium (22x22)"), self)
+        actionToolButtonSizeMedium.setObjectName("actionToolButtonSizeMedium")
+        actionToolButtonSizeMedium.setCheckable(True)
+        actionToolButtonSizeMedium.setToolTip(self.tr("Show icons in medium size"))
+        actionToolButtonSizeMedium.setData(22)
+
+        actionToolButtonSizeLarge = QAction(self.tr("&Large (32x32)"), self)
+        actionToolButtonSizeLarge.setObjectName("actionToolButtonSizeLarge")
+        actionToolButtonSizeLarge.setCheckable(True)
+        actionToolButtonSizeLarge.setToolTip(self.tr("Show icons in large size"))
+        actionToolButtonSizeLarge.setData(32)
+
+        actionToolButtonSizeHuge = QAction(self.tr("&Huge (48x48)"), self)
+        actionToolButtonSizeHuge.setObjectName("actionToolButtonSizeHuge")
+        actionToolButtonSizeHuge.setCheckable(True)
+        actionToolButtonSizeHuge.setToolTip(self.tr("Show icons in huge size"))
+        actionToolButtonSizeHuge.setData(48)
+
+        actionToolButtonSizeDefault = QAction(self.tr("De&fault"), self)
+        actionToolButtonSizeDefault.setObjectName("actionToolButtonSizeDefault")
+        actionToolButtonSizeDefault.setCheckable(True)
+        actionToolButtonSizeDefault.setToolTip(self.tr("Show icons in theme size"))
+        actionToolButtonSizeDefault.setData(0)
+
+        self._actionsToolButtonSize = QActionGroup(self)
+        self._actionsToolButtonSize.setObjectName("actionsToolButtonSize")
+        self._actionsToolButtonSize.addAction(actionToolButtonSizeSmall)
+        self._actionsToolButtonSize.addAction(actionToolButtonSizeMedium)
+        self._actionsToolButtonSize.addAction(actionToolButtonSizeLarge)
+        self._actionsToolButtonSize.addAction(actionToolButtonSizeHuge)
+        self._actionsToolButtonSize.addAction(actionToolButtonSizeDefault)
+        self._actionsToolButtonSize.triggered.connect(self._slotToolButtonSize)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -289,6 +328,8 @@ class MainWindow(QMainWindow):
         menuToolButtonStyle.setObjectName("menuToolButtonStyle")
         menuToolButtonStyle.addSection(self.tr("Text Position"))
         menuToolButtonStyle.addActions(self._actionsToolButtonStyle.actions())
+        menuToolButtonStyle.addSection(self.tr("Icon Size"))
+        menuToolButtonStyle.addActions(self._actionsToolButtonSize.actions())
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
@@ -487,6 +528,11 @@ class MainWindow(QMainWindow):
         self._toolbarTools.setToolButtonStyle(style)
         self._toolbarAppearance.setToolButtonStyle(style)
         self._toolbarHelp.setToolButtonStyle(style)
+
+
+    def _slotToolButtonSize(self, action):
+
+        size = action.data()
 
 
     def _slotViewFullScreen(self, checked):
