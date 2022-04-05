@@ -42,7 +42,6 @@ class AboutDialog(QDialog):
 
         # Content
         pageAbout = ColophonPageAbout()
-        pageAbout.layout().setContentsMargins(0, 0, 0, 0)
 
         # Button box
         buttonBox = QDialogButtonBox(QDialogButtonBox.Close)
