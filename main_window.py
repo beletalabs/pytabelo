@@ -350,6 +350,12 @@ class MainWindow(QMainWindow):
         self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionWest)
         self._actionsDocumentTabPosition.triggered.connect(self._slotDocumentTabPosition)
 
+        self._actionDocumentTabAutoHide = QAction(self.tr("Auto Hide"), self)
+        self._actionDocumentTabAutoHide.setObjectName("actionDocumentTabAutoHide")
+        self._actionDocumentTabAutoHide.setCheckable(True)
+        self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
+        self._actionDocumentTabAutoHide.toggled.connect(self._documentsArea.setTabBarAutoHide)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -378,6 +384,8 @@ class MainWindow(QMainWindow):
         menuDocumentTabPosition.setObjectName("menuDocumentTabPosition")
         menuDocumentTabPosition.addSection(self.tr("Tab Position"))
         menuDocumentTabPosition.addActions(self._actionsDocumentTabPosition.actions())
+        menuDocumentTabPosition.addSection(self.tr("Tab Behavior"))
+        menuDocumentTabPosition.addAction(self._actionDocumentTabAutoHide)
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
