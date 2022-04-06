@@ -29,6 +29,7 @@ from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
 from mdi_area import MdiArea
 from mdi_document import MdiDocument
+from mdi_window import MdiWindow
 from preferences_dialog import PreferencesDialog
 
 import icons_rc
@@ -589,8 +590,10 @@ class MainWindow(QMainWindow):
 
         document = MdiDocument()
 
-        subWindow = self._documentsArea.addSubWindow(document)
-        subWindow.setWindowIcon(QIcon())
+        docWindow = MdiWindow()
+        docWindow.setWidget(document)
+
+        self._documentsArea.addSubWindow(docWindow)
 
         return document
 
