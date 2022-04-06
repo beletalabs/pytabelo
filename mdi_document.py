@@ -21,10 +21,10 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from tabular_document import TabularDocument
+from table_document import TableDocument
 
 
-class MdiDocument(TabularDocument):
+class MdiDocument(TableDocument):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)

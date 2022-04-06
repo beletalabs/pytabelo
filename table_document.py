@@ -24,7 +24,7 @@
 from PySide2.QtWidgets import QWidget
 
 
-class TabularDocument(QWidget):
+class TableDocument(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)

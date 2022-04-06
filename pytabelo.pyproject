@@ -10,6 +10,6 @@
         "mdi_area.py",
         "mdi_document.py",
         "preferences_dialog.py",
-        "tabular_document.py"
+        "table_document.py"
     ]
 }
