@@ -318,6 +318,38 @@ class MainWindow(QMainWindow):
         self._actionShowDocumentbar.setToolTip(self.tr("Show the Documentbar"))
         self._actionShowDocumentbar.toggled.connect(self._documentsArea.setTabBarVisible)
 
+        actionDocumentTabPositionNorth = QAction(self.tr("Top"), self)
+        actionDocumentTabPositionNorth.setObjectName("actionDocumentTabPositionNorth")
+        actionDocumentTabPositionNorth.setCheckable(True)
+        actionDocumentTabPositionNorth.setToolTip(self.tr("Show tabs above the documents"))
+        actionDocumentTabPositionNorth.setData(QTabWidget.North)
+
+        actionDocumentTabPositionEast = QAction(self.tr("Right"), self)
+        actionDocumentTabPositionEast.setObjectName("actionDocumentTabPositionEast")
+        actionDocumentTabPositionEast.setCheckable(True)
+        actionDocumentTabPositionEast.setToolTip(self.tr("Show tabs to the right of the documents"))
+        actionDocumentTabPositionEast.setData(QTabWidget.East)
+
+        actionDocumentTabPositionSouth = QAction(self.tr("Bottom"), self)
+        actionDocumentTabPositionSouth.setObjectName("actionDocumentTabPositionSouth")
+        actionDocumentTabPositionSouth.setCheckable(True)
+        actionDocumentTabPositionSouth.setToolTip(self.tr("Show tabs below the documents"))
+        actionDocumentTabPositionSouth.setData(QTabWidget.South)
+
+        actionDocumentTabPositionWest = QAction(self.tr("Left"), self)
+        actionDocumentTabPositionWest.setObjectName("actionDocumentTabPositionWest")
+        actionDocumentTabPositionWest.setCheckable(True)
+        actionDocumentTabPositionWest.setToolTip(self.tr("Show tabs to the left of the documents"))
+        actionDocumentTabPositionWest.setData(QTabWidget.West)
+
+        self._actionDocumentTabPosition = QActionGroup(self)
+        self._actionDocumentTabPosition.setObjectName("actionDocumentTabPosition")
+        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionNorth)
+        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionEast)
+        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionSouth)
+        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionWest)
+        self._actionDocumentTabPosition.triggered.connect(self._slotDocumentTabPosition)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -342,6 +374,11 @@ class MainWindow(QMainWindow):
         menuToolButtonStyle.addSection(self.tr("Icon Size"))
         menuToolButtonStyle.addActions(self._actionsToolButtonSize.actions())
 
+        menuDocumentTabPosition = QMenu(self.tr("Document Tabs Position"), self)
+        menuDocumentTabPosition.setObjectName("menuDocumentTabPosition")
+        menuDocumentTabPosition.addSection(self.tr("Tab Position"))
+        menuDocumentTabPosition.addActions(self._actionDocumentTabPosition.actions())
+
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
         menuAppearance.addAction(self._actionShowMenubar)
@@ -357,6 +394,7 @@ class MainWindow(QMainWindow):
         menuAppearance.addMenu(menuToolButtonStyle)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowDocumentbar)
+        menuAppearance.addMenu(menuDocumentTabPosition)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
@@ -582,6 +620,11 @@ class MainWindow(QMainWindow):
         self._toolbarTools.setIconSize(size)
         self._toolbarAppearance.setIconSize(size)
         self._toolbarHelp.setIconSize(size)
+
+
+    def _slotDocumentTabPosition(self, action):
+
+        pass
 
 
     def _slotFullScreen(self, checked):
