@@ -548,6 +548,10 @@ class MainWindow(QMainWindow):
         position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in QTabWidget.TabPosition.values.values() else QTabWidget.North
         self._updateActionsDocumentTabPosition(position)
 
+        checked = settings.value("Application/DocumentTabAutoHide", False, type=bool)
+        if checked:  # Because the auto hide is unchecked when the application starts
+            self._actionDocumentTabAutoHide.toggle()
+
 
     def _saveSettings(self):
 
@@ -580,6 +584,9 @@ class MainWindow(QMainWindow):
 
         value = self._actionsDocumentTabPosition.checkedAction().data()
         settings.setValue("Application/DocumentTabPosition", value)
+
+        checked = self._actionDocumentTabAutoHide.isChecked()
+        settings.setValue("Application/DocumentTabAutoHide", checked)
 
 
     def _createDocument(self):

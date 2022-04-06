@@ -39,4 +39,6 @@ class MdiArea(QMdiArea):
 
     def setTabBarAutoHide(self, hide):
 
-        pass
+        tabBar = self.findChild(QTabBar)
+        if tabBar:
+            tabBar.setAutoHide(hide)
