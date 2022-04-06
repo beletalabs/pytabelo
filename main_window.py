@@ -313,6 +313,8 @@ class MainWindow(QMainWindow):
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
         self._actionShowStatusbar.setChecked(True)
+        self._actionShowStatusbar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
+        self._actionShowStatusbar.setIconText("Statusbar")
         self._actionShowStatusbar.setToolTip(self.tr("Show the Statusbar"))
         self._actionShowStatusbar.toggled.connect(self.statusBar().setVisible)
 
@@ -352,6 +354,7 @@ class MainWindow(QMainWindow):
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionShowMenubar)
+        self._toolbarAppearance.addAction(self._actionShowStatusbar)
         self._toolbarAppearance.addSeparator()
         self._toolbarAppearance.addAction(self._actionFullScreen)
 
