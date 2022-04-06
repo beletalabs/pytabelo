@@ -309,48 +309,34 @@ class MainWindow(QMainWindow):
         self._actionsToolButtonSize.addAction(actionToolButtonSizeDefault)
         self._actionsToolButtonSize.triggered.connect(self._slotToolButtonSize)
 
-        self._actionShowDocumentbar = QAction(self.tr("Show &Documentbar"), self)
-        self._actionShowDocumentbar.setObjectName("actionShowDocumentbar")
-        self._actionShowDocumentbar.setCheckable(True)
-        self._actionShowDocumentbar.setChecked(True)
-        self._actionShowDocumentbar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
-        self._actionShowDocumentbar.setIconText("Documentbar")
-        self._actionShowDocumentbar.setToolTip(self.tr("Show the Documentbar"))
-        self._actionShowDocumentbar.toggled.connect(self._documentsArea.setTabBarVisible)
+        self._actionShowDocumentTabs = QAction(self.tr("Show &Document Tabs"), self)
+        self._actionShowDocumentTabs.setObjectName("actionShowDocumentbar")
+        self._actionShowDocumentTabs.setCheckable(True)
+        self._actionShowDocumentTabs.setChecked(True)
+        self._actionShowDocumentTabs.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
+        self._actionShowDocumentTabs.setIconText("Document Tabs")
+        self._actionShowDocumentTabs.setToolTip(self.tr("Show the Document tabs"))
+        self._actionShowDocumentTabs.toggled.connect(self._documentsArea.setTabBarVisible)
 
-        actionDocumentTabPositionNorth = QAction(self.tr("Top"), self)
-        actionDocumentTabPositionNorth.setObjectName("actionDocumentTabPositionNorth")
-        actionDocumentTabPositionNorth.setCheckable(True)
-        actionDocumentTabPositionNorth.setToolTip(self.tr("Show tabs above the documents"))
-        actionDocumentTabPositionNorth.setData(QTabWidget.North)
+        actionDocumentTabPositionTop = QAction(self.tr("&Top"), self)
+        actionDocumentTabPositionTop.setObjectName("actionDocumentTabPositionTop")
+        actionDocumentTabPositionTop.setCheckable(True)
+        actionDocumentTabPositionTop.setToolTip(self.tr("Show tabs above the documents"))
+        actionDocumentTabPositionTop.setData(QTabWidget.North)
 
-        actionDocumentTabPositionEast = QAction(self.tr("Right"), self)
-        actionDocumentTabPositionEast.setObjectName("actionDocumentTabPositionEast")
-        actionDocumentTabPositionEast.setCheckable(True)
-        actionDocumentTabPositionEast.setToolTip(self.tr("Show tabs to the right of the documents"))
-        actionDocumentTabPositionEast.setData(QTabWidget.East)
-
-        actionDocumentTabPositionSouth = QAction(self.tr("Bottom"), self)
-        actionDocumentTabPositionSouth.setObjectName("actionDocumentTabPositionSouth")
-        actionDocumentTabPositionSouth.setCheckable(True)
-        actionDocumentTabPositionSouth.setToolTip(self.tr("Show tabs below the documents"))
-        actionDocumentTabPositionSouth.setData(QTabWidget.South)
-
-        actionDocumentTabPositionWest = QAction(self.tr("Left"), self)
-        actionDocumentTabPositionWest.setObjectName("actionDocumentTabPositionWest")
-        actionDocumentTabPositionWest.setCheckable(True)
-        actionDocumentTabPositionWest.setToolTip(self.tr("Show tabs to the left of the documents"))
-        actionDocumentTabPositionWest.setData(QTabWidget.West)
+        actionDocumentTabPositionBottom = QAction(self.tr("&Bottom"), self)
+        actionDocumentTabPositionBottom.setObjectName("actionDocumentTabPositionBottom")
+        actionDocumentTabPositionBottom.setCheckable(True)
+        actionDocumentTabPositionBottom.setToolTip(self.tr("Show tabs below the documents"))
+        actionDocumentTabPositionBottom.setData(QTabWidget.South)
 
         self._actionsDocumentTabPosition = QActionGroup(self)
         self._actionsDocumentTabPosition.setObjectName("actionsDocumentTabPosition")
-        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionNorth)
-        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionEast)
-        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionSouth)
-        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionWest)
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionTop)
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionBottom)
         self._actionsDocumentTabPosition.triggered.connect(self._slotDocumentTabPosition)
 
-        self._actionDocumentTabAutoHide = QAction(self.tr("Auto Hide"), self)
+        self._actionDocumentTabAutoHide = QAction(self.tr("&Auto Hide"), self)
         self._actionDocumentTabAutoHide.setObjectName("actionDocumentTabAutoHide")
         self._actionDocumentTabAutoHide.setCheckable(True)
         self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
@@ -380,12 +366,13 @@ class MainWindow(QMainWindow):
         menuToolButtonStyle.addSection(self.tr("Icon Size"))
         menuToolButtonStyle.addActions(self._actionsToolButtonSize.actions())
 
-        menuDocumentTabPosition = QMenu(self.tr("Document Tabs Position"), self)
+        menuDocumentTabPosition = QMenu(self.tr("Document Tab &Position"), self)
         menuDocumentTabPosition.setObjectName("menuDocumentTabPosition")
-        menuDocumentTabPosition.addSection(self.tr("Tab Position"))
+        menuDocumentTabPosition.addSection(self.tr("Position"))
         menuDocumentTabPosition.addActions(self._actionsDocumentTabPosition.actions())
-        menuDocumentTabPosition.addSection(self.tr("Tab Behavior"))
+        menuDocumentTabPosition.addSection(self.tr("Behavior"))
         menuDocumentTabPosition.addAction(self._actionDocumentTabAutoHide)
+        self._actionShowDocumentTabs.toggled.connect(menuDocumentTabPosition.setEnabled)
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
@@ -401,7 +388,7 @@ class MainWindow(QMainWindow):
         menuAppearance.addAction(self._actionShowToolbarHelp)
         menuAppearance.addMenu(menuToolButtonStyle)
         menuAppearance.addSeparator()
-        menuAppearance.addAction(self._actionShowDocumentbar)
+        menuAppearance.addAction(self._actionShowDocumentTabs)
         menuAppearance.addMenu(menuDocumentTabPosition)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
@@ -411,7 +398,7 @@ class MainWindow(QMainWindow):
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionShowMenubar)
-        self._toolbarAppearance.addAction(self._actionShowDocumentbar)
+        self._toolbarAppearance.addAction(self._actionShowDocumentTabs)
         self._toolbarAppearance.addAction(self._actionShowStatusbar)
         self._toolbarAppearance.addSeparator()
         self._toolbarAppearance.addAction(self._actionFullScreen)
@@ -498,6 +485,7 @@ class MainWindow(QMainWindow):
         #
         # Application properties
 
+        # Geometry
         geometry = settings.value("Application/Geometry", QByteArray())
         if not geometry.isEmpty():
             self.restoreGeometry(geometry)
@@ -507,12 +495,13 @@ class MainWindow(QMainWindow):
             self.resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3)
             self.move((availableGeometry.width() - self.width()) / 2, (availableGeometry.height() - self.height()) / 2)
 
+        # State
         state = settings.value("Application/State", QByteArray())
         if not state.isEmpty():
             self.restoreState(state)
 
             if self.isFullScreen():
-                self._actionFullScreen.trigger()
+                self._actionFullScreen.toggle()
         else:
             # Default: Show/hide toolbars
             self._toolbarApplication.setVisible(True)
@@ -524,32 +513,39 @@ class MainWindow(QMainWindow):
             self._toolbarAppearance.setVisible(False)
             self._toolbarHelp.setVisible(False)
 
+        # Show Menubar
         visible = settings.value("Application/ShowMenubar", True, type=bool)
-        if not visible:  # Because the menubar is visible when the application starts
+        if not visible:  # Default: Visible
             self._actionShowMenubar.toggle()
 
+        # Show Statusbar
         visible = settings.value("Application/ShowStatusbar", True, type=bool)
-        if not visible:  # Because the statusbar is visible when the application starts
+        if not visible:  # Default: Visible
             self._actionShowStatusbar.toggle()
 
+        # Tool Button Style
         value = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
         style = Qt.ToolButtonStyle(value) if Qt.ToolButtonStyle(value) in Qt.ToolButtonStyle.values.values() else Qt.ToolButtonFollowStyle
         self._updateActionsToolButtonStyle(style)
 
+        # Tool Button Size
         value = settings.value("Application/ToolButtonSize", 0, type=int)
         pixel = value if value in [0, 16, 22, 32, 48] else 0
         self._updateActionsToolButtonSize(pixel)
 
-        visible = settings.value("Application/ShowDocumentbar", True, type=bool)
-        if not visible:  # Because the documentbar is visible when the application starts
-            self._actionShowDocumentbar.toggle()
+        # Show Document Tabs
+        visible = settings.value("Application/ShowDocumentTabs", True, type=bool)
+        if not visible:  # Default: Visible
+            self._actionShowDocumentTabs.toggle()
 
+        # Document Tab Position
         value = settings.value("Application/DocumentTabPosition", QTabWidget.North, type=int)
-        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in QTabWidget.TabPosition.values.values() else QTabWidget.North
+        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.North
         self._updateActionsDocumentTabPosition(position)
 
+        # Document Tab Auto Hide
         checked = settings.value("Application/DocumentTabAutoHide", False, type=bool)
-        if checked:  # Because the auto hide is unchecked when the application starts
+        if checked:  # Default: Unchecked
             self._actionDocumentTabAutoHide.toggle()
 
 
@@ -576,11 +572,11 @@ class MainWindow(QMainWindow):
         value = self._actionsToolButtonStyle.checkedAction().data()
         settings.setValue("Application/ToolButtonStyle", value)
 
-        pixel = self._actionsToolButtonSize.checkedAction().data()
-        settings.setValue("Application/ToolButtonSize", pixel)
+        value = self._actionsToolButtonSize.checkedAction().data()
+        settings.setValue("Application/ToolButtonSize", value)
 
-        visible = self._actionShowDocumentbar.isChecked()
-        settings.setValue("Application/ShowDocumentbar", visible)
+        visible = self._actionShowDocumentTabs.isChecked()
+        settings.setValue("Application/ShowDocumentTabs", visible)
 
         value = self._actionsDocumentTabPosition.checkedAction().data()
         settings.setValue("Application/DocumentTabPosition", value)

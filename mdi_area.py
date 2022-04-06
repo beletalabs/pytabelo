@@ -30,11 +30,13 @@ class MdiArea(QMdiArea):
         super().__init__(parent=parent)
 
 
-    def setTabBarVisible(self, visible):
+    def isTabBarAutoHide(self):
 
         tabBar = self.findChild(QTabBar)
         if tabBar:
-            tabBar.setVisible(visible)
+            return tabBar.autoHide()
+
+        return False
 
 
     def setTabBarAutoHide(self, hide):
@@ -42,3 +44,19 @@ class MdiArea(QMdiArea):
         tabBar = self.findChild(QTabBar)
         if tabBar:
             tabBar.setAutoHide(hide)
+
+
+    def isTabBarVisible(self):
+
+        tabBar = self.findChild(QTabBar)
+        if tabBar:
+            return tabBar.isVisible()
+
+        return False
+
+
+    def setTabBarVisible(self, visible):
+
+        tabBar = self.findChild(QTabBar)
+        if tabBar:
+            tabBar.setVisible(visible)
