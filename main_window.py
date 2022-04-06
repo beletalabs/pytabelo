@@ -393,6 +393,9 @@ class MainWindow(QMainWindow):
 
     def _updateActionsToolButtonStyle(self, style):
 
+        if not style in [Qt.ToolButtonIconOnly, Qt.ToolButtonTextOnly, Qt.ToolButtonTextBesideIcon, Qt.ToolButtonTextUnderIcon]:
+            style = Qt.ToolButtonFollowStyle
+
         for action in self._actionsToolButtonStyle.actions():
             if Qt.ToolButtonStyle(action.data()) == style:
                 action.setChecked(True)
@@ -465,8 +468,8 @@ class MainWindow(QMainWindow):
         self.statusBar().setVisible(visible)
         self._actionShowStatusbar.setChecked(visible)
 
-        style = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
-        self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(style))
+        value = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
+        self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(value))
 
         pixel = settings.value("Application/ToolButtonSize", 0, type=int)
         self._updateActionsToolButtonSize(pixel)
@@ -492,8 +495,8 @@ class MainWindow(QMainWindow):
         visible = self.statusBar().isVisible()
         settings.setValue("Application/ShowStatusbar", visible)
 
-        style = self._actionsToolButtonStyle.checkedAction().data()
-        settings.setValue("Application/ToolButtonStyle", style)
+        value = self._actionsToolButtonStyle.checkedAction().data()
+        settings.setValue("Application/ToolButtonStyle", value)
 
         pixel = self._actionsToolButtonSize.checkedAction().data()
         settings.setValue("Application/ToolButtonSize", pixel)
