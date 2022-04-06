@@ -23,7 +23,7 @@
 
 from PySide2.QtCore import QByteArray, QSettings, QSize, Qt
 from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu
+from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu, QTabWidget
 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
@@ -309,6 +309,15 @@ class MainWindow(QMainWindow):
         self._actionsToolButtonSize.addAction(actionToolButtonSizeDefault)
         self._actionsToolButtonSize.triggered.connect(self._slotToolButtonSize)
 
+        self._actionShowDocumentbar = QAction(self.tr("Show &Documentbar"), self)
+        self._actionShowDocumentbar.setObjectName("actionShowDocumentbar")
+        self._actionShowDocumentbar.setCheckable(True)
+        self._actionShowDocumentbar.setChecked(True)
+        self._actionShowDocumentbar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
+        self._actionShowDocumentbar.setIconText("Documentbar")
+        self._actionShowDocumentbar.setToolTip(self.tr("Show the Documentbar"))
+        self._actionShowDocumentbar.toggled.connect(self._slotShowDocumentbar)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -347,6 +356,8 @@ class MainWindow(QMainWindow):
         menuAppearance.addAction(self._actionShowToolbarHelp)
         menuAppearance.addMenu(menuToolButtonStyle)
         menuAppearance.addSeparator()
+        menuAppearance.addAction(self._actionShowDocumentbar)
+        menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionFullScreen)
@@ -354,6 +365,7 @@ class MainWindow(QMainWindow):
         self._toolbarAppearance = self.addToolBar(self.tr("Appearance Toolbar"))
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionShowMenubar)
+        self._toolbarAppearance.addAction(self._actionShowDocumentbar)
         self._toolbarAppearance.addAction(self._actionShowStatusbar)
         self._toolbarAppearance.addSeparator()
         self._toolbarAppearance.addAction(self._actionFullScreen)
@@ -563,6 +575,11 @@ class MainWindow(QMainWindow):
         self._toolbarTools.setIconSize(size)
         self._toolbarAppearance.setIconSize(size)
         self._toolbarHelp.setIconSize(size)
+
+
+    def _slotShowDocumentbar(self, checked):
+
+        pass
 
 
     def _slotFullScreen(self, checked):
