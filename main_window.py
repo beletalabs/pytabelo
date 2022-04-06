@@ -21,7 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import QByteArray, QSettings, Qt
+from PySide2.QtCore import QByteArray, QSettings, QSize, Qt
 from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu
 
@@ -400,6 +400,18 @@ class MainWindow(QMainWindow):
                 break
 
 
+    def _updateActionsToolButtonSize(self, pixel):
+
+        if not pixel in [16, 22, 32, 48]:
+            pixel = 0
+
+        for action in self._actionsToolButtonSize.actions():
+            if action.data() == pixel:
+                action.setChecked(True)
+                self._slotToolButtonSize(action)
+                break
+
+
     def _updateActionViewFullScreen(self):
 
         if not self._actionViewFullScreen.isChecked():
@@ -456,6 +468,9 @@ class MainWindow(QMainWindow):
         style = settings.value("Application/ToolButtonStyle", Qt.ToolButtonFollowStyle, type=int)
         self._updateActionsToolButtonStyle(Qt.ToolButtonStyle(style))
 
+        pixel = settings.value("Application/ToolButtonSize", 0, type=int)
+        self._updateActionsToolButtonSize(pixel)
+
 
     def _saveSettings(self):
 
@@ -477,9 +492,11 @@ class MainWindow(QMainWindow):
         visible = self.statusBar().isVisible()
         settings.setValue("Application/ShowStatusbar", visible)
 
-        # Application property: Tool Button Style
         style = self._actionsToolButtonStyle.checkedAction().data()
         settings.setValue("Application/ToolButtonStyle", style)
+
+        pixel = self._actionsToolButtonSize.checkedAction().data()
+        settings.setValue("Application/ToolButtonSize", pixel)
 
 
     def _createDocument(self):
@@ -532,7 +549,17 @@ class MainWindow(QMainWindow):
 
     def _slotToolButtonSize(self, action):
 
-        size = action.data()
+        pixel = action.data()
+        size = QSize(pixel, pixel) if pixel else QSize(-1, -1)
+
+        self._toolbarApplication.setIconSize(size)
+        self._toolbarFile.setIconSize(size)
+        self._toolbarEdit.setIconSize(size)
+        self._toolbarView.setIconSize(size)
+        self._toolbarFormat.setIconSize(size)
+        self._toolbarTools.setIconSize(size)
+        self._toolbarAppearance.setIconSize(size)
+        self._toolbarHelp.setIconSize(size)
 
 
     def _slotViewFullScreen(self, checked):
