@@ -316,7 +316,7 @@ class MainWindow(QMainWindow):
         self._actionShowDocumentbar.setIcon(QIcon.fromTheme("show-menu", QIcon(":/icons/actions/16/show-menu.svg")))
         self._actionShowDocumentbar.setIconText("Documentbar")
         self._actionShowDocumentbar.setToolTip(self.tr("Show the Documentbar"))
-        self._actionShowDocumentbar.toggled.connect(self._slotShowDocumentbar)
+        self._actionShowDocumentbar.toggled.connect(self._documentsArea.setTabBarVisible)
 
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
@@ -486,6 +486,10 @@ class MainWindow(QMainWindow):
         pixel = value if value in [0, 16, 22, 32, 48] else 0
         self._updateActionsToolButtonSize(pixel)
 
+        visible = settings.value("Application/ShowDocumentbar", True, type=bool)
+        if not visible:  # Because the documentbar is visible when the application starts
+            self._actionShowDocumentbar.toggle()
+
 
     def _saveSettings(self):
 
@@ -512,6 +516,9 @@ class MainWindow(QMainWindow):
 
         pixel = self._actionsToolButtonSize.checkedAction().data()
         settings.setValue("Application/ToolButtonSize", pixel)
+
+        visible = self._actionShowDocumentbar.isChecked()
+        settings.setValue("Application/ShowDocumentbar", visible)
 
 
     def _createDocument(self):
@@ -575,11 +582,6 @@ class MainWindow(QMainWindow):
         self._toolbarTools.setIconSize(size)
         self._toolbarAppearance.setIconSize(size)
         self._toolbarHelp.setIconSize(size)
-
-
-    def _slotShowDocumentbar(self, checked):
-
-        pass
 
 
     def _slotFullScreen(self, checked):
