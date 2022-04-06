@@ -342,13 +342,13 @@ class MainWindow(QMainWindow):
         actionDocumentTabPositionWest.setToolTip(self.tr("Show tabs to the left of the documents"))
         actionDocumentTabPositionWest.setData(QTabWidget.West)
 
-        self._actionDocumentTabPosition = QActionGroup(self)
-        self._actionDocumentTabPosition.setObjectName("actionDocumentTabPosition")
-        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionNorth)
-        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionEast)
-        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionSouth)
-        self._actionDocumentTabPosition.addAction(actionDocumentTabPositionWest)
-        self._actionDocumentTabPosition.triggered.connect(self._slotDocumentTabPosition)
+        self._actionsDocumentTabPosition = QActionGroup(self)
+        self._actionsDocumentTabPosition.setObjectName("actionsDocumentTabPosition")
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionNorth)
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionEast)
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionSouth)
+        self._actionsDocumentTabPosition.addAction(actionDocumentTabPositionWest)
+        self._actionsDocumentTabPosition.triggered.connect(self._slotDocumentTabPosition)
 
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
@@ -377,7 +377,7 @@ class MainWindow(QMainWindow):
         menuDocumentTabPosition = QMenu(self.tr("Document Tabs Position"), self)
         menuDocumentTabPosition.setObjectName("menuDocumentTabPosition")
         menuDocumentTabPosition.addSection(self.tr("Tab Position"))
-        menuDocumentTabPosition.addActions(self._actionDocumentTabPosition.actions())
+        menuDocumentTabPosition.addActions(self._actionsDocumentTabPosition.actions())
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
@@ -460,6 +460,14 @@ class MainWindow(QMainWindow):
                 break
 
 
+    def _updateActionsDocumentTabPosition(self, position):
+
+        for action in self._actionsDocumentTabPosition.actions():
+            if QTabWidget.TabPosition(action.data()) == position:
+                action.trigger()
+                break
+
+
     def _updateActionFullScreen(self):
 
         if not self._actionFullScreen.isChecked():
@@ -528,6 +536,10 @@ class MainWindow(QMainWindow):
         if not visible:  # Because the documentbar is visible when the application starts
             self._actionShowDocumentbar.toggle()
 
+        value = settings.value("Application/DocumentTabPosition", QTabWidget.North, type=int)
+        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in QTabWidget.TabPosition.values.values() else QTabWidget.North
+        self._updateActionsDocumentTabPosition(position)
+
 
     def _saveSettings(self):
 
@@ -557,6 +569,9 @@ class MainWindow(QMainWindow):
 
         visible = self._actionShowDocumentbar.isChecked()
         settings.setValue("Application/ShowDocumentbar", visible)
+
+        value = self._actionsDocumentTabPosition.checkedAction().data()
+        settings.setValue("Application/DocumentTabPosition", value)
 
 
     def _createDocument(self):
@@ -624,7 +639,9 @@ class MainWindow(QMainWindow):
 
     def _slotDocumentTabPosition(self, action):
 
-        pass
+        position = QTabWidget.TabPosition(action.data())
+
+        self._documentsArea.setTabPosition(position)
 
 
     def _slotFullScreen(self, checked):
