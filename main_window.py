@@ -540,6 +540,11 @@ class MainWindow(QMainWindow):
         self._actionClose.setEnabled(enabled)
 
 
+    def _enableActionCloseOther(self):
+
+        self._actionCloseOther.setEnabled(self._documentsArea.subWindowCount() >= 2)
+
+
     def _loadSettings(self):
 
         settings = QSettings()
@@ -654,6 +659,7 @@ class MainWindow(QMainWindow):
 
         docWindow = MdiWindow()
         docWindow.setWidget(document)
+        docWindow.destroyed.connect(self._enableActionCloseOther)
 
         self._documentsArea.addSubWindow(docWindow)
 
@@ -663,6 +669,7 @@ class MainWindow(QMainWindow):
     def _activateDocument(self, subWindow):
 
         self._enableActions(subWindow is not None)
+        self._enableActionCloseOther()
 
 
     def _slotAbout(self):

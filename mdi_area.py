@@ -65,6 +65,11 @@ class MdiArea(QMdiArea):
             tabBar.setVisible(visible)
 
 
+    def subWindowCount(self):
+
+        return len(self.subWindowList())
+
+
     def closeSelectedSubWindow(self, subWindow):
 
         if subWindow is None:
