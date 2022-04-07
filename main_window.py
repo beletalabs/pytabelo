@@ -30,6 +30,7 @@ from colophon_dialog import ColophonDialog
 from mdi_area import MdiArea
 from mdi_document import MdiDocument
 from mdi_window import MdiWindow
+from message_box import MessageBox
 from preferences_dialog import PreferencesDialog
 
 import icons_rc

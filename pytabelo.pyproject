@@ -10,6 +10,7 @@
         "mdi_area.py",
         "mdi_document.py",
         "mdi_window.py",
+        "message_box.py",
         "preferences_dialog.py",
         "table_document.py"
     ]
