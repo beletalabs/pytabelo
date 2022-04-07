@@ -63,3 +63,28 @@ class MdiArea(QMdiArea):
         tabBar = self.findChild(QTabBar)
         if tabBar:
             tabBar.setVisible(visible)
+
+
+    def closeSelectedSubWindow(self, subWindow):
+
+        if subWindow is None:
+            return
+
+        subWindow.close()
+
+
+    def closeOtherSubWindows(self, subWindow):
+
+        subWindows = self.subWindowList()
+        if not len(subWindows) or subWindow is None:
+            return
+
+        # First remove the subwindow from the list that should not be closed
+        if subWindow in subWindows:
+            subWindows.remove(subWindow)
+        else:
+            return
+
+        # Then close all other subwindows
+        for subWindow in subWindows:
+            self.closeSelectedSubWindow(subWindow)

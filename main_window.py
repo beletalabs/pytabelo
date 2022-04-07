@@ -143,6 +143,7 @@ class MainWindow(QMainWindow):
         self._actionCloseOther = QAction(self.tr("Close Ot&her"), self)
         self._actionCloseOther.setObjectName("actionCloseOther")
         self._actionCloseOther.setToolTip(self.tr("Close other open documents"))
+        self._actionCloseOther.triggered.connect(self._slotCloseOther)
 
         menuFile = self.menuBar().addMenu(self.tr("&File"))
         menuFile.setObjectName("menuFile")
@@ -686,6 +687,11 @@ class MainWindow(QMainWindow):
 
         document = self._createDocument()
         document.show()
+
+
+    def _slotCloseOther(self):
+
+        self._documentsArea.closeOtherSubWindows(self._documentsArea.activeSubWindow())
 
 
     def _slotShowMenubar(self, checked):
