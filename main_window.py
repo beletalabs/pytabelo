@@ -140,11 +140,16 @@ class MainWindow(QMainWindow):
         self._actionClose.triggered.connect(self._documentsArea.closeActiveSubWindow)
         self.addAction(self._actionClose)
 
+        self._actionCloseOther = QAction(self.tr("Close Ot&her"), self)
+        self._actionCloseOther.setObjectName("actionCloseOther")
+        self._actionCloseOther.setToolTip(self.tr("Close other open documents"))
+
         menuFile = self.menuBar().addMenu(self.tr("&File"))
         menuFile.setObjectName("menuFile")
         menuFile.addAction(self._actionNew)
         menuFile.addSeparator()
         menuFile.addAction(self._actionClose)
+        menuFile.addAction(self._actionCloseOther)
 
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
