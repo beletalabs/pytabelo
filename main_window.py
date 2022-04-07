@@ -145,12 +145,17 @@ class MainWindow(QMainWindow):
         self._actionCloseOther.setToolTip(self.tr("Close other open documents"))
         self._actionCloseOther.triggered.connect(self._slotCloseOther)
 
+        self._actionCloseAll = QAction(self.tr("Clos&e All"), self)
+        self._actionCloseAll.setObjectName("actionCloseAll")
+        self._actionCloseAll.setToolTip(self.tr("Close all open documents"))
+
         menuFile = self.menuBar().addMenu(self.tr("&File"))
         menuFile.setObjectName("menuFile")
         menuFile.addAction(self._actionNew)
         menuFile.addSeparator()
         menuFile.addAction(self._actionClose)
         menuFile.addAction(self._actionCloseOther)
+        menuFile.addAction(self._actionCloseAll)
 
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
@@ -538,6 +543,7 @@ class MainWindow(QMainWindow):
     def _enableActions(self, enabled):
 
         self._actionClose.setEnabled(enabled)
+        self._actionCloseAll.setEnabled(enabled)
 
 
     def _enableActionCloseOther(self):
