@@ -47,11 +47,14 @@ class MainWindow(QMainWindow):
         self._documentsArea.setDocumentMode(True)
         self._documentsArea.setTabsClosable(True)
         self._documentsArea.setTabsMovable(True)
+        self._documentsArea.subWindowActivated.connect(self._activateDocument)
         self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
 
         self._loadSettings()
+
+        self._activateDocument(None)
 
 
     def closeEvent(self, event):
@@ -526,6 +529,11 @@ class MainWindow(QMainWindow):
             self._actionFullScreen.setToolTip(self.tr("Exit full screen mode"))
 
 
+    def _enableActions(self, enabled):
+
+        self._actionClose.setEnabled(enabled)
+
+
     def _loadSettings(self):
 
         settings = QSettings()
@@ -644,6 +652,11 @@ class MainWindow(QMainWindow):
         self._documentsArea.addSubWindow(docWindow)
 
         return document
+
+
+    def _activateDocument(self, subWindow):
+
+        self._enableActions(subWindow is not None)
 
 
     def _slotAbout(self):
