@@ -129,13 +129,25 @@ class MainWindow(QMainWindow):
         self._actionNew.triggered.connect(self._slotNew)
         self.addAction(self._actionNew)
 
+        self._actionClose = QAction(self.tr("&Close"), self)
+        self._actionClose.setObjectName("actionClose")
+        self._actionClose.setIcon(QIcon.fromTheme("document-close", QIcon(":/icons/actions/16/document-close.svg")))
+        self._actionClose.setShortcut(QKeySequence.Close)
+        self._actionClose.setToolTip(self.tr("Close document"))
+        self._actionClose.triggered.connect(self._documentsArea.closeActiveSubWindow)
+        self.addAction(self._actionClose)
+
         menuFile = self.menuBar().addMenu(self.tr("&File"))
         menuFile.setObjectName("menuFile")
         menuFile.addAction(self._actionNew)
+        menuFile.addSeparator()
+        menuFile.addAction(self._actionClose)
 
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
         self._toolbarFile.addAction(self._actionNew)
+        self._toolbarFile.addSeparator()
+        self._toolbarFile.addAction(self._actionClose)
 
 
         #
