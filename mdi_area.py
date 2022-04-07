@@ -21,6 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMdiArea, QTabBar
 
 
@@ -28,6 +29,8 @@ class MdiArea(QMdiArea):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self.setAttribute(Qt.WA_DeleteOnClose)
 
 
     def isTabBarAutoHide(self):

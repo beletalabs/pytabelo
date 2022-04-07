@@ -21,6 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMdiSubWindow
 
 
@@ -28,3 +29,5 @@ class MdiWindow(QMdiSubWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self.setAttribute(Qt.WA_DeleteOnClose)
