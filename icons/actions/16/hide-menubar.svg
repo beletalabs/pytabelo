@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs id="defs3051">
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#232629;
+      }
+    </style>
+  </defs>
+  <path style="fill:currentColor;fill-opacity:1;stroke:none"
+    d="M 2,2 V 5 H 5 V 2 Z m 4,0 v 1 h 4.878906 l 1,-1 z M 13.314453,2 2,13.294922 2.7148438,14 14,2.6972656 Z M 6,4 v 1 h 2.8789062 l 1,-1 z M 14,4.1210938 13.121094,5 H 14 Z M 2,7 v 3 H 3.8789062 L 5,8.8789062 V 7 Z M 6,7 V 7.8789062 L 6.8789062,7 Z m 5.121094,0 -1,1 H 14 V 7 Z m -2.0000002,2 -1,1 H 14 V 9 Z m -3,3 -1,1 H 14 v -1 z"
+    class="ColorScheme-Text" />
+</svg>

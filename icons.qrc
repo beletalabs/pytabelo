@@ -4,7 +4,15 @@
         <file alias="configure.svg">icons/actions/16/configure.svg</file>
         <file alias="document-new.svg">icons/actions/16/document-new.svg</file>
         <file alias="help-about.svg">icons/actions/16/help-about.svg</file>
+        <file alias="hide-menubar.svg">icons/actions/16/hide-menubar.svg</file>
+        <file alias="hide-statusbar.svg">icons/actions/16/hide-statusbar.svg</file>
+        <file alias="hide-tabbar.svg">icons/actions/16/hide-tabbar.svg</file>
+        <file alias="hide-tabbar-bottom.svg">icons/actions/16/hide-tabbar-bottom.svg</file>
         <file alias="show-menu.svg">icons/actions/16/show-menu.svg</file>
+        <file alias="show-menubar.svg">icons/actions/16/show-menubar.svg</file>
+        <file alias="show-statusbar.svg">icons/actions/16/show-statusbar.svg</file>
+        <file alias="show-tabbar.svg">icons/actions/16/show-tabbar.svg</file>
+        <file alias="show-tabbar-bottom.svg">icons/actions/16/show-tabbar-bottom.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/16/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/16/view-restore.svg</file>
     </qresource>
@@ -13,7 +21,15 @@
         <file alias="configure.svg">icons/actions/22/configure.svg</file>
         <file alias="document-new.svg">icons/actions/22/document-new.svg</file>
         <file alias="help-about.svg">icons/actions/22/help-about.svg</file>
+        <file alias="hide-menubar.svg">icons/actions/22/hide-menubar.svg</file>
+        <file alias="hide-statusbar.svg">icons/actions/22/hide-statusbar.svg</file>
+        <file alias="hide-tabbar.svg">icons/actions/22/hide-tabbar.svg</file>
+        <file alias="hide-tabbar-bottom.svg">icons/actions/22/hide-tabbar-bottom.svg</file>
         <file alias="show-menu.svg">icons/actions/22/show-menu.svg</file>
+        <file alias="show-menubar.svg">icons/actions/22/show-menubar.svg</file>
+        <file alias="show-statusbar.svg">icons/actions/22/show-statusbar.svg</file>
+        <file alias="show-tabbar.svg">icons/actions/22/show-tabbar.svg</file>
+        <file alias="show-tabbar-bottom.svg">icons/actions/22/show-tabbar-bottom.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/22/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/22/view-restore.svg</file>
     </qresource>
