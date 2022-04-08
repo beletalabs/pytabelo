@@ -63,17 +63,6 @@ class MainWindow(QMainWindow):
         self._documentActivated(None)
 
 
-    def closeEvent(self, event):
-
-        if True:
-            # Store application properties
-            self._saveSettings()
-
-            event.accept()
-        else:
-            event.ignore()
-
-
     def _setupActions(self):
 
         #
@@ -664,6 +653,27 @@ class MainWindow(QMainWindow):
 
         checked = self._actionDocumentTabAutoHide.isChecked()
         settings.setValue("Application/DocumentTabAutoHide", checked)
+
+
+    def closeEvent(self, event):
+
+        if self._documentsArea.subWindowCount() >= 1:
+
+            title = self.tr("Quit the application")
+            text = self.tr("This will close all open documents and quit the application.\n"
+                           "Are you sure you want to continue?")
+            buttons = QMessageBox.Yes | QMessageBox.Cancel
+            default = QMessageBox.Yes
+
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmQuit") is QMessageBox.Cancel:
+                event.ignore()
+                return
+
+            self._documentsArea.closeAllSubWindows()
+
+        self._saveSettings()
+
+        event.accept()
 
 
     def _createDocument(self):
