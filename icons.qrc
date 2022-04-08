@@ -16,6 +16,7 @@
         <file alias="show-tabbar-bottom.svg">icons/actions/16/show-tabbar-bottom.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/16/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/16/view-restore.svg</file>
+        <file alias="window-close.svg">icons/actions/16/window-close.svg</file>
     </qresource>
     <qresource prefix="/icons/actions/22">
         <file alias="application-exit.svg">icons/actions/22/application-exit.svg</file>
@@ -34,6 +35,7 @@
         <file alias="show-tabbar-bottom.svg">icons/actions/22/show-tabbar-bottom.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/22/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/22/view-restore.svg</file>
+        <file alias="window-close.svg">icons/actions/22/window-close.svg</file>
     </qresource>
     <qresource prefix="/icons/apps/16">
         <file alias="tabelo.svg">icons/apps/16/tabelo.svg</file>

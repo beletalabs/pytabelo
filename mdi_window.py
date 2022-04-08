@@ -22,7 +22,8 @@
 #
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QMdiSubWindow
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QAction, QMdiSubWindow
 
 
 class MdiWindow(QMdiSubWindow):
@@ -31,3 +32,21 @@ class MdiWindow(QMdiSubWindow):
         super().__init__(parent=parent)
 
         self.setAttribute(Qt.WA_DeleteOnClose)
+
+        self._setupActions()
+
+
+    def _setupActions(self):
+
+        menu = self.systemMenu()
+        if not menu:
+            return
+
+        self._actionClose = QAction(self.tr("&Close"), self)
+        self._actionClose.setObjectName("actionClose")
+        self._actionClose.setIcon(QIcon.fromTheme("window-close", QIcon(":/icons/actions/16/window-close.svg")))
+        self._actionClose.setToolTip(self.tr("Close document"))
+        self._actionClose.triggered.connect(self.close)
+
+        menu.clear()
+        menu.addAction(self._actionClose)
