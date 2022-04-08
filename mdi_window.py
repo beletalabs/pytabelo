@@ -21,7 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Qt, Signal
+from PySide2.QtCore import Property, Qt, Signal
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QAction, QMdiSubWindow, QMessageBox
 
@@ -35,6 +35,8 @@ class MdiWindow(QMdiSubWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self._filenameSequenceNumber = 0
 
         self.setAttribute(Qt.WA_DeleteOnClose)
 
@@ -67,6 +69,20 @@ class MdiWindow(QMdiSubWindow):
     def _enableActionCloseOther(self, enabled):
 
         self._actionCloseOther.setEnabled(enabled)
+
+
+    def getFilenameSequenceNumber(self):
+
+        return self._filenameSequenceNumber
+
+
+    def setFilenameSequenceNumber(self, number):
+
+        if number is not self._filenameSequenceNumber:
+            self._filenameSequenceNumber = number
+
+
+    filenameSequenceNumber = Property(int, getFilenameSequenceNumber, setFilenameSequenceNumber)
 
 
     def subWindowCountChanged(self, count):
