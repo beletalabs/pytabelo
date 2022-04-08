@@ -23,10 +23,11 @@
 
 from PySide2.QtCore import QByteArray, QSettings, QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu, QTabWidget
+from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu, QMessageBox, QTabWidget
 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
+from confirmation_dialog import ConfirmationDialog
 from mdi_area import MdiArea
 from mdi_document import MdiDocument
 from mdi_window import MdiWindow
@@ -737,7 +738,16 @@ class MainWindow(QMainWindow):
 
     def _slotCloseAll(self):
 
-        self._documentsArea.closeAllSubWindows()
+        if self._documentsArea.subWindowCount() >= 1:
+
+            title = self.tr("Close all documents")
+            text = self.tr("This will close all open documents.\n"
+                           "Are you sure you want to continue?")
+            buttons = QMessageBox.Yes | QMessageBox.Cancel
+            default = QMessageBox.Yes
+
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseAll") is not QMessageBox.Cancel:
+                self._documentsArea.closeAllSubWindows()
 
 
     def _slotShowMenubar(self, checked):

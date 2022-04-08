@@ -21,10 +21,15 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtWidgets import QDialog
+from PySide2.QtWidgets import QDialog, QMessageBox
 
 
 class ConfirmationDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+
+    def warning(self, title, text, buttons=QMessageBox.Ok, defaultButton=QMessageBox.NoButton, confirmationKey=""):
+
+        return QMessageBox.warning(self.parent(), title, text, buttons, defaultButton)
