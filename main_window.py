@@ -689,6 +689,9 @@ class MainWindow(QMainWindow):
 
         self.documentCountChanged.connect(docWindow.subWindowCountChanged)
 
+        # Initialize
+        document.initUrl()
+
         return document
 
 

@@ -23,8 +23,36 @@
 
 from table_document import TableDocument
 
+from PySide2.QtCore import Property, QUrl, Signal
+
 
 class MdiDocument(TableDocument):
 
+    urlChanged = Signal(object)
+
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self._url = QUrl()
+
+
+    def getUrl(self):
+
+        return self._url
+
+
+    def setUrl(self, url):
+
+        if url is not self._url:
+            self._url = url
+            self.urlChanged.emit(url)
+
+
+    def initUrl(self):
+
+        self._url = QUrl()
+        self.urlChanged.emit(QUrl())
+
+
+    url = Property(QUrl, getUrl, setUrl, notify=urlChanged)
