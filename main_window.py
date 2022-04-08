@@ -21,7 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import QByteArray, QSettings, QSize, Qt
+from PySide2.QtCore import QByteArray, QSettings, QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu, QTabWidget
 
@@ -38,6 +38,9 @@ import icons_rc
 
 class MainWindow(QMainWindow):
 
+    documentCountChanged = Signal(int)
+
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -48,14 +51,15 @@ class MainWindow(QMainWindow):
         self._documentsArea.setDocumentMode(True)
         self._documentsArea.setTabsClosable(True)
         self._documentsArea.setTabsMovable(True)
-        self._documentsArea.subWindowActivated.connect(self._activateDocument)
+        self._documentsArea.subWindowActivated.connect(self._documentActivated)
         self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
 
         self._loadSettings()
 
-        self._activateDocument(None)
+        self._documentCreated()
+        self._documentActivated(None)
 
 
     def closeEvent(self, event):
@@ -548,9 +552,9 @@ class MainWindow(QMainWindow):
         self._actionCloseAll.setEnabled(enabled)
 
 
-    def _enableActionCloseOther(self):
+    def _enableActionCloseOther(self, enabled):
 
-        self._actionCloseOther.setEnabled(self._documentsArea.subWindowCount() >= 2)
+        self._actionCloseOther.setEnabled(enabled)
 
 
     def _loadSettings(self):
@@ -667,17 +671,34 @@ class MainWindow(QMainWindow):
 
         docWindow = MdiWindow()
         docWindow.setWidget(document)
-        docWindow.destroyed.connect(self._enableActionCloseOther)
-
         self._documentsArea.addSubWindow(docWindow)
+
+        docWindow.destroyed.connect(self._documentDestroyed)
 
         return document
 
 
-    def _activateDocument(self, subWindow):
+    def _documentCreated(self):
+
+        count = self._documentsArea.subWindowCount()
+
+        self._enableActionCloseOther(count >= 2)
+
+        self.documentCountChanged.emit(count)
+
+
+    def _documentActivated(self, subWindow):
 
         self._enableActions(subWindow is not None)
-        self._enableActionCloseOther()
+
+
+    def _documentDestroyed(self):
+
+        count = self._documentsArea.subWindowCount()
+
+        self._enableActionCloseOther(count >= 2)
+
+        self.documentCountChanged.emit(count)
 
 
     def _slotAbout(self):
@@ -702,6 +723,8 @@ class MainWindow(QMainWindow):
 
         document = self._createDocument()
         document.show()
+
+        self._documentCreated()
 
 
     def _slotCloseOther(self):
