@@ -673,7 +673,10 @@ class MainWindow(QMainWindow):
         docWindow.setWidget(document)
         self._documentsArea.addSubWindow(docWindow)
 
+        docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
+
+        self.documentCountChanged.connect(docWindow.subWindowCountChanged)
 
         return document
 

@@ -21,12 +21,15 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, Signal
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QAction, QMdiSubWindow
 
 
 class MdiWindow(QMdiSubWindow):
+
+    closeOtherSubWindows = Signal(object)
+
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -48,5 +51,27 @@ class MdiWindow(QMdiSubWindow):
         self._actionClose.setToolTip(self.tr("Close document"))
         self._actionClose.triggered.connect(self.close)
 
+        self._actionCloseOther = QAction(self.tr("Close Ot&her"), self)
+        self._actionCloseOther.setObjectName("actionCloseOther")
+        self._actionCloseOther.setIcon(QIcon.fromTheme("window-close", QIcon(":/icons/actions/16/window-close.svg")))
+        self._actionCloseOther.setToolTip(self.tr("Close other open documents"))
+        self._actionCloseOther.triggered.connect(self._slotCloseOther)
+
         menu.clear()
         menu.addAction(self._actionClose)
+        menu.addAction(self._actionCloseOther)
+
+
+    def _enableActionCloseOther(self, enabled):
+
+        self._actionCloseOther.setEnabled(enabled)
+
+
+    def subWindowCountChanged(self, count):
+
+        self._enableActionCloseOther(count >= 2)
+
+
+    def _slotCloseOther(self):
+
+        self.closeOtherSubWindows.emit(self)
