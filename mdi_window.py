@@ -85,6 +85,34 @@ class MdiWindow(QMdiSubWindow):
     filenameSequenceNumber = Property(int, getFilenameSequenceNumber, setFilenameSequenceNumber)
 
 
+    def _resetFilenameSequenceNumber(self):
+
+        self._filenameSequenceNumber = 0
+
+
+    def _latestFilenameSequenceNumber(self, url):
+
+        number = 0
+
+        subWindows = self.mdiArea().subWindowList() if self.mdiArea() else []
+        for subWindow in subWindows:
+
+            document = subWindow.widget()
+            if document.getUrl().fileName() is url.fileName():
+
+                docWindow = subWindow
+                if docWindow.getFilenameSequenceNumber() > number:
+                    number = docWindow.getFilenameSequenceNumber()
+
+        return number
+
+
+    def documentUrlChanged(self, url):
+
+        self._resetFilenameSequenceNumber()
+        self.setFilenameSequenceNumber(self._latestFilenameSequenceNumber(url) + 1)
+
+
     def subWindowCountChanged(self, count):
 
         self._enableActionCloseOther(count >= 2)

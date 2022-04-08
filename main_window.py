@@ -684,6 +684,8 @@ class MainWindow(QMainWindow):
         docWindow.setWidget(document)
         self._documentsArea.addSubWindow(docWindow)
 
+        document.urlChanged.connect(docWindow.documentUrlChanged)
+
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
 
