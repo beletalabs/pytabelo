@@ -733,7 +733,16 @@ class MainWindow(QMainWindow):
 
     def _slotCloseOther(self):
 
-        self._documentsArea.closeOtherSubWindows(self._documentsArea.activeSubWindow())
+        if self._documentsArea.subWindowCount() >= 2:
+
+            title = self.tr("Close all documents beside current one")
+            text = self.tr("This will close all open documents beside the current one.\n"
+                           "Are you sure you want to continue?")
+            buttons = QMessageBox.Yes | QMessageBox.Cancel
+            default = QMessageBox.Yes
+
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") is not QMessageBox.Cancel:
+                self._documentsArea.closeOtherSubWindows(self._documentsArea.activeSubWindow())
 
 
     def _slotCloseAll(self):

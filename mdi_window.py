@@ -23,7 +23,9 @@
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QAction, QMdiSubWindow
+from PySide2.QtWidgets import QAction, QMdiSubWindow, QMessageBox
+
+from confirmation_dialog import ConfirmationDialog
 
 
 class MdiWindow(QMdiSubWindow):
@@ -74,4 +76,14 @@ class MdiWindow(QMdiSubWindow):
 
     def _slotCloseOther(self):
 
-        self.closeOtherSubWindows.emit(self)
+        count = len(self.mdiArea().subWindowList()) if self.mdiArea() else 0
+        if count >= 2:
+
+            title = self.tr("Close all documents except this one")
+            text = self.tr("This will close all open documents except this one.\n"
+                           "Are you sure you want to continue?")
+            buttons = QMessageBox.Yes | QMessageBox.Cancel
+            default = QMessageBox.Yes
+
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") is not QMessageBox.Cancel:
+                self.closeOtherSubWindows.emit(self)
