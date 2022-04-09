@@ -127,6 +127,14 @@ class MainWindow(QMainWindow):
         self._actionNew.triggered.connect(self._slotNew)
         self.addAction(self._actionNew)
 
+        self._actionOpen = QAction(self.tr("&Open..."), self)
+        self._actionOpen.setObjectName("actionOpen")
+        self._actionOpen.setIcon(QIcon.fromTheme("document-open", QIcon(":/icons/actions/16/document-open.svg")))
+        self._actionOpen.setShortcut(QKeySequence.Open)
+        self._actionOpen.setToolTip(self.tr("Open an existing document"))
+        self._actionOpen.triggered.connect(self._slotOpen)
+        self.addAction(self._actionOpen)
+
         self._actionClose = QAction(self.tr("&Close"), self)
         self._actionClose.setObjectName("actionClose")
         self._actionClose.setIcon(QIcon.fromTheme("document-close", QIcon(":/icons/actions/16/document-close.svg")))
@@ -149,6 +157,8 @@ class MainWindow(QMainWindow):
         menuFile.setObjectName("menuFile")
         menuFile.addAction(self._actionNew)
         menuFile.addSeparator()
+        menuFile.addAction(self._actionOpen)
+        menuFile.addSeparator()
         menuFile.addAction(self._actionClose)
         menuFile.addAction(self._actionCloseOther)
         menuFile.addAction(self._actionCloseAll)
@@ -156,6 +166,7 @@ class MainWindow(QMainWindow):
         self._toolbarFile = self.addToolBar(self.tr("File Toolbar"))
         self._toolbarFile.setObjectName("toolbarFile")
         self._toolbarFile.addAction(self._actionNew)
+        self._toolbarFile.addAction(self._actionOpen)
         self._toolbarFile.addSeparator()
         self._toolbarFile.addAction(self._actionClose)
 
@@ -784,6 +795,11 @@ class MainWindow(QMainWindow):
         document.show()
 
         self._documentCreated()
+
+
+    def _slotOpen(self):
+
+        pass
 
 
     def _slotCloseOther(self):
