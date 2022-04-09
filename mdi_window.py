@@ -21,7 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Property, Qt, Signal
+from PySide2.QtCore import Property, Signal, Qt, QDir, QUrl
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QAction, QMdiSubWindow, QMessageBox
 
@@ -112,10 +112,46 @@ class MdiWindow(QMdiSubWindow):
         self._resetFilenameSequenceNumber()
         self.setFilenameSequenceNumber(self._latestFilenameSequenceNumber(url) + 1)
 
+        self._updateWindowTitle()
+
 
     def subWindowCountChanged(self, count):
 
         self._enableActionCloseOther(count >= 2)
+
+
+    def windowCaption(self, pathVisible):
+
+        caption = self.tr("Untitled")
+        url = self.widget().getUrl()
+
+        # Name
+        if not url.isEmpty():
+
+            if pathVisible:
+                caption = url.toString(QUrl.FormattingOptions(QUrl.PreferLocalFile))
+
+                homePath = QDir.homePath()
+                if caption.startswith(homePath):
+                    caption = caption.replace(homePath, "~", 1)
+
+            elif url.isLocalFile():
+                caption = url.fileName()
+
+        # Sequence number
+        if (not pathVisible or url.isEmpty()) and self._filenameSequenceNumber > 1:
+            caption = self.tr("{0} ({1})").format(caption, self._filenameSequenceNumber)
+
+        return caption
+
+
+    def _updateWindowTitle(self):
+
+        pathVisible = False
+
+        caption = self.windowCaption(pathVisible)
+        if caption != self.windowTitle:
+            self.setWindowTitle(caption)
 
 
     def _slotCloseOther(self):

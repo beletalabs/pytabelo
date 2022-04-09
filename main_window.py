@@ -676,6 +676,27 @@ class MainWindow(QMainWindow):
         event.accept()
 
 
+    def _windowTitleChanged(self, title):
+
+        subWindow = self._documentsArea.activeSubWindow()
+        if self.sender() == subWindow:
+            self._updateWindowTitle(subWindow)
+
+
+    def _updateWindowTitle(self, docWindow):
+
+        caption = ""
+        modified = False
+
+        if (docWindow is not None):
+
+            caption = docWindow.windowCaption(True) + " [*]"
+            modified = docWindow.isWindowModified()
+
+        self.setWindowTitle(caption)
+        self.setWindowModified(modified)
+
+
     def _createDocument(self):
 
         document = MdiDocument()
@@ -684,7 +705,12 @@ class MainWindow(QMainWindow):
         docWindow.setWidget(document)
         self._documentsArea.addSubWindow(docWindow)
 
+        #
+        # Connections
+
+        # Url changed: Update sequence number of the file name first, then the window titles
         document.urlChanged.connect(docWindow.documentUrlChanged)
+        docWindow.windowTitleChanged.connect(self._windowTitleChanged)
 
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
@@ -708,6 +734,7 @@ class MainWindow(QMainWindow):
 
     def _documentActivated(self, subWindow):
 
+        self._updateWindowTitle(subWindow)
         self._enableActions(subWindow is not None)
 
 
