@@ -23,7 +23,7 @@
 
 from PySide2.QtCore import QByteArray, QSettings, QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QMainWindow, QMenu, QMessageBox, QTabWidget
+from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QFileDialog, QMainWindow, QMenu, QMessageBox, QTabWidget
 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
@@ -747,6 +747,34 @@ class MainWindow(QMainWindow):
         return _extractDocument(self._documentsArea.activeSubWindow())
 
 
+    def openDocument(self, url):
+
+        subWindow = self._documentsArea.findSubWindow(url)
+        if subWindow is not None:
+
+            # Given document is already loaded; activate the subwindow
+             self._documentsArea.setActiveSubWindow(subWindow)
+             return True
+
+        return self._loadDocument(url)
+
+
+    def _loadDocument(self, url):
+
+        document = self._createDocument()
+
+        if not True:
+
+            # Given document could not be loaded
+            document.close()
+            return False
+
+        document.show()
+        document.setUrl(url)
+
+        return True
+
+
     def _documentCreated(self):
 
         count = self._documentsArea.subWindowCount()
@@ -799,7 +827,9 @@ class MainWindow(QMainWindow):
 
     def _slotOpen(self):
 
-        pass
+        urls, _ = QFileDialog.getOpenFileUrls(self, self.tr("Open Document"))
+        for url in urls:
+            self.openDocument(url)
 
 
     def _slotCloseOther(self):
