@@ -723,6 +723,19 @@ class MainWindow(QMainWindow):
         return document
 
 
+    def _extractDocument(self, subWindow):
+
+        if subWindow is not None:
+            return subWindow.widget()
+
+        return None
+
+
+    def _activeDocument(self):
+
+        return _extractDocument(self._documentsArea.activeSubWindow())
+
+
     def _documentCreated(self):
 
         count = self._documentsArea.subWindowCount()

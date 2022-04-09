@@ -33,6 +33,11 @@ class MdiArea(QMdiArea):
         self.setAttribute(Qt.WA_DeleteOnClose)
 
 
+    def hasTabBar(self):
+
+        return self.findChild(QTabBar) is not None
+
+
     def isTabBarAutoHide(self):
 
         tabBar = self.findChild(QTabBar)
@@ -68,6 +73,21 @@ class MdiArea(QMdiArea):
     def subWindowCount(self):
 
         return len(self.subWindowList())
+
+
+    def findSubWindow(self, url):
+
+        if url.isEmpty():
+            return None
+
+        subWindows = self.subWindowList()
+        for subWindow in subWindows:
+
+            document = subWindow.widget()
+            if document.getUrl() == url:
+                return subWindow
+
+        return None
 
 
     def closeSelectedSubWindow(self, subWindow):
