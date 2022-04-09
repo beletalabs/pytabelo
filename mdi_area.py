@@ -36,7 +36,7 @@ class MdiArea(QMdiArea):
     def isTabBarAutoHide(self):
 
         tabBar = self.findChild(QTabBar)
-        if tabBar:
+        if tabBar is not None:
             return tabBar.autoHide()
 
         return False
@@ -45,23 +45,23 @@ class MdiArea(QMdiArea):
     def setTabBarAutoHide(self, hide):
 
         tabBar = self.findChild(QTabBar)
-        if tabBar:
+        if tabBar is not None:
             tabBar.setAutoHide(hide)
 
 
     def isTabBarVisible(self):
 
         tabBar = self.findChild(QTabBar)
-        if tabBar:
+        if tabBar is not None:
             return tabBar.isVisible()
 
-        return False
+        return True
 
 
     def setTabBarVisible(self, visible):
 
         tabBar = self.findChild(QTabBar)
-        if tabBar:
+        if tabBar is not None:
             tabBar.setVisible(visible)
 
 
@@ -73,7 +73,7 @@ class MdiArea(QMdiArea):
     def closeSelectedSubWindow(self, subWindow):
 
         if subWindow is None:
-            return
+            return None
 
         subWindow.close()
 
@@ -81,14 +81,11 @@ class MdiArea(QMdiArea):
     def closeOtherSubWindows(self, subWindow):
 
         subWindows = self.subWindowList()
-        if not len(subWindows) or subWindow is None:
-            return
+        if subWindow not in subWindows:
+            return None
 
         # First remove the subwindow from the list that should not be closed
-        if subWindow in subWindows:
-            subWindows.remove(subWindow)
-        else:
-            return
+        subWindows.remove(subWindow)
 
         # Then close all other subwindows
         for subWindow in subWindows:

@@ -44,7 +44,7 @@ class MdiDocument(TableDocument):
 
     def setUrl(self, url):
 
-        if url is not self._url:
+        if url != self._url:
             self._url = url
             self.urlChanged.emit(url)
 

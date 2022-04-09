@@ -46,8 +46,8 @@ class MdiWindow(QMdiSubWindow):
     def _setupActions(self):
 
         menu = self.systemMenu()
-        if not menu:
-            return
+        if menu is None:
+            return None
 
         self._actionClose = QAction(self.tr("&Close"), self)
         self._actionClose.setObjectName("actionClose")
@@ -78,7 +78,7 @@ class MdiWindow(QMdiSubWindow):
 
     def setFilenameSequenceNumber(self, number):
 
-        if number is not self._filenameSequenceNumber:
+        if number != self._filenameSequenceNumber:
             self._filenameSequenceNumber = number
 
 
@@ -98,7 +98,7 @@ class MdiWindow(QMdiSubWindow):
         for subWindow in subWindows:
 
             document = subWindow.widget()
-            if document.getUrl().fileName() is url.fileName():
+            if document.getUrl().fileName() == url.fileName():
 
                 docWindow = subWindow
                 if docWindow.getFilenameSequenceNumber() > number:
@@ -129,5 +129,5 @@ class MdiWindow(QMdiSubWindow):
             buttons = QMessageBox.Yes | QMessageBox.Cancel
             default = QMessageBox.Yes
 
-            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") is not QMessageBox.Cancel:
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") != QMessageBox.Cancel:
                 self.closeOtherSubWindows.emit(self)
