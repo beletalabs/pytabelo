@@ -23,7 +23,7 @@
 
 import sys
 
-from PySide2.QtCore import QCommandLineParser
+from PySide2.QtCore import QCommandLineParser, QDir, QUrl
 from PySide2.QtWidgets import QApplication
 
 from main_window import MainWindow
@@ -43,9 +43,19 @@ if __name__ == "__main__":
     parser.setApplicationDescription("{0} - A table editor based on Qt for Python".format(app.applicationName()))
     parser.addHelpOption()
     parser.addVersionOption()
+    parser.addPositionalArgument("urls", QApplication.translate("main", "Documents to open."), "[urls...]")
     parser.process(app)
+
+
+    #
+    # Main window
 
     window = MainWindow()
     window.show()
+
+    urls = parser.positionalArguments()
+    for url in urls:
+        window.openDocument(QUrl.fromUserInput(url, QDir.currentPath()))
+
 
     sys.exit(app.exec_())
