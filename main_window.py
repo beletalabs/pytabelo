@@ -719,13 +719,6 @@ class MainWindow(QMainWindow):
         event.accept()
 
 
-    def _windowTitleChanged(self, title):
-
-        subWindow = self._documentsArea.activeSubWindow()
-        if self.sender() == subWindow:
-            self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
-
-
     def _updateWindowTitle(self, docWindow, pathVisible):
 
         caption = ""
@@ -753,7 +746,7 @@ class MainWindow(QMainWindow):
 
         # Url changed: Update sequence number of the file name first, then the window titles
         document.urlChanged.connect(docWindow.documentUrlChanged)
-        docWindow.windowTitleChanged.connect(self._windowTitleChanged)
+        document.urlChanged.connect(self.documentUrlChanged)
 
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
@@ -823,6 +816,15 @@ class MainWindow(QMainWindow):
         self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
         self._enableActions(subWindow is not None)
         self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
+
+
+    def documentUrlChanged(self):
+
+        document = self._activeDocument()
+        if self.sender() == document:
+
+            self._updateWindowTitle(self._documentsArea.activeSubWindow(), self._actionShowPath.isChecked())
+            self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
 
 
     def _documentDestroyed(self):
