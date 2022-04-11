@@ -135,6 +135,12 @@ class MainWindow(QMainWindow):
         self._actionOpen.triggered.connect(self._slotOpen)
         self.addAction(self._actionOpen)
 
+        self._actionCopyPath = QAction(self.tr("Cop&y Path"), self)
+        self._actionCopyPath.setObjectName("actionCopyPath")
+        self._actionCopyPath.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
+        self._actionCopyPath.setToolTip(self.tr("Copy document path to clipboard"))
+        self._actionCopyPath.triggered.connect(self._slotCopyPath)
+
         self._actionClose = QAction(self.tr("&Close"), self)
         self._actionClose.setObjectName("actionClose")
         self._actionClose.setIcon(QIcon.fromTheme("document-close", QIcon(":/icons/actions/16/document-close.svg")))
@@ -158,6 +164,8 @@ class MainWindow(QMainWindow):
         menuFile.addAction(self._actionNew)
         menuFile.addSeparator()
         menuFile.addAction(self._actionOpen)
+        menuFile.addSeparator()
+        menuFile.addAction(self._actionCopyPath)
         menuFile.addSeparator()
         menuFile.addAction(self._actionClose)
         menuFile.addAction(self._actionCloseOther)
@@ -569,6 +577,11 @@ class MainWindow(QMainWindow):
         self._actionCloseOther.setEnabled(enabled)
 
 
+    def _enableFileActions(self, enabled):
+
+        self._actionCopyPath.setEnabled(enabled)
+
+
     def _loadSettings(self):
 
         settings = QSettings()
@@ -763,7 +776,7 @@ class MainWindow(QMainWindow):
 
     def _activeDocument(self):
 
-        return _extractDocument(self._documentsArea.activeSubWindow())
+        return self._extractDocument(self._documentsArea.activeSubWindow())
 
 
     def openDocument(self, url):
@@ -805,8 +818,11 @@ class MainWindow(QMainWindow):
 
     def _documentActivated(self, subWindow):
 
+        document = self._extractDocument(subWindow)
+
         self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
         self._enableActions(subWindow is not None)
+        self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
 
 
     def _documentDestroyed(self):
@@ -849,6 +865,13 @@ class MainWindow(QMainWindow):
         urls, _ = QFileDialog.getOpenFileUrls(self, self.tr("Open Document"))
         for url in urls:
             self.openDocument(url)
+
+
+    def _slotCopyPath(self):
+
+        document = self._activeDocument()
+        if document is not None:
+            document.copyUrl()
 
 
     def _slotShowPath(self, checked):

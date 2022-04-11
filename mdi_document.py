@@ -24,6 +24,8 @@
 from table_document import TableDocument
 
 from PySide2.QtCore import Property, QUrl, Signal
+from PySide2.QtGui import QClipboard
+from PySide2.QtWidgets import QApplication
 
 
 class MdiDocument(TableDocument):
@@ -56,3 +58,9 @@ class MdiDocument(TableDocument):
 
 
     url = Property(QUrl, getUrl, setUrl, notify=urlChanged)
+
+
+    def copyUrl(self):
+
+        if not self._url.isEmpty():
+            QApplication.clipboard().setText(self._url.toDisplayString(QUrl.FormattingOptions(QUrl.PreferLocalFile)))
