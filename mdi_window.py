@@ -68,11 +68,18 @@ class MdiWindow(QMdiSubWindow):
         self._actionShowPath.setToolTip(self.tr("Show document path in the tab caption"))
         self._actionShowPath.toggled.connect(self._slotShowPath)
 
+        self._actionCopyPath = QAction(self.tr("Cop&y Path"), self)
+        self._actionCopyPath.setObjectName("actionCopyPath")
+        self._actionCopyPath.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
+        self._actionCopyPath.setToolTip(self.tr("Copy document path to clipboard"))
+        self._actionCopyPath.triggered.connect(self._slotCopyPath)
+
         menu.clear()
         menu.addAction(self._actionClose)
         menu.addAction(self._actionCloseOther)
         menu.addSeparator()
         menu.addAction(self._actionShowPath)
+        menu.addAction(self._actionCopyPath)
 
 
     def _enableActionCloseOther(self, enabled):
@@ -124,6 +131,7 @@ class MdiWindow(QMdiSubWindow):
         self._updateWindowTitle(self._actionShowPath.isChecked())
 
         self._actionShowPath.setEnabled(not url.isEmpty())
+        self._actionCopyPath.setEnabled(not url.isEmpty())
 
 
     def subWindowCountChanged(self, count):
@@ -181,3 +189,10 @@ class MdiWindow(QMdiSubWindow):
     def _slotShowPath(self):
 
         self._updateWindowTitle(self._actionShowPath.isChecked())
+
+
+    def _slotCopyPath(self):
+
+        document = self.widget()
+        if document is not None:
+            document.copyUrl()
