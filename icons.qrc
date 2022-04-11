@@ -12,6 +12,7 @@
         <file alias="hide-tabbar-bottom.svg">icons/actions/16/hide-tabbar-bottom.svg</file>
         <file alias="show-menu.svg">icons/actions/16/show-menu.svg</file>
         <file alias="show-menubar.svg">icons/actions/16/show-menubar.svg</file>
+        <file alias="show-path.svg">icons/actions/16/show-path.svg</file>
         <file alias="show-statusbar.svg">icons/actions/16/show-statusbar.svg</file>
         <file alias="show-tabbar.svg">icons/actions/16/show-tabbar.svg</file>
         <file alias="show-tabbar-bottom.svg">icons/actions/16/show-tabbar-bottom.svg</file>
@@ -32,6 +33,7 @@
         <file alias="hide-tabbar-bottom.svg">icons/actions/22/hide-tabbar-bottom.svg</file>
         <file alias="show-menu.svg">icons/actions/22/show-menu.svg</file>
         <file alias="show-menubar.svg">icons/actions/22/show-menubar.svg</file>
+        <file alias="show-path.svg">icons/actions/22/show-path.svg</file>
         <file alias="show-statusbar.svg">icons/actions/22/show-statusbar.svg</file>
         <file alias="show-tabbar.svg">icons/actions/22/show-tabbar.svg</file>
         <file alias="show-tabbar-bottom.svg">icons/actions/22/show-tabbar-bottom.svg</file>

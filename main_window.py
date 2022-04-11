@@ -214,6 +214,15 @@ class MainWindow(QMainWindow):
         #
         # Appearance
 
+        self._actionShowPath = QAction(self.tr("Show &Path in Titlebar"), self)
+        self._actionShowPath.setObjectName("actionShowPath")
+        self._actionShowPath.setCheckable(True)
+        self._actionShowPath.setChecked(True)
+        self._actionShowPath.setIcon(QIcon.fromTheme("show-path", QIcon(":/icons/actions/16/show-path.svg")))
+        self._actionShowPath.setIconText(self.tr("Path"))
+        self._actionShowPath.setToolTip(self.tr("Show document path in the window caption"))
+        self._actionShowPath.toggled.connect(self._slotShowPath)
+
         self._actionShowMenubar = QAction(self)
         self._actionShowMenubar.setObjectName("actionShowMenubar")
         self._actionShowMenubar.setCheckable(True)
@@ -404,6 +413,8 @@ class MainWindow(QMainWindow):
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
+        menuAppearance.addAction(self._actionShowPath)
+        menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowMenubar)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowToolbarApplication)
@@ -594,6 +605,11 @@ class MainWindow(QMainWindow):
             self._toolbarAppearance.setVisible(False)
             self._toolbarHelp.setVisible(False)
 
+        # Show Path
+        visible = settings.value("Application/ShowPath", True, type=bool)
+        if not visible:  # Default: Visible
+            self._actionShowPath.toggle()
+
         # Show Menubar
         visible = settings.value("Application/ShowMenubar", True, type=bool)
         if not visible:  # Default: Visible
@@ -644,6 +660,9 @@ class MainWindow(QMainWindow):
         state = self.saveState()
         settings.setValue("Application/State", state)
 
+        visible = self._actionShowPath.isChecked()
+        settings.setValue("Application/ShowPath", visible)
+
         visible = self._actionShowMenubar.isChecked()
         settings.setValue("Application/ShowMenubar", visible)
 
@@ -691,17 +710,17 @@ class MainWindow(QMainWindow):
 
         subWindow = self._documentsArea.activeSubWindow()
         if self.sender() == subWindow:
-            self._updateWindowTitle(subWindow)
+            self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
 
 
-    def _updateWindowTitle(self, docWindow):
+    def _updateWindowTitle(self, docWindow, pathVisible):
 
         caption = ""
         modified = False
 
         if (docWindow is not None):
 
-            caption = docWindow.windowCaption(True) + " [*]"
+            caption = docWindow.windowCaption(pathVisible) + " [*]"
             modified = docWindow.isWindowModified()
 
         self.setWindowTitle(caption)
@@ -786,7 +805,7 @@ class MainWindow(QMainWindow):
 
     def _documentActivated(self, subWindow):
 
-        self._updateWindowTitle(subWindow)
+        self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
         self._enableActions(subWindow is not None)
 
 
@@ -830,6 +849,11 @@ class MainWindow(QMainWindow):
         urls, _ = QFileDialog.getOpenFileUrls(self, self.tr("Open Document"))
         for url in urls:
             self.openDocument(url)
+
+
+    def _slotShowPath(self, checked):
+
+        self._updateWindowTitle(self._documentsArea.activeSubWindow(), checked)
 
 
     def _slotCloseOther(self):
