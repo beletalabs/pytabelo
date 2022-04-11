@@ -61,9 +61,18 @@ class MdiWindow(QMdiSubWindow):
         self._actionCloseOther.setToolTip(self.tr("Close other open documents"))
         self._actionCloseOther.triggered.connect(self._slotCloseOther)
 
+        self._actionShowPath = QAction(self.tr("Show &Path"), self)
+        self._actionShowPath.setObjectName("actionShowPath")
+        self._actionShowPath.setCheckable(True)
+        self._actionShowPath.setIcon(QIcon.fromTheme("show-path", QIcon(":/icons/actions/16/show-path.svg")))
+        self._actionShowPath.setToolTip(self.tr("Show document path in the tab caption"))
+        self._actionShowPath.toggled.connect(self._slotShowPath)
+
         menu.clear()
         menu.addAction(self._actionClose)
         menu.addAction(self._actionCloseOther)
+        menu.addSeparator()
+        menu.addAction(self._actionShowPath)
 
 
     def _enableActionCloseOther(self, enabled):
@@ -112,7 +121,9 @@ class MdiWindow(QMdiSubWindow):
         self._resetFilenameSequenceNumber()
         self.setFilenameSequenceNumber(self._latestFilenameSequenceNumber(url) + 1)
 
-        self._updateWindowTitle()
+        self._updateWindowTitle(self._actionShowPath.isChecked())
+
+        self._actionShowPath.setEnabled(not url.isEmpty())
 
 
     def subWindowCountChanged(self, count):
@@ -145,9 +156,7 @@ class MdiWindow(QMdiSubWindow):
         return caption
 
 
-    def _updateWindowTitle(self):
-
-        pathVisible = False
+    def _updateWindowTitle(self, pathVisible):
 
         caption = self.windowCaption(pathVisible)
         if caption != self.windowTitle:
@@ -167,3 +176,8 @@ class MdiWindow(QMdiSubWindow):
 
             if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") != QMessageBox.Cancel:
                 self.closeOtherSubWindows.emit(self)
+
+
+    def _slotShowPath(self):
+
+        self._updateWindowTitle(self._actionShowPath.isChecked())
