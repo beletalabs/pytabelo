@@ -722,14 +722,22 @@ class MainWindow(QMainWindow):
     def _updateWindowTitle(self, docWindow, pathVisible):
 
         caption = ""
-        modified = False
 
         if (docWindow is not None):
 
             caption = docWindow.windowCaption(pathVisible) + " [*]"
-            modified = docWindow.isWindowModified()
 
         self.setWindowTitle(caption)
+
+
+    def _updateWindowModified(self, docWindow):
+
+        modified = False
+
+        if (docWindow is not None):
+
+            modified = docWindow.isWindowModified()
+
         self.setWindowModified(modified)
 
 
@@ -748,6 +756,10 @@ class MainWindow(QMainWindow):
         document.urlChanged.connect(docWindow.documentUrlChanged)
         document.urlChanged.connect(self.documentUrlChanged)
 
+        # Modified changed: Update subwindow icon and window modified status
+        document.modifiedChanged.connect(docWindow.documentModifiedChanged)
+        document.modifiedChanged.connect(self.documentModifiedChanged)
+
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
 
@@ -755,6 +767,7 @@ class MainWindow(QMainWindow):
 
         # Initialize
         document.initUrl()
+        document.initModified()
 
         return document
 
@@ -814,6 +827,7 @@ class MainWindow(QMainWindow):
         document = self._extractDocument(subWindow)
 
         self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
+        self._updateWindowModified(subWindow)
         self._enableActions(subWindow is not None)
         self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
 
@@ -825,6 +839,14 @@ class MainWindow(QMainWindow):
 
             self._updateWindowTitle(self._documentsArea.activeSubWindow(), self._actionShowPath.isChecked())
             self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
+
+
+    def documentModifiedChanged(self, modified):
+
+        document = self._activeDocument()
+        if self.sender() == document:
+
+            self._updateWindowModified(self._documentsArea.activeSubWindow())
 
 
     def _documentDestroyed(self):

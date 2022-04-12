@@ -134,6 +134,12 @@ class MdiWindow(QMdiSubWindow):
         self._actionCopyPath.setEnabled(not url.isEmpty())
 
 
+    def documentModifiedChanged(self, modified):
+
+        self.setWindowModified(modified)
+        self._updateWindowIcon(modified)
+
+
     def subWindowCountChanged(self, count):
 
         self._enableActionCloseOther(count >= 2)
@@ -169,6 +175,16 @@ class MdiWindow(QMdiSubWindow):
         caption = self.windowCaption(pathVisible)
         if caption != self.windowTitle:
             self.setWindowTitle(caption)
+
+
+    def _updateWindowIcon(self, modified):
+
+        icon = QIcon()
+
+        if modified:
+            icon = QIcon.fromTheme("document-save", QIcon(":/icons/actions/16/document-save.svg"))
+
+        self.setWindowIcon(icon)
 
 
     def _slotCloseOther(self):
