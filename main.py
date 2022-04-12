@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     urls = parser.positionalArguments()
     for url in urls:
-        window.openDocument(QUrl.fromUserInput(url, QDir.currentPath()))
+        window.openDocument(QUrl.fromUserInput(url, QDir.currentPath(), QUrl.AssumeLocalFile))
 
 
     sys.exit(app.exec_())
