@@ -23,20 +23,42 @@
 
 from table_document import TableDocument
 
-from PySide2.QtCore import Property, QUrl, Signal
+from PySide2.QtCore import Property, Signal, QUrl
 from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QApplication
 
 
 class MdiDocument(TableDocument):
 
+    modifiedChanged = Signal(bool)
     urlChanged = Signal(object)
 
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
+        self._modified = False
         self._url = QUrl()
+
+
+    def getModified(self):
+
+        return self._modified
+
+    def setModified(self, modified):
+
+        if modified != self._modified:
+            self._modified = modified
+            self.modifiedChanged.emit(modified)
+
+
+    def initModified(self):
+
+        self._modified = False
+        self.modifiedChanged.emit(False)
+
+
+    modified = Property(bool, getModified, setModified, notify=modifiedChanged)
 
 
     def getUrl(self):
