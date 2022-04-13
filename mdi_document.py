@@ -86,3 +86,9 @@ class MdiDocument(TableDocument):
 
         if not self._url.isEmpty():
             QApplication.clipboard().setText(self._url.toDisplayString(QUrl.FormattingOptions(QUrl.PreferLocalFile)))
+
+
+    def copyFilename(self):
+
+        if not self._url.isEmpty():
+            QApplication.clipboard().setText(self._url.fileName())

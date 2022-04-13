@@ -74,12 +74,19 @@ class MdiWindow(QMdiSubWindow):
         self._actionCopyPath.setToolTip(self.tr("Copy document path to clipboard"))
         self._actionCopyPath.triggered.connect(self._slotCopyPath)
 
+        self._actionCopyFilename = QAction(self.tr("Copy &Filename"), self)
+        self._actionCopyFilename.setObjectName("actionCopyFilename")
+        self._actionCopyFilename.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
+        self._actionCopyFilename.setToolTip(self.tr("Copy document filename to clipboard"))
+        self._actionCopyFilename.triggered.connect(self._slotCopyFilename)
+
         menu.clear()
         menu.addAction(self._actionClose)
         menu.addAction(self._actionCloseOther)
         menu.addSeparator()
         menu.addAction(self._actionShowPath)
         menu.addAction(self._actionCopyPath)
+        menu.addAction(self._actionCopyFilename)
 
 
     def _enableActionCloseOther(self, enabled):
@@ -132,6 +139,7 @@ class MdiWindow(QMdiSubWindow):
 
         self._actionShowPath.setEnabled(not url.isEmpty())
         self._actionCopyPath.setEnabled(not url.isEmpty())
+        self._actionCopyFilename.setEnabled(not url.isEmpty())
 
 
     def documentModifiedChanged(self, modified):
@@ -212,3 +220,10 @@ class MdiWindow(QMdiSubWindow):
         document = self.widget()
         if document is not None:
             document.copyUrl()
+
+
+    def _slotCopyFilename(self):
+
+        document = self.widget()
+        if document is not None:
+            document.copyFilename()

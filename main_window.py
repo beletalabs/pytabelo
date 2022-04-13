@@ -141,6 +141,12 @@ class MainWindow(QMainWindow):
         self._actionCopyPath.setToolTip(self.tr("Copy document path to clipboard"))
         self._actionCopyPath.triggered.connect(self._slotCopyPath)
 
+        self._actionCopyFilename = QAction(self.tr("Copy &Filename"), self)
+        self._actionCopyFilename.setObjectName("actionCopyFilename")
+        self._actionCopyFilename.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
+        self._actionCopyFilename.setToolTip(self.tr("Copy document filename to clipboard"))
+        self._actionCopyFilename.triggered.connect(self._slotCopyFilename)
+
         self._actionClose = QAction(self.tr("&Close"), self)
         self._actionClose.setObjectName("actionClose")
         self._actionClose.setIcon(QIcon.fromTheme("document-close", QIcon(":/icons/actions/16/document-close.svg")))
@@ -166,6 +172,7 @@ class MainWindow(QMainWindow):
         menuFile.addAction(self._actionOpen)
         menuFile.addSeparator()
         menuFile.addAction(self._actionCopyPath)
+        menuFile.addAction(self._actionCopyFilename)
         menuFile.addSeparator()
         menuFile.addAction(self._actionClose)
         menuFile.addAction(self._actionCloseOther)
@@ -597,6 +604,7 @@ class MainWindow(QMainWindow):
     def _enableFileActions(self, enabled):
 
         self._actionCopyPath.setEnabled(enabled)
+        self._actionCopyFilename.setEnabled(enabled)
 
 
     def _loadSettings(self):
@@ -937,6 +945,13 @@ class MainWindow(QMainWindow):
         document = self._activeDocument()
         if document is not None:
             document.copyUrl()
+
+
+    def _slotCopyFilename(self):
+
+        document = self._activeDocument()
+        if document is not None:
+            document.copyFilename()
 
 
     def _slotCloseOther(self):
