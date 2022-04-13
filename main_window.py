@@ -231,14 +231,16 @@ class MainWindow(QMainWindow):
         self._actionShowPath.setToolTip(self.tr("Show document path in the window caption"))
         self._actionShowPath.toggled.connect(self._slotShowPath)
 
-        self._actionShowMenubar = QAction(self)
+        self._actionShowMenubar = QAction(self.tr("Show &Menubar"), self)
         self._actionShowMenubar.setObjectName("actionShowMenubar")
         self._actionShowMenubar.setCheckable(True)
         self._actionShowMenubar.setChecked(True)
+        self._actionShowMenubar.setIcon(QIcon.fromTheme("show-menubar", QIcon(":/icons/actions/16/show-menubar.svg")))
+        self._actionShowMenubar.setIconText(self.tr("Menubar"))
         self._actionShowMenubar.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_M))
+        self._actionShowMenubar.setToolTip(self.tr("Show the menubar"))
         self._actionShowMenubar.toggled.connect(self._slotShowMenubar)
         self.addAction(self._actionShowMenubar)
-        self._updateActionShowMenubar()
 
         self._actionShowToolbarApplication = QAction(self.tr("Show &Application Toolbar"), self)
         self._actionShowToolbarApplication.setObjectName("actionShowToolbarApplication")
@@ -358,12 +360,14 @@ class MainWindow(QMainWindow):
         self._actionsToolButtonSize.addAction(actionToolButtonSizeDefault)
         self._actionsToolButtonSize.triggered.connect(self._slotToolButtonSize)
 
-        self._actionShowDocumentTabs = QAction(self)
+        self._actionShowDocumentTabs = QAction(self.tr("Show &Document Tabs"), self)
         self._actionShowDocumentTabs.setObjectName("actionShowDocumentbar")
         self._actionShowDocumentTabs.setCheckable(True)
         self._actionShowDocumentTabs.setChecked(True)
+        self._actionShowDocumentTabs.setIcon(QIcon.fromTheme("show-tabbar", QIcon(":/icons/actions/16/show-tabbar.svg")))
+        self._actionShowDocumentTabs.setIconText(self.tr("Document Tabs"))
+        self._actionShowDocumentTabs.setToolTip(self.tr("Show the document tabs"))
         self._actionShowDocumentTabs.toggled.connect(self._slotShowDocumentTabs)
-        self._updateActionShowDocumentTabs()
 
         actionDocumentTabPositionTop = QAction(self.tr("&Top"), self)
         actionDocumentTabPositionTop.setObjectName("actionDocumentTabPositionTop")
@@ -389,12 +393,14 @@ class MainWindow(QMainWindow):
         self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
         self._actionDocumentTabAutoHide.toggled.connect(self._documentsArea.setTabBarAutoHide)
 
-        self._actionShowStatusbar = QAction(self)
+        self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
         self._actionShowStatusbar.setChecked(True)
+        self._actionShowStatusbar.setIcon(QIcon.fromTheme("show-statusbar", QIcon(":/icons/actions/16/show-statusbar.svg")))
+        self._actionShowStatusbar.setIconText(self.tr("Statusbar"))
+        self._actionShowStatusbar.setToolTip(self.tr("Show the statusbar"))
         self._actionShowStatusbar.toggled.connect(self._slotShowStatusbar)
-        self._updateActionShowStatusbar()
 
         self._actionFullScreen = QAction(self)
         self._actionFullScreen.setObjectName("actionFullScreen")
@@ -508,48 +514,6 @@ class MainWindow(QMainWindow):
             if QTabWidget.TabPosition(action.data()) == position:
                 action.trigger()
                 break
-
-
-    def _updateActionShowMenubar(self):
-
-        if not self._actionShowMenubar.isChecked():
-            self._actionShowMenubar.setText(self.tr("Show &Menubar"))
-            self._actionShowMenubar.setIcon(QIcon.fromTheme("show-menubar", QIcon(":/icons/actions/16/show-menubar.svg")))
-            self._actionShowMenubar.setIconText(self.tr("Menubar"))
-            self._actionShowMenubar.setToolTip(self.tr("Show the menubar"))
-        else:
-            self._actionShowMenubar.setText(self.tr("Hide &Menubar"))
-            self._actionShowMenubar.setIcon(QIcon.fromTheme("hide-menubar", QIcon(":/icons/actions/16/hide-menubar.svg")))
-            self._actionShowMenubar.setIconText(self.tr("Menubar"))
-            self._actionShowMenubar.setToolTip(self.tr("Hide the menubar"))
-
-
-    def _updateActionShowDocumentTabs(self):
-
-        if not self._actionShowDocumentTabs.isChecked():
-            self._actionShowDocumentTabs.setText(self.tr("Show &Document Tabs"))
-            self._actionShowDocumentTabs.setIcon(QIcon.fromTheme("show-tabbar", QIcon(":/icons/actions/16/show-tabbar.svg")))
-            self._actionShowDocumentTabs.setIconText(self.tr("Document Tabs"))
-            self._actionShowDocumentTabs.setToolTip(self.tr("Show the document tabs"))
-        else:
-            self._actionShowDocumentTabs.setText(self.tr("Hide &Document Tabs"))
-            self._actionShowDocumentTabs.setIcon(QIcon.fromTheme("hide-tabbar", QIcon(":/icons/actions/16/hide-tabbar.svg")))
-            self._actionShowDocumentTabs.setIconText(self.tr("Document Tabs"))
-            self._actionShowDocumentTabs.setToolTip(self.tr("Hide the document tabs"))
-
-
-    def _updateActionShowStatusbar(self):
-
-        if not self._actionShowStatusbar.isChecked():
-            self._actionShowStatusbar.setText(self.tr("Show Stat&usbar"))
-            self._actionShowStatusbar.setIcon(QIcon.fromTheme("show-statusbar", QIcon(":/icons/actions/16/show-statusbar.svg")))
-            self._actionShowStatusbar.setIconText(self.tr("Statusbar"))
-            self._actionShowStatusbar.setToolTip(self.tr("Show the statusbar"))
-        else:
-            self._actionShowStatusbar.setText(self.tr("Hide Stat&usbar"))
-            self._actionShowStatusbar.setIcon(QIcon.fromTheme("hide-statusbar", QIcon(":/icons/actions/16/hide-statusbar.svg")))
-            self._actionShowStatusbar.setIconText(self.tr("Statusbar"))
-            self._actionShowStatusbar.setToolTip(self.tr("Hide the statusbar"))
 
 
     def _updateActionFullScreen(self):
@@ -898,11 +862,6 @@ class MainWindow(QMainWindow):
             document.copyUrl()
 
 
-    def _slotShowPath(self, checked):
-
-        self._updateWindowTitle(self._documentsArea.activeSubWindow(), checked)
-
-
     def _slotCloseOther(self):
 
         if self._documentsArea.subWindowCount() >= 2:
@@ -931,11 +890,14 @@ class MainWindow(QMainWindow):
                 self._documentsArea.closeAllSubWindows()
 
 
+    def _slotShowPath(self, checked):
+
+        self._updateWindowTitle(self._documentsArea.activeSubWindow(), checked)
+
+
     def _slotShowMenubar(self, checked):
 
         self.menuBar().setVisible(checked)
-
-        self._updateActionShowMenubar()
 
 
     def _slotToolButtonStyle(self, action):
@@ -971,8 +933,6 @@ class MainWindow(QMainWindow):
 
         self._documentsArea.setTabBarVisible(checked)
 
-        self._updateActionShowDocumentTabs()
-
 
     def _slotDocumentTabPosition(self, action):
 
@@ -984,8 +944,6 @@ class MainWindow(QMainWindow):
     def _slotShowStatusbar(self, checked):
 
         self.statusBar().setVisible(checked)
-
-        self._updateActionShowStatusbar()
 
 
     def _slotFullScreen(self, checked):
