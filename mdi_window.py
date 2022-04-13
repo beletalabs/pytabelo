@@ -198,7 +198,7 @@ class MdiWindow(QMdiSubWindow):
             buttons = QMessageBox.Yes | QMessageBox.Cancel
             default = QMessageBox.Yes
 
-            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") != QMessageBox.Cancel:
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOtherDocuments") != QMessageBox.Cancel:
                 self.closeOtherSubWindows.emit(self)
 
 

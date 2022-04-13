@@ -708,7 +708,7 @@ class MainWindow(QMainWindow):
             buttons = QMessageBox.Yes | QMessageBox.Cancel
             default = QMessageBox.Yes
 
-            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmQuit") == QMessageBox.Cancel:
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmQuitApplication") == QMessageBox.Cancel:
                 event.ignore()
                 return None
 
@@ -913,7 +913,7 @@ class MainWindow(QMainWindow):
             buttons = QMessageBox.Yes | QMessageBox.Cancel
             default = QMessageBox.Yes
 
-            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOther") != QMessageBox.Cancel:
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOtherDocuments") != QMessageBox.Cancel:
                 self._documentsArea.closeOtherSubWindows(self._documentsArea.activeSubWindow())
 
 
@@ -927,7 +927,7 @@ class MainWindow(QMainWindow):
             buttons = QMessageBox.Yes | QMessageBox.Cancel
             default = QMessageBox.Yes
 
-            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseAll") != QMessageBox.Cancel:
+            if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseAllDocuments") != QMessageBox.Cancel:
                 self._documentsArea.closeAllSubWindows()
 
 

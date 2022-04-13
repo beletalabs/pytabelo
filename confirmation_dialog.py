@@ -21,15 +21,83 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtWidgets import QDialog, QMessageBox
+from PySide2.QtCore import Qt, QSettings
+from PySide2.QtWidgets import QCheckBox, QMessageBox
 
 
-class ConfirmationDialog(QDialog):
+class ConfirmationDialog(QMessageBox):
 
-    def __init__(self, parent=None):
+    def __init__(self, confirmationKey, parent=None):
         super().__init__(parent=parent)
+
+        self._confirmationKey = confirmationKey
+        self._cbDoNotShowAgain = None
+
+        if self._confirmationKey:
+            self._cbDoNotShowAgain = QCheckBox(self.tr("Do not show again"))
+            self.setCheckBox(self._cbDoNotShowAgain)
+
+
+    def information(parent, title, text, buttons=QMessageBox.Ok, defaultButton=QMessageBox.NoButton, confirmationKey=""):
+
+        dialog = ConfirmationDialog(confirmationKey, self);
+        dialog.setIcon(QMessageBox.Information)
+        dialog.setWindowTitle(title);
+        dialog.setText(text);
+        dialog.setStandardButtons(buttons);
+        dialog.setDefaultButton(defaultButton);
+
+        return dialog._execute()
 
 
     def warning(self, title, text, buttons=QMessageBox.Ok, defaultButton=QMessageBox.NoButton, confirmationKey=""):
 
-        return QMessageBox.warning(self.parent(), title, text, buttons, defaultButton)
+        dialog = ConfirmationDialog(confirmationKey, self);
+        dialog.setIcon(QMessageBox.Warning)
+        dialog.setWindowTitle(title);
+        dialog.setText(text);
+        dialog.setStandardButtons(buttons);
+        dialog.setDefaultButton(defaultButton);
+
+        return dialog._execute()
+
+
+    def critical(self, title, text, buttons=QMessageBox.Ok, defaultButton=QMessageBox.NoButton, confirmationKey=""):
+
+        dialog = ConfirmationDialog(confirmationKey, self);
+        dialog.setIcon(QMessageBox.Critical)
+        dialog.setWindowTitle(title);
+        dialog.setText(text);
+        dialog.setStandardButtons(buttons);
+        dialog.setDefaultButton(defaultButton);
+
+        return dialog._execute()
+
+
+    def question(self, title, text, buttons=QMessageBox.Ok, defaultButton=QMessageBox.NoButton, confirmationKey=""):
+
+        dialog = ConfirmationDialog(confirmationKey, self);
+        dialog.setIcon(QMessageBox.Question)
+        dialog.setWindowTitle(title);
+        dialog.setText(text);
+        dialog.setStandardButtons(buttons);
+        dialog.setDefaultButton(defaultButton);
+
+        return dialog._execute()
+
+
+    def _execute(self):
+
+        settings = QSettings()
+
+        if self._cbDoNotShowAgain is not None:
+            confirm = settings.value("Confirmations/" + self._confirmationKey, True, type=bool)
+            if not confirm:
+                return QMessageBox.NoButton
+
+        self.exec_()
+
+        if self._cbDoNotShowAgain is not None:
+            settings.setValue("Confirmations/" + self._confirmationKey, not self._cbDoNotShowAgain.isChecked())
+
+        return self.standardButton(self.clickedButton())
