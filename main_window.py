@@ -393,6 +393,15 @@ class MainWindow(QMainWindow):
         self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
         self._actionDocumentTabAutoHide.toggled.connect(self._documentsArea.setTabBarAutoHide)
 
+        self._actionShowSheetTabs = QAction(self.tr("Show &Sheet Tabs"), self)
+        self._actionShowSheetTabs.setObjectName("actionShowSheetTabs")
+        self._actionShowSheetTabs.setCheckable(True)
+        self._actionShowSheetTabs.setChecked(True)
+        self._actionShowSheetTabs.setIcon(QIcon.fromTheme("show-tabbar-bottom", QIcon(":/icons/actions/16/show-tabbar-bottom.svg")))
+        self._actionShowSheetTabs.setIconText(self.tr("Sheet Tabs"))
+        self._actionShowSheetTabs.setToolTip(self.tr("Show the sheet tabs"))
+        self._actionShowSheetTabs.toggled.connect(self._slotShowSheetTabs)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -443,6 +452,7 @@ class MainWindow(QMainWindow):
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowDocumentTabs)
         menuAppearance.addMenu(menuDocumentTabPosition)
+        menuAppearance.addAction(self._actionShowSheetTabs)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
@@ -452,6 +462,7 @@ class MainWindow(QMainWindow):
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionShowMenubar)
         self._toolbarAppearance.addAction(self._actionShowDocumentTabs)
+        self._toolbarAppearance.addAction(self._actionShowSheetTabs)
         self._toolbarAppearance.addAction(self._actionShowStatusbar)
         self._toolbarAppearance.addSeparator()
         self._toolbarAppearance.addAction(self._actionFullScreen)
@@ -622,6 +633,11 @@ class MainWindow(QMainWindow):
         if checked:  # Default: Unchecked
             self._actionDocumentTabAutoHide.toggle()
 
+        # Show Sheet Tabs
+        visible = settings.value("Application/ShowSheetTabs", True, type=bool)
+        if not visible:  # Default: Visible
+            self._actionShowSheetTabs.toggle()
+
 
     def _saveSettings(self):
 
@@ -660,6 +676,9 @@ class MainWindow(QMainWindow):
 
         checked = self._actionDocumentTabAutoHide.isChecked()
         settings.setValue("Application/DocumentTabAutoHide", checked)
+
+        visible = self._actionShowSheetTabs.isChecked()
+        settings.setValue("Application/ShowSheetTabs", visible)
 
 
     def closeEvent(self, event):
@@ -939,6 +958,11 @@ class MainWindow(QMainWindow):
         position = QTabWidget.TabPosition(action.data())
 
         self._documentsArea.setTabPosition(position)
+
+
+    def _slotShowSheetTabs(self, checked):
+
+        pass
 
 
     def _slotShowStatusbar(self, checked):
