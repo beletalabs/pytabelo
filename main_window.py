@@ -402,6 +402,24 @@ class MainWindow(QMainWindow):
         self._actionShowSheetTabs.setToolTip(self.tr("Show the sheet tabs"))
         self._actionShowSheetTabs.toggled.connect(self._slotShowSheetTabs)
 
+        actionSheetTabPositionTop = QAction(self.tr("&Top"), self)
+        actionSheetTabPositionTop.setObjectName("actionSheetTabPositionTop")
+        actionSheetTabPositionTop.setCheckable(True)
+        actionSheetTabPositionTop.setToolTip(self.tr("Show tabs above the sheets"))
+        actionSheetTabPositionTop.setData(QTabWidget.North)
+
+        actionSheetTabPositionBottom = QAction(self.tr("&Bottom"), self)
+        actionSheetTabPositionBottom.setObjectName("actionSheetTabPositionBottom")
+        actionSheetTabPositionBottom.setCheckable(True)
+        actionSheetTabPositionBottom.setToolTip(self.tr("Show tabs below the sheets"))
+        actionSheetTabPositionBottom.setData(QTabWidget.South)
+
+        self._actionsSheetTabPosition = QActionGroup(self)
+        self._actionsSheetTabPosition.setObjectName("actionsSheetTabPosition")
+        self._actionsSheetTabPosition.addAction(actionSheetTabPositionTop)
+        self._actionsSheetTabPosition.addAction(actionSheetTabPositionBottom)
+        self._actionsSheetTabPosition.triggered.connect(self._slotSheetTabPosition)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -434,6 +452,12 @@ class MainWindow(QMainWindow):
         menuDocumentTabPosition.addAction(self._actionDocumentTabAutoHide)
         self._actionShowDocumentTabs.toggled.connect(menuDocumentTabPosition.setEnabled)
 
+        menuSheetTabPosition = QMenu(self.tr("Sheet Tab &Position"), self)
+        menuSheetTabPosition.setObjectName("menuSheetTabPosition")
+        menuSheetTabPosition.addSection(self.tr("Position"))
+        menuSheetTabPosition.addActions(self._actionsSheetTabPosition.actions())
+        self._actionShowSheetTabs.toggled.connect(menuSheetTabPosition.setEnabled)
+
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
         menuAppearance.addAction(self._actionShowPath)
@@ -453,6 +477,7 @@ class MainWindow(QMainWindow):
         menuAppearance.addAction(self._actionShowDocumentTabs)
         menuAppearance.addMenu(menuDocumentTabPosition)
         menuAppearance.addAction(self._actionShowSheetTabs)
+        menuAppearance.addMenu(menuSheetTabPosition)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
@@ -522,6 +547,14 @@ class MainWindow(QMainWindow):
     def _updateActionsDocumentTabPosition(self, position):
 
         for action in self._actionsDocumentTabPosition.actions():
+            if QTabWidget.TabPosition(action.data()) == position:
+                action.trigger()
+                break
+
+
+    def _updateActionsSheetTabPosition(self, position):
+
+        for action in self._actionsSheetTabPosition.actions():
             if QTabWidget.TabPosition(action.data()) == position:
                 action.trigger()
                 break
@@ -638,6 +671,11 @@ class MainWindow(QMainWindow):
         if not visible:  # Default: Visible
             self._actionShowSheetTabs.toggle()
 
+        # Sheet Tab Position
+        value = settings.value("Application/SheetTabPosition", QTabWidget.South, type=int)
+        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.South
+        self._updateActionsSheetTabPosition(position)
+
 
     def _saveSettings(self):
 
@@ -679,6 +717,9 @@ class MainWindow(QMainWindow):
 
         visible = self._actionShowSheetTabs.isChecked()
         settings.setValue("Application/ShowSheetTabs", visible)
+
+        value = self._actionsSheetTabPosition.checkedAction().data()
+        settings.setValue("Application/SheetTabPosition", value)
 
 
     def closeEvent(self, event):
@@ -963,6 +1004,11 @@ class MainWindow(QMainWindow):
     def _slotShowSheetTabs(self, checked):
 
         pass
+
+
+    def _slotSheetTabPosition(self, action):
+
+        position = QTabWidget.TabPosition(action.data())
 
 
     def _slotShowStatusbar(self, checked):
