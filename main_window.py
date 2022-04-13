@@ -420,6 +420,13 @@ class MainWindow(QMainWindow):
         self._actionsSheetTabPosition.addAction(actionSheetTabPositionBottom)
         self._actionsSheetTabPosition.triggered.connect(self._slotSheetTabPosition)
 
+        self._actionSheetTabAutoHide = QAction(self.tr("&Auto Hide"), self)
+        self._actionSheetTabAutoHide.setObjectName("actionSheetTabAutoHide")
+        self._actionSheetTabAutoHide.setCheckable(True)
+        self._actionSheetTabAutoHide.setChecked(True)
+        self._actionSheetTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 sheet"))
+        self._actionSheetTabAutoHide.toggled.connect(self._slotSheetTabAutoHide)
+
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
         self._actionShowStatusbar.setCheckable(True)
@@ -456,6 +463,8 @@ class MainWindow(QMainWindow):
         menuSheetTabPosition.setObjectName("menuSheetTabPosition")
         menuSheetTabPosition.addSection(self.tr("Position"))
         menuSheetTabPosition.addActions(self._actionsSheetTabPosition.actions())
+        menuSheetTabPosition.addSection(self.tr("Behavior"))
+        menuSheetTabPosition.addAction(self._actionSheetTabAutoHide)
         self._actionShowSheetTabs.toggled.connect(menuSheetTabPosition.setEnabled)
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
@@ -676,6 +685,11 @@ class MainWindow(QMainWindow):
         position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.South
         self._updateActionsSheetTabPosition(position)
 
+        # Sheet Tab Auto Hide
+        checked = settings.value("Application/SheetTabAutoHide", True, type=bool)
+        if not checked:  # Default: Checked
+            self._actionSheetTabAutoHide.toggle()
+
 
     def _saveSettings(self):
 
@@ -720,6 +734,9 @@ class MainWindow(QMainWindow):
 
         value = self._actionsSheetTabPosition.checkedAction().data()
         settings.setValue("Application/SheetTabPosition", value)
+
+        checked = self._actionSheetTabAutoHide.isChecked()
+        settings.setValue("Application/SheetTabAutoHide", checked)
 
 
     def closeEvent(self, event):
@@ -1009,6 +1026,11 @@ class MainWindow(QMainWindow):
     def _slotSheetTabPosition(self, action):
 
         position = QTabWidget.TabPosition(action.data())
+
+
+    def _slotSheetTabAutoHide(self, checked):
+
+        pass
 
 
     def _slotShowStatusbar(self, checked):
