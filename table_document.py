@@ -30,13 +30,14 @@ class TableDocument(QWidget):
     documentCountChanged = Signal(int)
 
     tabPositionChanged = Signal(QTabWidget.TabPosition)
+    tabBarAutoHideChanged = Signal(bool)
 
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self._tabBarAutoHide = False
         self._tabPosition = QTabWidget.South
+        self._tabBarAutoHide = True
 
         self._tabBox = QTabWidget()
         self._tabBox.setDocumentMode(True)
@@ -73,6 +74,27 @@ class TableDocument(QWidget):
 
         self._tabBox.setTabPosition(self._tabPosition)
         self.tabPositionChanged.emit(self._tabPosition)
+
+
+    def getTabBarAutoHide(self):
+
+        return self._tabBox.tabBarAutoHide()
+
+
+    def setTabBarAutoHide(self, hide):
+
+        if hide != self._tabBox.tabBarAutoHide():
+            self._tabBox.setTabBarAutoHide(hide)
+            self.tabBarAutoHideChanged.emit(hide)
+
+
+    tabBarAutoHide = Property(bool, getTabBarAutoHide, setTabBarAutoHide, notify=tabBarAutoHideChanged)
+
+
+    def initTabBarAutoHide(self):
+
+        self._tabBox.setTabBarAutoHide(self._tabBarAutoHide)
+        self.tabBarAutoHideChanged.emit(self._tabBarAutoHide)
 
 
     def _addTab(self, count):
