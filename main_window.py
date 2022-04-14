@@ -688,11 +688,6 @@ class MainWindow(QMainWindow):
         if not visible:  # Default: Visible
             self._actionShowSheetTabs.toggle()
 
-        # Sheet Tab Position
-        value = settings.value("Application/SheetTabPosition", QTabWidget.South, type=int)
-        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.South
-        self._updateActionsSheetTabPosition(position)
-
         # Sheet Tab Auto Hide
         checked = settings.value("Application/SheetTabAutoHide", True, type=bool)
         if not checked:  # Default: Checked
@@ -739,9 +734,6 @@ class MainWindow(QMainWindow):
 
         visible = self._actionShowSheetTabs.isChecked()
         settings.setValue("Application/ShowSheetTabs", visible)
-
-        value = self._actionsSheetTabPosition.checkedAction().data()
-        settings.setValue("Application/SheetTabPosition", value)
 
         checked = self._actionSheetTabAutoHide.isChecked()
         settings.setValue("Application/SheetTabAutoHide", checked)
@@ -810,6 +802,8 @@ class MainWindow(QMainWindow):
         document.modifiedChanged.connect(docWindow.documentModifiedChanged)
         document.modifiedChanged.connect(self.documentModifiedChanged)
 
+        document.tabPositionChanged.connect(self.documentTabPositionChanged)
+
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
 
@@ -820,6 +814,7 @@ class MainWindow(QMainWindow):
         # Initialize
         document.initUrl()
         document.initModified()
+        document.initTabPosition()
 
         return document
 
@@ -880,7 +875,10 @@ class MainWindow(QMainWindow):
 
         self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
         self._updateWindowModified(subWindow)
-        self._enableActions(subWindow is not None)
+
+        self._updateActionsSheetTabPosition(document.getTabPosition() if document is not None else QTabWidget.South)
+
+        self._enableActions(document is not None)
         self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
 
 
@@ -899,6 +897,14 @@ class MainWindow(QMainWindow):
         if self.sender() == document:
 
             self._updateWindowModified(self._documentsArea.activeSubWindow())
+
+
+    def documentTabPositionChanged(self, position):
+
+        document = self._activeDocument()
+        if self.sender() == document:
+
+            self._updateActionsSheetTabPosition(position)
 
 
     def _documentDestroyed(self):
@@ -1044,6 +1050,10 @@ class MainWindow(QMainWindow):
     def _slotSheetTabPosition(self, action):
 
         position = QTabWidget.TabPosition(action.data())
+
+        document = self._activeDocument()
+        if document is not None:
+            document.setTabPosition(position)
 
 
     def _slotSheetTabAutoHide(self, checked):

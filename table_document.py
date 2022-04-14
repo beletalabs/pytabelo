@@ -21,13 +21,15 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Signal, Qt
+from PySide2.QtCore import Property, Signal, Qt
 from PySide2.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 
 class TableDocument(QWidget):
 
     documentCountChanged = Signal(int)
+
+    tabPositionChanged = Signal(QTabWidget.TabPosition)
 
 
     def __init__(self, parent=None):
@@ -50,6 +52,27 @@ class TableDocument(QWidget):
         self.setLayout(mainLayout)
 
         self.documentCountChanged.connect(self._addTab)
+
+
+    def getTabPosition(self):
+
+        return self._tabBox.tabPosition()
+
+
+    def setTabPosition(self, position):
+
+        if position != self._tabBox.tabPosition():
+            self._tabBox.setTabPosition(position)
+            self.tabPositionChanged.emit(position)
+
+
+    tabPosition = Property(QTabWidget.TabPosition, getTabPosition, setTabPosition, notify=tabPositionChanged)
+
+
+    def initTabPosition(self):
+
+        self._tabBox.setTabPosition(self._tabPosition)
+        self.tabPositionChanged.emit(self._tabPosition)
 
 
     def _addTab(self, count):
