@@ -21,10 +21,50 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtWidgets import QWidget
+from PySide2.QtCore import Signal, Qt
+from PySide2.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 
 class TableDocument(QWidget):
 
+    documentCountChanged = Signal(int)
+
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self._tabBarAutoHide = False
+        self._tabPosition = QTabWidget.South
+
+        self._tabBox = QTabWidget()
+        self._tabBox.setDocumentMode(True)
+        self._tabBox.setMovable(True)
+        self._tabBox.setTabBarAutoHide(self._tabBarAutoHide)
+        self._tabBox.setTabPosition(self._tabPosition)
+        self._tabBox.setTabsClosable(True)
+        self._tabBox.tabCloseRequested.connect(self._closeTab)
+
+        # Main layout
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self._tabBox)
+        self.setLayout(mainLayout)
+
+        self.documentCountChanged.connect(self._addTab)
+
+
+    def _addTab(self, count):
+
+        if not self._tabBox.count():
+            for i in range(1, count+1):
+                widget = QWidget()
+                widget.setAttribute(Qt.WA_DeleteOnClose)
+                self._tabBox.addTab(widget, self.tr("Sheet {0}").format(i))
+
+
+    def _closeTab(self, index):
+
+        widget = self._tabBox.widget(index)
+        if widget is not None:
+            widget.close()
+
+        self._tabBox.removeTab(index)
