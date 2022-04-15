@@ -22,12 +22,13 @@
 #
 
 from PySide2.QtCore import Property, Signal, Qt
-from PySide2.QtWidgets import QMdiArea, QTabBar
+from PySide2.QtWidgets import QMdiArea, QTabBar, QTabWidget
 
 
 class MdiArea(QMdiArea):
 
     tabBarVisibleChanged = Signal(bool)
+    tabPositionChanged = Signal(QTabWidget.TabPosition)
 
 
     def __init__(self, parent=None):
@@ -36,6 +37,7 @@ class MdiArea(QMdiArea):
         self.setAttribute(Qt.WA_DeleteOnClose)
 
         self._tabBarVisible = True
+        self._tabPosition = QTabWidget.North
 
 
     def hasTabBar(self):
@@ -80,6 +82,27 @@ class MdiArea(QMdiArea):
             self.findChild(QTabBar).setVisible(visible)
         if self.subWindowCount() >= 2:
             self.findChild(QTabBar).setVisible(visible)
+
+
+    def getTabPosition(self):
+
+        return super().tabPosition()
+
+
+    def setTabPosition(self, position):
+
+        if position != self.getTabPosition():
+            super().setTabPosition(position)
+            self.tabPositionChanged.emit(position)
+
+
+    tabPosition = Property(QTabWidget.TabPosition, getTabPosition, setTabPosition, notify=tabPositionChanged)
+
+
+    def initTabPosition(self):
+
+        super().setTabPosition(self._tabPosition)
+        self.tabPositionChanged.emit(self._tabPosition)
 
 
     def isTabBarAutoHide(self):

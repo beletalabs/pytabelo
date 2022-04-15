@@ -54,6 +54,7 @@ class MainWindow(QMainWindow):
         self._documentsArea.setTabsMovable(True)
         self._documentsArea.subWindowActivated.connect(self._documentActivated)
         self._documentsArea.tabBarVisibleChanged.connect(self._docWindowTabBarVisibleChanged)
+        self._documentsArea.tabPositionChanged.connect(self._docWindowTabPositionChanged)
         self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
@@ -787,6 +788,11 @@ class MainWindow(QMainWindow):
     def _docWindowTabBarVisibleChanged(self, visible):
 
         self._updateActionShowDocumentTabs(visible)
+
+
+    def _docWindowTabPositionChanged(self, position):
+
+        self._updateActionsDocumentTabPosition(position)
 
 
     def _createDocument(self):
