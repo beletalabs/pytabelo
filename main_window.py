@@ -55,11 +55,16 @@ class MainWindow(QMainWindow):
         self._documentsArea.subWindowActivated.connect(self._documentActivated)
         self._documentsArea.tabBarVisibleChanged.connect(self._docWindowTabBarVisibleChanged)
         self._documentsArea.tabPositionChanged.connect(self._docWindowTabPositionChanged)
+        self._documentsArea.tabBarAutoHideChanged.connect(self._docWindowTabBarAutoHideChanged)
         self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
 
         self._loadSettings()
+
+        self._documentsArea.initTabBarVisible()
+        self._documentsArea.initTabPosition()
+        self._documentsArea.initTabBarAutoHide()
 
         self._documentCreated()
         self._documentActivated(None)
@@ -400,7 +405,7 @@ class MainWindow(QMainWindow):
         self._actionDocumentTabAutoHide.setObjectName("actionDocumentTabAutoHide")
         self._actionDocumentTabAutoHide.setCheckable(True)
         self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
-        self._actionDocumentTabAutoHide.toggled.connect(self._documentsArea.setTabBarAutoHide)
+        self._actionDocumentTabAutoHide.toggled.connect(self._slotDocumentTabAutoHide)
 
         self._actionShowSheetTabs = QAction(self.tr("Show &Sheet Tabs"), self)
         self._actionShowSheetTabs.setObjectName("actionShowSheetTabs")
@@ -576,6 +581,12 @@ class MainWindow(QMainWindow):
                 break
 
 
+    def _updateActionDocumentTabAutoHide(self, hide):
+
+        if hide != self._actionDocumentTabAutoHide.isChecked():
+            self._actionDocumentTabAutoHide.toggle()
+
+
     def _updateActionShowSheetTabs(self, visible):
 
         if visible != self._actionShowSheetTabs.isChecked():
@@ -688,20 +699,6 @@ class MainWindow(QMainWindow):
         pixel = value if value in [0, 16, 22, 32, 48] else 0
         self._updateActionsToolButtonSize(pixel)
 
-        # Show Document Tabs
-        visible = settings.value("Application/ShowDocumentTabs", True, type=bool)
-        self._updateActionShowDocumentTabs(visible)
-
-        # Document Tab Position
-        value = settings.value("Application/DocumentTabPosition", QTabWidget.North, type=int)
-        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.North
-        self._updateActionsDocumentTabPosition(position)
-
-        # Document Tab Auto Hide
-        checked = settings.value("Application/DocumentTabAutoHide", False, type=bool)
-        if checked:  # Default: Unchecked
-            self._actionDocumentTabAutoHide.toggle()
-
 
     def _saveSettings(self):
 
@@ -731,15 +728,6 @@ class MainWindow(QMainWindow):
 
         value = self._actionsToolButtonSize.checkedAction().data()
         settings.setValue("Application/ToolButtonSize", value)
-
-        visible = self._actionShowDocumentTabs.isChecked()
-        settings.setValue("Application/ShowDocumentTabs", visible)
-
-        value = self._actionsDocumentTabPosition.checkedAction().data()
-        settings.setValue("Application/DocumentTabPosition", value)
-
-        checked = self._actionDocumentTabAutoHide.isChecked()
-        settings.setValue("Application/DocumentTabAutoHide", checked)
 
 
     def closeEvent(self, event):
@@ -793,6 +781,11 @@ class MainWindow(QMainWindow):
     def _docWindowTabPositionChanged(self, position):
 
         self._updateActionsDocumentTabPosition(position)
+
+
+    def _docWindowTabBarAutoHideChanged(self, hide):
+
+        self._updateActionDocumentTabAutoHide(hide)
 
 
     def _createDocument(self):
@@ -1075,6 +1068,11 @@ class MainWindow(QMainWindow):
         position = QTabWidget.TabPosition(action.data())
 
         self._documentsArea.setTabPosition(position)
+
+
+    def _slotDocumentTabAutoHide(self, checked):
+
+        self._documentsArea.setTabBarAutoHide(checked)
 
 
     def _slotShowSheetTabs(self, checked):

@@ -29,6 +29,7 @@ class MdiArea(QMdiArea):
 
     tabBarVisibleChanged = Signal(bool)
     tabPositionChanged = Signal(QTabWidget.TabPosition)
+    tabBarAutoHideChanged = Signal(bool)
 
 
     def __init__(self, parent=None):
@@ -38,6 +39,7 @@ class MdiArea(QMdiArea):
 
         self._tabBarVisible = True
         self._tabPosition = QTabWidget.North
+        self._tabBarAutoHide = False
 
 
     def hasTabBar(self):
@@ -64,7 +66,7 @@ class MdiArea(QMdiArea):
             self._tabBarVisible = visible
             self.tabBarVisibleChanged.emit(visible)
 
-            if self.subWindowCount() == 1 and not self.isTabBarAutoHide():
+            if self.subWindowCount() == 1 and not self.getTabBarAutoHide():
                 self.findChild(QTabBar).setVisible(visible)
             if self.subWindowCount() >= 2:
                 self.findChild(QTabBar).setVisible(visible)
@@ -78,7 +80,7 @@ class MdiArea(QMdiArea):
         self._tabBarVisible = True
         self.tabBarVisibleChanged.emit(self._tabBarVisible)
 
-        if self.subWindowCount() == 1 and not self.isTabBarAutoHide():
+        if self.subWindowCount() == 1 and not self.getTabBarAutoHide():
             self.findChild(QTabBar).setVisible(visible)
         if self.subWindowCount() >= 2:
             self.findChild(QTabBar).setVisible(visible)
@@ -105,20 +107,29 @@ class MdiArea(QMdiArea):
         self.tabPositionChanged.emit(self._tabPosition)
 
 
-    def isTabBarAutoHide(self):
+    def getTabBarAutoHide(self):
 
-        tabBar = self.findChild(QTabBar)
-        if tabBar is not None:
-            return tabBar.autoHide()
+        if self.hasTabBar():
+            return self.findChild(QTabBar).autoHide()
 
         return False
 
 
     def setTabBarAutoHide(self, hide):
 
-        tabBar = self.findChild(QTabBar)
-        if tabBar is not None:
-            tabBar.setAutoHide(hide)
+        if self.hasTabBar() and hide != self.getTabBarAutoHide():
+            self.findChild(QTabBar).setAutoHide(hide)
+            self.tabBarAutoHideChanged.emit(hide)
+
+
+    tabBarAutoHide = Property(bool, getTabBarAutoHide, setTabBarAutoHide, notify=tabBarAutoHideChanged)
+
+
+    def initTabBarAutoHide(self):
+
+        if self.hasTabBar():
+            self.findChild(QTabBar).setAutoHide(self._tabBarAutoHide)
+            self.tabBarAutoHideChanged.emit(self._tabBarAutoHide)
 
 
     def subWindowCount(self):
