@@ -29,6 +29,7 @@ class TableDocument(QWidget):
 
     documentCountChanged = Signal(int)
 
+    tabBarVisibleChanged = Signal(bool)
     tabPositionChanged = Signal(QTabWidget.TabPosition)
     tabBarAutoHideChanged = Signal(bool)
 
@@ -36,6 +37,7 @@ class TableDocument(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
+        self._tabBarVisible = True
         self._tabPosition = QTabWidget.South
         self._tabBarAutoHide = True
 
@@ -53,6 +55,42 @@ class TableDocument(QWidget):
         self.setLayout(mainLayout)
 
         self.documentCountChanged.connect(self._addTab)
+
+
+    def getTabBarVisible(self):
+
+        return self._tabBarVisible
+
+
+    def setTabBarVisible(self, visible):
+
+        if visible != self._tabBarVisible:
+            self._tabBarVisible = visible
+            self.tabBarVisibleChanged.emit(visible)
+
+            if self._tabBox.count() == 1 and not self.getTabBarAutoHide():
+                self._tabBox.tabBar().setVisible(visible)
+            if self._tabBox.count() >= 2:
+                self._tabBox.tabBar().setVisible(visible)
+
+
+    tabBarVisible = Property(bool, getTabBarVisible, setTabBarVisible, notify=tabBarVisibleChanged)
+
+
+    def initTabBarVisible(self):
+
+        self._tabBarVisible = True
+        self.tabBarVisibleChanged.emit(self._tabBarVisible)
+
+        if self._tabBox.count() == 1 and not self.getTabBarAutoHide():
+            self._tabBox.tabBar().setVisible(self._tabBarVisible)
+        if self._tabBox.count() >= 2:
+            self._tabBox.tabBar().setVisible(self._tabBarVisible)
+
+
+    def isTabBarVisible(self):
+
+        return self._tabBox.tabBar().isVisible()
 
 
     def getTabPosition(self):
