@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
         self._documentsArea.setTabsClosable(True)
         self._documentsArea.setTabsMovable(True)
         self._documentsArea.subWindowActivated.connect(self._documentActivated)
+        self._documentsArea.tabBarVisibleChanged.connect(self._docWindowTabBarVisibleChanged)
         self.setCentralWidget(self._documentsArea)
 
         self._setupActions()
@@ -560,6 +561,12 @@ class MainWindow(QMainWindow):
                 break
 
 
+    def _updateActionShowDocumentTabs(self, visible):
+
+        if visible != self._actionShowDocumentTabs.isChecked():
+            self._actionShowDocumentTabs.toggle()
+
+
     def _updateActionsDocumentTabPosition(self, position):
 
         for action in self._actionsDocumentTabPosition.actions():
@@ -682,8 +689,7 @@ class MainWindow(QMainWindow):
 
         # Show Document Tabs
         visible = settings.value("Application/ShowDocumentTabs", True, type=bool)
-        if not visible:  # Default: Visible
-            self._actionShowDocumentTabs.toggle()
+        self._updateActionShowDocumentTabs(visible)
 
         # Document Tab Position
         value = settings.value("Application/DocumentTabPosition", QTabWidget.North, type=int)
@@ -776,6 +782,11 @@ class MainWindow(QMainWindow):
             modified = docWindow.isWindowModified()
 
         self.setWindowModified(modified)
+
+
+    def _docWindowTabBarVisibleChanged(self, visible):
+
+        self._updateActionShowDocumentTabs(visible)
 
 
     def _createDocument(self):

@@ -21,21 +21,65 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Property, Signal, Qt
 from PySide2.QtWidgets import QMdiArea, QTabBar
 
 
 class MdiArea(QMdiArea):
+
+    tabBarVisibleChanged = Signal(bool)
+
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
         self.setAttribute(Qt.WA_DeleteOnClose)
 
+        self._tabBarVisible = True
+
 
     def hasTabBar(self):
 
         return self.findChild(QTabBar) is not None
+
+
+    def isTabBarVisible(self):
+
+        if self.hasTabBar():
+            return self.findChild(QTabBar).isVisible()
+
+        return True
+
+
+    def getTabBarVisible(self):
+
+        return self._tabBarVisible
+
+
+    def setTabBarVisible(self, visible):
+
+        if self.hasTabBar() and visible != self._tabBarVisible:
+            self._tabBarVisible = visible
+            self.tabBarVisibleChanged.emit(visible)
+
+            if self.subWindowCount() == 1 and not self.isTabBarAutoHide():
+                self.findChild(QTabBar).setVisible(visible)
+            if self.subWindowCount() >= 2:
+                self.findChild(QTabBar).setVisible(visible)
+
+
+    tabBarVisible = Property(bool, getTabBarVisible, setTabBarVisible, notify=tabBarVisibleChanged)
+
+
+    def initTabBarVisible(self):
+
+        self._tabBarVisible = True
+        self.tabBarVisibleChanged.emit(self._tabBarVisible)
+
+        if self.subWindowCount() == 1 and not self.isTabBarAutoHide():
+            self.findChild(QTabBar).setVisible(visible)
+        if self.subWindowCount() >= 2:
+            self.findChild(QTabBar).setVisible(visible)
 
 
     def isTabBarAutoHide(self):
@@ -52,22 +96,6 @@ class MdiArea(QMdiArea):
         tabBar = self.findChild(QTabBar)
         if tabBar is not None:
             tabBar.setAutoHide(hide)
-
-
-    def isTabBarVisible(self):
-
-        tabBar = self.findChild(QTabBar)
-        if tabBar is not None:
-            return tabBar.isVisible()
-
-        return True
-
-
-    def setTabBarVisible(self, visible):
-
-        tabBar = self.findChild(QTabBar)
-        if tabBar is not None:
-            tabBar.setVisible(visible)
 
 
     def subWindowCount(self):
