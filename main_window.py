@@ -407,39 +407,39 @@ class MainWindow(QMainWindow):
         self._actionDocumentTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 document"))
         self._actionDocumentTabAutoHide.toggled.connect(self._slotDocumentTabAutoHide)
 
-        self._actionShowSheetTabs = QAction(self.tr("Show &Sheet Tabs"), self)
-        self._actionShowSheetTabs.setObjectName("actionShowSheetTabs")
-        self._actionShowSheetTabs.setCheckable(True)
-        self._actionShowSheetTabs.setChecked(True)
-        self._actionShowSheetTabs.setIcon(QIcon.fromTheme("show-tabbar-bottom", QIcon(":/icons/actions/16/show-tabbar-bottom.svg")))
-        self._actionShowSheetTabs.setIconText(self.tr("Sheet Tabs"))
-        self._actionShowSheetTabs.setToolTip(self.tr("Show the sheet tabs"))
-        self._actionShowSheetTabs.toggled.connect(self._slotShowSheetTabs)
+        self._actionSheetTabsVisible = QAction(self.tr("Show &Sheet Tabs"), self)
+        self._actionSheetTabsVisible.setObjectName("actionSheetTabsVisible")
+        self._actionSheetTabsVisible.setCheckable(True)
+        self._actionSheetTabsVisible.setChecked(True)
+        self._actionSheetTabsVisible.setIcon(QIcon.fromTheme("show-tabbar-bottom", QIcon(":/icons/actions/16/show-tabbar-bottom.svg")))
+        self._actionSheetTabsVisible.setIconText(self.tr("Sheet Tabs"))
+        self._actionSheetTabsVisible.setToolTip(self.tr("Show the sheet tabs"))
+        self._actionSheetTabsVisible.toggled.connect(self._slotSheetTabsVisible)
 
-        actionSheetTabPositionTop = QAction(self.tr("&Top"), self)
-        actionSheetTabPositionTop.setObjectName("actionSheetTabPositionTop")
-        actionSheetTabPositionTop.setCheckable(True)
-        actionSheetTabPositionTop.setToolTip(self.tr("Show tabs above the sheets"))
-        actionSheetTabPositionTop.setData(QTabWidget.North)
+        actionSheetTabsPositionTop = QAction(self.tr("&Top"), self)
+        actionSheetTabsPositionTop.setObjectName("actionSheetTabsPositionTop")
+        actionSheetTabsPositionTop.setCheckable(True)
+        actionSheetTabsPositionTop.setToolTip(self.tr("Show tabs above the sheets"))
+        actionSheetTabsPositionTop.setData(QTabWidget.North)
 
-        actionSheetTabPositionBottom = QAction(self.tr("&Bottom"), self)
-        actionSheetTabPositionBottom.setObjectName("actionSheetTabPositionBottom")
-        actionSheetTabPositionBottom.setCheckable(True)
-        actionSheetTabPositionBottom.setToolTip(self.tr("Show tabs below the sheets"))
-        actionSheetTabPositionBottom.setData(QTabWidget.South)
+        actionSheetTabsPositionBottom = QAction(self.tr("&Bottom"), self)
+        actionSheetTabsPositionBottom.setObjectName("actionSheetTabsPositionBottom")
+        actionSheetTabsPositionBottom.setCheckable(True)
+        actionSheetTabsPositionBottom.setToolTip(self.tr("Show tabs below the sheets"))
+        actionSheetTabsPositionBottom.setData(QTabWidget.South)
 
-        self._actionsSheetTabPosition = QActionGroup(self)
-        self._actionsSheetTabPosition.setObjectName("actionsSheetTabPosition")
-        self._actionsSheetTabPosition.addAction(actionSheetTabPositionTop)
-        self._actionsSheetTabPosition.addAction(actionSheetTabPositionBottom)
-        self._actionsSheetTabPosition.triggered.connect(self._slotSheetTabPosition)
+        self._actionsSheetTabsPosition = QActionGroup(self)
+        self._actionsSheetTabsPosition.setObjectName("actionsSheetTabsPosition")
+        self._actionsSheetTabsPosition.addAction(actionSheetTabsPositionTop)
+        self._actionsSheetTabsPosition.addAction(actionSheetTabsPositionBottom)
+        self._actionsSheetTabsPosition.triggered.connect(self._slotSheetTabsPosition)
 
-        self._actionSheetTabAutoHide = QAction(self.tr("&Auto Hide"), self)
-        self._actionSheetTabAutoHide.setObjectName("actionSheetTabAutoHide")
-        self._actionSheetTabAutoHide.setCheckable(True)
-        self._actionSheetTabAutoHide.setChecked(True)
-        self._actionSheetTabAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 sheet"))
-        self._actionSheetTabAutoHide.toggled.connect(self._slotSheetTabAutoHide)
+        self._actionSheetTabsAutoHide = QAction(self.tr("&Auto Hide"), self)
+        self._actionSheetTabsAutoHide.setObjectName("actionSheetTabsAutoHide")
+        self._actionSheetTabsAutoHide.setCheckable(True)
+        self._actionSheetTabsAutoHide.setChecked(True)
+        self._actionSheetTabsAutoHide.setToolTip(self.tr("Tabs are automatically hidden if they contain only 1 sheet"))
+        self._actionSheetTabsAutoHide.toggled.connect(self._slotSheetTabsAutoHide)
 
         self._actionShowStatusbar = QAction(self.tr("Show Stat&usbar"), self)
         self._actionShowStatusbar.setObjectName("actionShowStatusbar")
@@ -473,13 +473,13 @@ class MainWindow(QMainWindow):
         menuDocumentTabPosition.addAction(self._actionDocumentTabAutoHide)
         self._actionShowDocumentTabs.toggled.connect(menuDocumentTabPosition.setEnabled)
 
-        menuSheetTabPosition = QMenu(self.tr("Sheet Tab &Position"), self)
-        menuSheetTabPosition.setObjectName("menuSheetTabPosition")
-        menuSheetTabPosition.addSection(self.tr("Position"))
-        menuSheetTabPosition.addActions(self._actionsSheetTabPosition.actions())
-        menuSheetTabPosition.addSection(self.tr("Behavior"))
-        menuSheetTabPosition.addAction(self._actionSheetTabAutoHide)
-        self._actionShowSheetTabs.toggled.connect(menuSheetTabPosition.setEnabled)
+        menuSheetTabsPosition = QMenu(self.tr("Sheet Tab P&osition"), self)
+        menuSheetTabsPosition.setObjectName("menuSheetTabsPosition")
+        menuSheetTabsPosition.addSection(self.tr("Position"))
+        menuSheetTabsPosition.addActions(self._actionsSheetTabsPosition.actions())
+        menuSheetTabsPosition.addSection(self.tr("Behavior"))
+        menuSheetTabsPosition.addAction(self._actionSheetTabsAutoHide)
+        self._actionSheetTabsVisible.toggled.connect(menuSheetTabsPosition.setEnabled)
 
         menuAppearance = self.menuBar().addMenu(self.tr("Appea&rance"))
         menuAppearance.setObjectName("menuAppearance")
@@ -499,8 +499,8 @@ class MainWindow(QMainWindow):
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowDocumentTabs)
         menuAppearance.addMenu(menuDocumentTabPosition)
-        menuAppearance.addAction(self._actionShowSheetTabs)
-        menuAppearance.addMenu(menuSheetTabPosition)
+        menuAppearance.addAction(self._actionSheetTabsVisible)
+        menuAppearance.addMenu(menuSheetTabsPosition)
         menuAppearance.addSeparator()
         menuAppearance.addAction(self._actionShowStatusbar)
         menuAppearance.addSeparator()
@@ -510,7 +510,7 @@ class MainWindow(QMainWindow):
         self._toolbarAppearance.setObjectName("toolbarAppearance")
         self._toolbarAppearance.addAction(self._actionShowMenubar)
         self._toolbarAppearance.addAction(self._actionShowDocumentTabs)
-        self._toolbarAppearance.addAction(self._actionShowSheetTabs)
+        self._toolbarAppearance.addAction(self._actionSheetTabsVisible)
         self._toolbarAppearance.addAction(self._actionShowStatusbar)
         self._toolbarAppearance.addSeparator()
         self._toolbarAppearance.addAction(self._actionFullScreen)
@@ -587,24 +587,24 @@ class MainWindow(QMainWindow):
             self._actionDocumentTabAutoHide.toggle()
 
 
-    def _updateActionShowSheetTabs(self, visible):
+    def _updateActionSheetTabsVisible(self, visible):
+        """  """
+        if visible != self._actionSheetTabsVisible.isChecked():
+            self._actionSheetTabsVisible.toggle()
 
-        if visible != self._actionShowSheetTabs.isChecked():
-            self._actionShowSheetTabs.toggle()
 
-
-    def _updateActionsSheetTabPosition(self, position):
-
-        for action in self._actionsSheetTabPosition.actions():
+    def _updateActionsSheetTabsPosition(self, position):
+        """  """
+        for action in self._actionsSheetTabsPosition.actions():
             if QTabWidget.TabPosition(action.data()) == position:
                 action.trigger()
                 break
 
 
-    def _updateActionSheetTabAutoHide(self, hide):
-
-        if hide != self._actionSheetTabAutoHide.isChecked():
-            self._actionSheetTabAutoHide.toggle()
+    def _updateActionSheetTabsAutoHide(self, hide):
+        """  """
+        if hide != self._actionSheetTabsAutoHide.isChecked():
+            self._actionSheetTabsAutoHide.toggle()
 
 
     def _updateActionFullScreen(self):
@@ -808,9 +808,9 @@ class MainWindow(QMainWindow):
         document.modifiedChanged.connect(docWindow.documentModifiedChanged)
         document.modifiedChanged.connect(self.documentModifiedChanged)
 
-        document.tabBarVisibleChanged.connect(self.documentTabBarVisibleChanged)
-        document.tabPositionChanged.connect(self.documentTabPositionChanged)
-        document.tabBarAutoHideChanged.connect(self.documentTabBarAutoHideChanged)
+        document.tabsVisibleChanged.connect(self._documentTabsVisibleChanged)
+        document.tabsPositionChanged.connect(self._documentTabsPositionChanged)
+        document.tabsAutoHideChanged.connect(self._documentTabsAutoHideChanged)
 
         docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
         docWindow.destroyed.connect(self._documentDestroyed)
@@ -822,9 +822,9 @@ class MainWindow(QMainWindow):
         # Initialize
         document.initUrl()
         document.initModified()
-        document.initTabBarVisible()
-        document.initTabPosition()
-        document.initTabBarAutoHide()
+        document.initTabsVisible()
+        document.initTabsPosition()
+        document.initTabsAutoHide()
 
         return document
 
@@ -840,6 +840,11 @@ class MainWindow(QMainWindow):
     def _activeDocument(self):
 
         return self._extractDocument(self._documentsArea.activeSubWindow())
+
+
+    def _hasActiveDocument(self):
+        """  """
+        return self._activeDocument() is not None
 
 
     def openDocument(self, url):
@@ -886,9 +891,9 @@ class MainWindow(QMainWindow):
         self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
         self._updateWindowModified(subWindow)
 
-        self._updateActionShowSheetTabs(document.getTabBarVisible() if document is not None else True)
-        self._updateActionsSheetTabPosition(document.getTabPosition() if document is not None else QTabWidget.South)
-        self._updateActionSheetTabAutoHide(document.getTabBarAutoHide() if document is not None else True)
+        self._updateActionSheetTabsVisible(document.getTabsVisible() if document is not None else True)
+        self._updateActionsSheetTabsPosition(document.getTabsPosition() if document is not None else QTabWidget.South)
+        self._updateActionSheetTabsAutoHide(document.getTabsAutoHide() if document is not None else True)
 
         self._enableActions(document is not None)
         self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
@@ -911,28 +916,22 @@ class MainWindow(QMainWindow):
             self._updateWindowModified(self._documentsArea.activeSubWindow())
 
 
-    def documentTabBarVisibleChanged(self, visible):
-
-        document = self._activeDocument()
-        if self.sender() == document:
-
-            self._updateActionShowSheetTabs(visible)
+    def _documentTabsVisibleChanged(self, visible):
+        """  """
+        if self.sender() == self._activeDocument():
+            self._updateActionSheetTabsVisible(visible)
 
 
-    def documentTabPositionChanged(self, position):
-
-        document = self._activeDocument()
-        if self.sender() == document:
-
-            self._updateActionsSheetTabPosition(position)
+    def _documentTabsPositionChanged(self, position):
+        """  """
+        if self.sender() == self._activeDocument():
+            self._updateActionsSheetTabsPosition(position)
 
 
-    def documentTabBarAutoHideChanged(self, hide):
-
-        document = self._activeDocument()
-        if self.sender() == document:
-
-            self._updateActionSheetTabAutoHide(hide)
+    def _documentTabsAutoHideChanged(self, hide):
+        """  """
+        if self.sender() == self._activeDocument():
+            self._updateActionSheetTabsAutoHide(hide)
 
 
     def _documentDestroyed(self):
@@ -1075,27 +1074,22 @@ class MainWindow(QMainWindow):
         self._documentsArea.setTabBarAutoHide(checked)
 
 
-    def _slotShowSheetTabs(self, checked):
-
-        document = self._activeDocument()
-        if document is not None:
-            document.setTabBarVisible(checked)
-
-
-    def _slotSheetTabPosition(self, action):
-
-        position = QTabWidget.TabPosition(action.data())
-
-        document = self._activeDocument()
-        if document is not None:
-            document.setTabPosition(position)
+    def _slotSheetTabsVisible(self, checked):
+        """  """
+        if self._hasActiveDocument():
+            self._activeDocument().tabsVisible = checked
 
 
-    def _slotSheetTabAutoHide(self, checked):
+    def _slotSheetTabsPosition(self, action):
+        """  """
+        if self._hasActiveDocument():
+            self._activeDocument().tabsPosition = QTabWidget.TabPosition(action.data())
 
-        document = self._activeDocument()
-        if document is not None:
-            document.setTabBarAutoHide(checked)
+
+    def _slotSheetTabsAutoHide(self, checked):
+        """  """
+        if self._hasActiveDocument():
+            self._activeDocument().tabsAutoHide = checked
 
 
     def _slotShowStatusbar(self, checked):

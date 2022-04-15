@@ -21,7 +21,7 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Property, Signal, Qt
+from PySide2.QtCore import Property, Signal, Qt, QSettings
 from PySide2.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 
@@ -29,114 +29,144 @@ class TableDocument(QWidget):
 
     documentCountChanged = Signal(int)
 
-    tabBarVisibleChanged = Signal(bool)
-    tabPositionChanged = Signal(QTabWidget.TabPosition)
-    tabBarAutoHideChanged = Signal(bool)
-
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        self._tabBarVisible = True
-        self._tabPosition = QTabWidget.South
-        self._tabBarAutoHide = True
-
         self._tabBox = QTabWidget()
         self._tabBox.setDocumentMode(True)
         self._tabBox.setMovable(True)
-        self._tabBox.setTabBarAutoHide(self._tabBarAutoHide)
-        self._tabBox.setTabPosition(self._tabPosition)
         self._tabBox.setTabsClosable(True)
-        self._tabBox.tabCloseRequested.connect(self._closeTab)
+        self._tabBox.tabCloseRequested.connect(self._slotCloseTab)
+
+        self._loadSettings()
 
         # Main layout
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self._tabBox)
         self.setLayout(mainLayout)
 
-        self.documentCountChanged.connect(self._addTab)
+        self.documentCountChanged.connect(self._slotAddTab)
 
 
-    def getTabBarVisible(self):
+    def _loadSettings(self):
 
-        return self._tabBarVisible
+        settings = QSettings()
 
+        # Sheet Tabs Visible
+        visible = settings.value("Document/SheetTabsVisible", True, type=bool)
+        self._tabsVisible = visible
+        self._setTabBarVisible(visible)
 
-    def setTabBarVisible(self, visible):
+        # Sheet Tabs Position
+        value = settings.value("Document/SheetTabsPosition", QTabWidget.South, type=int)
+        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.South
+        self._tabBox.setTabPosition(position)
 
-        if visible != self._tabBarVisible:
-            self._tabBarVisible = visible
-            self.tabBarVisibleChanged.emit(visible)
-
-            if self._tabBox.count() == 1 and not self.getTabBarAutoHide():
-                self._tabBox.tabBar().setVisible(visible)
-            if self._tabBox.count() >= 2:
-                self._tabBox.tabBar().setVisible(visible)
-
-
-    tabBarVisible = Property(bool, getTabBarVisible, setTabBarVisible, notify=tabBarVisibleChanged)
-
-
-    def initTabBarVisible(self):
-
-        self._tabBarVisible = True
-        self.tabBarVisibleChanged.emit(self._tabBarVisible)
-
-        if self._tabBox.count() == 1 and not self.getTabBarAutoHide():
-            self._tabBox.tabBar().setVisible(self._tabBarVisible)
-        if self._tabBox.count() >= 2:
-            self._tabBox.tabBar().setVisible(self._tabBarVisible)
+        # Sheet Tabs Auto Hide
+        hide = settings.value("Document/SheetTabsAutoHide", True, type=bool)
+        self._tabBox.setTabBarAutoHide(hide)
 
 
-    def isTabBarVisible(self):
-
+    def _isTabBarVisible(self):
+        """  """
         return self._tabBox.tabBar().isVisible()
 
 
-    def getTabPosition(self):
+    def _setTabBarVisible(self, visible):
+        """  """
+        if not (self._tabBox.count() <= 1 and self.getTabsAutoHide()):
+            self._tabBox.tabBar().setVisible(visible)
 
+
+    #
+    # Property: tabsVisible
+    #
+
+    def getTabsVisible(self):
+        """  """
+        return self._tabsVisible
+
+
+    def setTabsVisible(self, visible):
+        """  """
+        if visible != self.getTabsVisible:
+            self._tabsVisible = visible
+            self._setTabBarVisible(visible)
+            self.tabsVisibleChanged.emit(visible)
+
+
+    def initTabsVisible(self):
+        """  """
+        visible = True
+        self._tabsVisible = visible
+        self._setTabBarVisible(visible)
+        self.tabsVisibleChanged.emit(visible)
+
+
+    tabsVisibleChanged = Signal(bool)
+    tabsVisible = Property(bool, getTabsVisible, setTabsVisible, notify=tabsVisibleChanged)
+
+
+    #
+    # Property: tabsPosition
+    #
+
+    def getTabsPosition(self):
+        """  """
         return self._tabBox.tabPosition()
 
 
-    def setTabPosition(self, position):
-
-        if position != self._tabBox.tabPosition():
+    def setTabsPosition(self, position):
+        """  """
+        if position != self.getTabsPosition():
             self._tabBox.setTabPosition(position)
-            self.tabPositionChanged.emit(position)
+            self.tabsPositionChanged.emit(position)
 
 
-    tabPosition = Property(QTabWidget.TabPosition, getTabPosition, setTabPosition, notify=tabPositionChanged)
+    def initTabsPosition(self):
+        """  """
+        position = QTabWidget.South
+        self._tabBox.setTabPosition(position)
+        self.tabsPositionChanged.emit(position)
 
 
-    def initTabPosition(self):
-
-        self._tabBox.setTabPosition(self._tabPosition)
-        self.tabPositionChanged.emit(self._tabPosition)
+    tabsPositionChanged = Signal(QTabWidget.TabPosition)
+    tabsPosition = Property(QTabWidget.TabPosition, getTabsPosition, setTabsPosition, notify=tabsPositionChanged)
 
 
-    def getTabBarAutoHide(self):
+    #
+    # Property: tabsAutoHide
+    #
 
+    def getTabsAutoHide(self):
+        """  """
         return self._tabBox.tabBarAutoHide()
 
 
-    def setTabBarAutoHide(self, hide):
-
-        if hide != self._tabBox.tabBarAutoHide():
+    def setTabsAutoHide(self, hide):
+        """  """
+        if hide != self.getTabsAutoHide():
             self._tabBox.setTabBarAutoHide(hide)
-            self.tabBarAutoHideChanged.emit(hide)
+            self.tabsAutoHideChanged.emit(hide)
 
 
-    tabBarAutoHide = Property(bool, getTabBarAutoHide, setTabBarAutoHide, notify=tabBarAutoHideChanged)
+    def initTabsAutoHide(self):
+        """  """
+        self._tabBox.setTabBarAutoHide(True)
+        self.tabsAutoHideChanged.emit(True)
 
 
-    def initTabBarAutoHide(self):
-
-        self._tabBox.setTabBarAutoHide(self._tabBarAutoHide)
-        self.tabBarAutoHideChanged.emit(self._tabBarAutoHide)
+    tabsAutoHideChanged = Signal(bool)
+    tabsAutoHide = Property(bool, getTabsAutoHide, setTabsAutoHide, notify=tabsAutoHideChanged)
 
 
-    def _addTab(self, count):
+    #
+    #
+    #
 
+    def _slotAddTab(self, count):
+        """  """
         if not self._tabBox.count():
             for i in range(1, count+1):
                 widget = QWidget()
@@ -144,10 +174,9 @@ class TableDocument(QWidget):
                 self._tabBox.addTab(widget, self.tr("Sheet {0}").format(i))
 
 
-    def _closeTab(self, index):
-
+    def _slotCloseTab(self, index):
+        """  """
         widget = self._tabBox.widget(index)
         if widget is not None:
             widget.close()
-
         self._tabBox.removeTab(index)
