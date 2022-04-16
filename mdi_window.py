@@ -219,11 +219,11 @@ class MdiWindow(QMdiSubWindow):
 
         document = self.widget()
         if document is not None:
-            document.copyUrl()
+            document.copyPathToClipboard()
 
 
     def _slotCopyFilename(self):
 
         document = self.widget()
         if document is not None:
-            document.copyFilename()
+            document.copyFilenameToClipboard()

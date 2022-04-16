@@ -751,27 +751,27 @@ class MainWindow(QMainWindow):
         event.accept()
 
 
-    def _updateWindowTitle(self, docWindow, pathVisible):
+    #
+    # Application window
+    #
 
-        caption = ""
+    def _updateWindowModified(self):
+        """  """
+        docWindow = self._documentsArea.activeSubWindow()
+        modified = docWindow.isWindowModified() if docWindow is not None else False
+        self.setWindowModified(modified)
 
-        if (docWindow is not None):
 
-            caption = docWindow.windowCaption(pathVisible) + " [*]"
-
+    def _updateWindowTitle(self, pathVisible):
+        """  """
+        docWindow = self._documentsArea.activeSubWindow()
+        caption = self.tr("{0} [*]").format(docWindow.windowCaption(pathVisible)) if docWindow is not None else ""
         self.setWindowTitle(caption)
 
 
-    def _updateWindowModified(self, docWindow):
-
-        modified = False
-
-        if (docWindow is not None):
-
-            modified = docWindow.isWindowModified()
-
-        self.setWindowModified(modified)
-
+    #
+    # Document window
+    #
 
     def _docWindowTabBarVisibleChanged(self, visible):
 
@@ -788,6 +788,10 @@ class MainWindow(QMainWindow):
         self._updateActionDocumentTabAutoHide(hide)
 
 
+    #
+    # Document
+    #
+
     def _createDocument(self):
 
         document = MdiDocument()
@@ -800,13 +804,11 @@ class MainWindow(QMainWindow):
         #
         # Connections
 
-        # Url changed: Update sequence number of the file name first, then the window titles
-        document.urlChanged.connect(docWindow.documentUrlChanged)
-        document.urlChanged.connect(self.documentUrlChanged)
-
-        # Modified changed: Update subwindow icon and window modified status
         document.modifiedChanged.connect(docWindow.documentModifiedChanged)
-        document.modifiedChanged.connect(self.documentModifiedChanged)
+        document.modifiedChanged.connect(self._documentModifiedChanged)
+
+        document.urlChanged.connect(docWindow.documentUrlChanged)
+        document.urlChanged.connect(self._documentUrlChanged)
 
         document.tabsVisibleChanged.connect(self._documentTabsVisibleChanged)
         document.tabsPositionChanged.connect(self._documentTabsPositionChanged)
@@ -820,8 +822,8 @@ class MainWindow(QMainWindow):
 
 
         # Initialize
-        document.initUrl()
         document.initModified()
+        document.initUrl()
         document.initTabsVisible()
         document.initTabsPosition()
         document.initTabsAutoHide()
@@ -888,8 +890,8 @@ class MainWindow(QMainWindow):
 
         document = self._extractDocument(subWindow)
 
-        self._updateWindowTitle(subWindow, self._actionShowPath.isChecked())
-        self._updateWindowModified(subWindow)
+        self._updateWindowModified()
+        self._updateWindowTitle(self._actionShowPath.isChecked())
 
         self._updateActionSheetTabsVisible(document.getTabsVisible() if document is not None else True)
         self._updateActionsSheetTabsPosition(document.getTabsPosition() if document is not None else QTabWidget.South)
@@ -899,21 +901,17 @@ class MainWindow(QMainWindow):
         self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
 
 
-    def documentUrlChanged(self):
-
-        document = self._activeDocument()
-        if self.sender() == document:
-
-            self._updateWindowTitle(self._documentsArea.activeSubWindow(), self._actionShowPath.isChecked())
-            self._enableFileActions(not document.getUrl().isEmpty() if document is not None else False)
+    def _documentModifiedChanged(self, modified):
+        """  """
+        if self.sender() == self._activeDocument():
+            self._updateWindowModified()
 
 
-    def documentModifiedChanged(self, modified):
-
-        document = self._activeDocument()
-        if self.sender() == document:
-
-            self._updateWindowModified(self._documentsArea.activeSubWindow())
+    def _documentUrlChanged(self):
+        """  """
+        if self.sender() == self._activeDocument():
+            self._updateWindowTitle(self._actionShowPath.isChecked())
+            self._enableFileActions(not self._activeDocument().getUrl().isEmpty() if self._hasActiveDocument() else False)
 
 
     def _documentTabsVisibleChanged(self, visible):
@@ -942,6 +940,10 @@ class MainWindow(QMainWindow):
 
         self.documentCountChanged.emit(count)
 
+
+    #
+    # Action slots
+    #
 
     def _slotAbout(self):
 
@@ -977,17 +979,15 @@ class MainWindow(QMainWindow):
 
 
     def _slotCopyPath(self):
-
-        document = self._activeDocument()
-        if document is not None:
-            document.copyUrl()
+        """  """
+        if self._hasActiveDocument():
+            self._activeDocument().copyPathToClipboard()
 
 
     def _slotCopyFilename(self):
-
-        document = self._activeDocument()
-        if document is not None:
-            document.copyFilename()
+        """  """
+        if self._hasActiveDocument():
+            self._activeDocument().copyFilenameToClipboard()
 
 
     def _slotCloseOther(self):
@@ -1019,8 +1019,8 @@ class MainWindow(QMainWindow):
 
 
     def _slotShowPath(self, checked):
-
-        self._updateWindowTitle(self._documentsArea.activeSubWindow(), checked)
+        """  """
+        self._updateWindowTitle(checked)
 
 
     def _slotShowMenubar(self, checked):

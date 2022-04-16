@@ -23,16 +23,12 @@
 
 from table_document import TableDocument
 
-from PySide2.QtCore import Property, Signal, QUrl
+from PySide2.QtCore import Property, Signal, Qt, QUrl
 from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QApplication
 
 
 class MdiDocument(TableDocument):
-
-    modifiedChanged = Signal(bool)
-    urlChanged = Signal(object)
-
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -40,55 +36,74 @@ class MdiDocument(TableDocument):
         self._modified = False
         self._url = QUrl()
 
+        self.setAttribute(Qt.WA_DeleteOnClose)
+
+
+    #
+    # Property: modified
+    #
 
     def getModified(self):
-
+        """  """
         return self._modified
 
-    def setModified(self, modified):
 
-        if modified != self._modified:
+    def setModified(self, modified):
+        """  """
+        if modified != self.getModified:
             self._modified = modified
             self.modifiedChanged.emit(modified)
 
 
     def initModified(self):
+        """  """
+        modified = False
+        self._modified = modified
+        self.modifiedChanged.emit(modified)
 
-        self._modified = False
-        self.modifiedChanged.emit(False)
 
-
+    modifiedChanged = Signal(bool)
     modified = Property(bool, getModified, setModified, notify=modifiedChanged)
 
 
-    def getUrl(self):
+    #
+    # Property: url
+    #
 
+    def getUrl(self):
+        """  """
         return self._url
 
 
     def setUrl(self, url):
-
+        """  """
         if url != self._url:
             self._url = url
             self.urlChanged.emit(url)
 
 
     def initUrl(self):
+        """  """
+        url = QUrl()
+        self._url = url
+        self.urlChanged.emit(url)
 
-        self._url = QUrl()
-        self.urlChanged.emit(QUrl())
 
-
+    urlChanged = Signal(object)
     url = Property(QUrl, getUrl, setUrl, notify=urlChanged)
 
 
-    def copyUrl(self):
+    #
+    #
+    #
 
+    def copyPathToClipboard(self):
+        """  """
         if not self._url.isEmpty():
             QApplication.clipboard().setText(self._url.toDisplayString(QUrl.FormattingOptions(QUrl.PreferLocalFile)))
 
 
-    def copyFilename(self):
-
+    def copyFilenameToClipboard(self):
+        """  """
         if not self._url.isEmpty():
             QApplication.clipboard().setText(self._url.fileName())
