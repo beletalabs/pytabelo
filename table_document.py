@@ -31,6 +31,7 @@ class TableDocument(QWidget):
 
 
     def __init__(self, parent=None):
+        """  """
         super().__init__(parent=parent)
 
         self._tabBox = QTabWidget()
@@ -50,7 +51,7 @@ class TableDocument(QWidget):
 
 
     def _loadSettings(self):
-
+        """  """
         settings = QSettings()
 
         # Sheet Tabs Visible
@@ -67,6 +68,10 @@ class TableDocument(QWidget):
         hide = settings.value("Document/SheetTabsAutoHide", True, type=bool)
         self._tabBox.setTabBarAutoHide(hide)
 
+
+    #
+    # Property helper functions
+    #
 
     def _isTabBarVisible(self):
         """  """

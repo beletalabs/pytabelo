@@ -21,139 +21,198 @@
 # along with PyTabelo.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from PySide2.QtCore import Property, Signal, Qt
+from PySide2.QtCore import Property, Signal, Qt, QSettings
 from PySide2.QtWidgets import QMdiArea, QTabBar, QTabWidget
 
 
 class MdiArea(QMdiArea):
 
-    tabBarVisibleChanged = Signal(bool)
-    tabPositionChanged = Signal(QTabWidget.TabPosition)
-    tabBarAutoHideChanged = Signal(bool)
-
-
     def __init__(self, parent=None):
+        """  """
         super().__init__(parent=parent)
 
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        self._loadSettings()
 
-        self._tabBarVisible = True
-        self._tabPosition = QTabWidget.North
-        self._tabBarAutoHide = False
 
+    def _loadSettings(self):
+        """  """
+        settings = QSettings()
+
+        # Document Tabs Visible
+        visible = settings.value("DocumentManager/DocumentTabsVisible", True, type=bool)
+        self._tabsVisible = visible
+        self._setTabBarVisible(visible)
+
+        # Document Tabs Position
+        value = settings.value("DocumentManager/DocumentTabsPosition", QTabWidget.North, type=int)
+        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.North
+        self.setTabPosition(position)
+
+        # Document Tabs Auto Hide
+        hide = settings.value("DocumentManager/DocumentTabsAutoHide", False, type=bool)
+        self._setTabBarAutoHide(hide)
+
+
+    def saveSettings(self):
+        """  """
+        settings = QSettings()
+
+        visible = self.getTabsVisible()
+        settings.setValue("DocumentManager/DocumentTabsVisible", visible)
+
+        position = self.getTabsPosition()
+        settings.setValue("DocumentManager/DocumentTabsPosition", position)
+
+        hide = self.getTabsAutoHide()
+        settings.setValue("DocumentManager/DocumentTabsAutoHide", hide)
+
+
+    #
+    # Property helper functions
+    #
 
     def hasTabBar(self):
-
+        """  """
         return self.findChild(QTabBar) is not None
 
 
-    def isTabBarVisible(self):
-
-        if self.hasTabBar():
-            return self.findChild(QTabBar).isVisible()
-
-        return True
+    def _isTabBarVisible(self):
+        """  """
+        return self.findChild(QTabBar).isVisible() if self.hasTabBar() else False
 
 
-    def getTabBarVisible(self):
-
-        return self._tabBarVisible
-
-
-    def setTabBarVisible(self, visible):
-
-        if self.hasTabBar() and visible != self._tabBarVisible:
-            self._tabBarVisible = visible
-            self.tabBarVisibleChanged.emit(visible)
-
-            if self.subWindowCount() == 1 and not self.getTabBarAutoHide():
-                self.findChild(QTabBar).setVisible(visible)
-            if self.subWindowCount() >= 2:
-                self.findChild(QTabBar).setVisible(visible)
-
-
-    tabBarVisible = Property(bool, getTabBarVisible, setTabBarVisible, notify=tabBarVisibleChanged)
-
-
-    def initTabBarVisible(self):
-
-        self._tabBarVisible = True
-        self.tabBarVisibleChanged.emit(self._tabBarVisible)
-
-        if self.subWindowCount() == 1 and not self.getTabBarAutoHide():
-            self.findChild(QTabBar).setVisible(visible)
-        if self.subWindowCount() >= 2:
+    def _setTabBarVisible(self, visible):
+        """  """
+        if self.hasTabBar() and not (self.getCount() <= 1 and self.getTabsAutoHide()):
             self.findChild(QTabBar).setVisible(visible)
 
 
-    def getTabPosition(self):
-
-        return super().tabPosition()
-
-
-    def setTabPosition(self, position):
-
-        if position != self.getTabPosition():
-            super().setTabPosition(position)
-            self.tabPositionChanged.emit(position)
-
-
-    tabPosition = Property(QTabWidget.TabPosition, getTabPosition, setTabPosition, notify=tabPositionChanged)
-
-
-    def initTabPosition(self):
-
-        super().setTabPosition(self._tabPosition)
-        self.tabPositionChanged.emit(self._tabPosition)
-
-
-    def getTabBarAutoHide(self):
-
+    def _setTabBarAutoHide(self, hide):
+        """  """
         if self.hasTabBar():
-            return self.findChild(QTabBar).autoHide()
-
-        return False
-
-
-    def setTabBarAutoHide(self, hide):
-
-        if self.hasTabBar() and hide != self.getTabBarAutoHide():
             self.findChild(QTabBar).setAutoHide(hide)
-            self.tabBarAutoHideChanged.emit(hide)
 
 
-    tabBarAutoHide = Property(bool, getTabBarAutoHide, setTabBarAutoHide, notify=tabBarAutoHideChanged)
+    #
+    # Property: tabsVisible
+    #
+
+    def getTabsVisible(self):
+        """  """
+        return self._tabsVisible
 
 
-    def initTabBarAutoHide(self):
+    def setTabsVisible(self, visible):
+        """  """
+        if self.hasTabBar() and visible != self.getTabsVisible:
+            self._tabsVisible = visible
+            self._setTabBarVisible(visible)
+            self.tabsVisibleChanged.emit(visible)
 
+
+    def initTabsVisible(self):
+        """  """
         if self.hasTabBar():
-            self.findChild(QTabBar).setAutoHide(self._tabBarAutoHide)
-            self.tabBarAutoHideChanged.emit(self._tabBarAutoHide)
+            visible = True
+            self._tabsVisible = visible
+            self._setTabBarVisible(visible)
+            self.tabsVisibleChanged.emit(visible)
 
+
+    tabsVisibleChanged = Signal(bool)
+    tabsVisible = Property(bool, getTabsVisible, setTabsVisible, notify=tabsVisibleChanged)
+
+
+    #
+    # Property: tabsPosition
+    #
+
+    def getTabsPosition(self):
+        """  """
+        return self.tabPosition()
+
+
+    def setTabsPosition(self, position):
+        """  """
+        if position != self.getTabsPosition():
+            self.setTabPosition(position)
+            self.tabsPositionChanged.emit(position)
+
+
+    def initTabsPosition(self):
+        """  """
+        position = QTabWidget.North
+        self.setTabPosition(position)
+        self.tabsPositionChanged.emit(position)
+
+
+    tabsPositionChanged = Signal(QTabWidget.TabPosition)
+    tabsPosition = Property(QTabWidget.TabPosition, getTabsPosition, setTabsPosition, notify=tabsPositionChanged)
+
+
+    #
+    # Property: tabsAutoHide
+    #
+
+    def getTabsAutoHide(self):
+        """  """
+        return self.findChild(QTabBar).autoHide() if self.hasTabBar() else False
+
+
+    def setTabsAutoHide(self, hide):
+        """  """
+        if self.hasTabBar() and hide != self.getTabsAutoHide():
+            self._setTabBarAutoHide(hide)
+            self.tabsAutoHideChanged.emit(hide)
+
+
+    def initTabsAutoHide(self):
+        """  """
+        if self.hasTabBar():
+            hide = False
+            self._setTabBarAutoHide(hide)
+            self.tabsAutoHideChanged.emit(hide)
+
+
+    tabsAutoHideChanged = Signal(bool)
+    tabsAutoHide = Property(bool, getTabsAutoHide, setTabsAutoHide, notify=tabsAutoHideChanged)
+
+
+    #
+    # Property: count
+    #
+
+    def getCount(self):
+        """  """
+        return len(self.subWindowList())
+
+
+    count = Property(int, getCount)
+
+
+    #
+    #
+    #
 
     def subWindowCount(self):
-
+        """  """
         return len(self.subWindowList())
 
 
     def findSubWindow(self, url):
-
+        """  """
         if url.isEmpty():
             return None
 
-        subWindows = self.subWindowList()
-        for subWindow in subWindows:
-
-            document = subWindow.widget()
-            if document.getUrl() == url:
+        for subWindow in self.subWindowList():
+            if subWindow.widget().getUrl() == url:
                 return subWindow
 
         return None
 
 
     def closeSelectedSubWindow(self, subWindow):
-
+        """  """
         if subWindow is None:
             return None
 
@@ -161,7 +220,7 @@ class MdiArea(QMdiArea):
 
 
     def closeOtherSubWindows(self, subWindow):
-
+        """  """
         subWindows = self.subWindowList()
         if subWindow not in subWindows:
             return None

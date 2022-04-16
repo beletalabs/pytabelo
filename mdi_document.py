@@ -31,6 +31,7 @@ from PySide2.QtWidgets import QApplication
 class MdiDocument(TableDocument):
 
     def __init__(self, parent=None):
+        """  """
         super().__init__(parent=parent)
 
         self._modified = False
