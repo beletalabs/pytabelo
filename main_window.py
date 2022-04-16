@@ -799,33 +799,31 @@ class MainWindow(QMainWindow):
         docWindow.setWidget(document)
         self._documentsArea.addSubWindow(docWindow)
 
-
-        #
-        # Connections
-
-        document.modifiedChanged.connect(docWindow.documentModifiedChanged)
-        document.modifiedChanged.connect(self._documentModifiedChanged)
-
-        document.urlChanged.connect(docWindow.documentUrlChanged)
-        document.urlChanged.connect(self._documentUrlChanged)
-
+        # Connections: Tabs
         document.tabsVisibleChanged.connect(self._documentTabsVisibleChanged)
         document.tabsPositionChanged.connect(self._documentTabsPositionChanged)
         document.tabsAutoHideChanged.connect(self._documentTabsAutoHideChanged)
-
-        docWindow.closeOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
-        docWindow.destroyed.connect(self._documentDestroyed)
-
+        # Connections: Modified
+        document.modifiedChanged.connect(docWindow.documentModifiedChanged)
+        document.modifiedChanged.connect(self._documentModifiedChanged)
+        # Connections: Url
+        document.urlChanged.connect(docWindow.documentUrlChanged)
+        document.urlChanged.connect(self._documentUrlChanged)
+        # Connections: Actions
+        docWindow.actionCloseOtherSubWindows.connect(self._documentsArea.closeOtherSubWindows)
+        docWindow.actionCopyPath.connect(document.copyPathToClipboard)
+        docWindow.actionCopyFilename.connect(document.copyFilenameToClipboard)
+        # Connections: Closed
+        docWindow.destroyed.connect(self._documentClosed)
         self.documentCountChanged.connect(document.documentCountChanged)
-        self.documentCountChanged.connect(docWindow.subWindowCountChanged)
-
+        self.documentCountChanged.connect(docWindow.documentCountChanged)
 
         # Initialize
-        document.initModified()
-        document.initUrl()
         document.initTabsVisible()
         document.initTabsPosition()
         document.initTabsAutoHide()
+        document.initModified()
+        document.initUrl()
 
         return document
 
@@ -934,13 +932,10 @@ class MainWindow(QMainWindow):
             self._updateActionSheetTabsAutoHide(hide)
 
 
-    def _documentDestroyed(self):
-
-        count = self._documentsArea.subWindowCount()
-
-        self._enableActionCloseOther(count >= 2)
-
-        self.documentCountChanged.emit(count)
+    def _documentClosed(self):
+        """  """
+        self.documentCountChanged.emit(self._documentsArea.count)
+        self._enableActionCloseOther(self._documentsArea.count >= 2)
 
 
     #

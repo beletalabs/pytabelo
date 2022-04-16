@@ -30,10 +30,13 @@ from confirmation_dialog import ConfirmationDialog
 
 class MdiWindow(QMdiSubWindow):
 
-    closeOtherSubWindows = Signal(object)
+    actionCloseOtherSubWindows = Signal(object)
+    actionCopyPath = Signal()
+    actionCopyFilename = Signal()
 
 
     def __init__(self, parent=None):
+        """  """
         super().__init__(parent=parent)
 
         self._filenameSequenceNumber = 0
@@ -44,7 +47,7 @@ class MdiWindow(QMdiSubWindow):
 
 
     def _setupActions(self):
-
+        """  """
         menu = self.systemMenu()
         if menu is None:
             return None
@@ -66,19 +69,19 @@ class MdiWindow(QMdiSubWindow):
         self._actionShowPath.setCheckable(True)
         self._actionShowPath.setIcon(QIcon.fromTheme("show-path", QIcon(":/icons/actions/16/show-path.svg")))
         self._actionShowPath.setToolTip(self.tr("Show document path in the tab caption"))
-        self._actionShowPath.toggled.connect(self._slotShowPath)
+        self._actionShowPath.toggled.connect(self._updateWindowTitle)
 
         self._actionCopyPath = QAction(self.tr("Cop&y Path"), self)
         self._actionCopyPath.setObjectName("actionCopyPath")
         self._actionCopyPath.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
         self._actionCopyPath.setToolTip(self.tr("Copy document path to clipboard"))
-        self._actionCopyPath.triggered.connect(self._slotCopyPath)
+        self._actionCopyPath.triggered.connect(self.actionCopyPath)
 
         self._actionCopyFilename = QAction(self.tr("Copy &Filename"), self)
         self._actionCopyFilename.setObjectName("actionCopyFilename")
         self._actionCopyFilename.setIcon(QIcon.fromTheme("edit-copy-path", QIcon(":/icons/actions/16/edit-copy-path.svg")))
         self._actionCopyFilename.setToolTip(self.tr("Copy document filename to clipboard"))
-        self._actionCopyFilename.triggered.connect(self._slotCopyFilename)
+        self._actionCopyFilename.triggered.connect(self.actionCopyFilename)
 
         menu.clear()
         menu.addAction(self._actionClose)
@@ -90,70 +93,54 @@ class MdiWindow(QMdiSubWindow):
 
 
     def _enableActionCloseOther(self, enabled):
-
+        """  """
         self._actionCloseOther.setEnabled(enabled)
 
 
-    def getFilenameSequenceNumber(self):
+    #
+    # Property: filenameSequenceNumber
+    #
 
+    def getFilenameSequenceNumber(self):
+        """  """
         return self._filenameSequenceNumber
 
 
     def setFilenameSequenceNumber(self, number):
-
+        """  """
         if number != self._filenameSequenceNumber:
             self._filenameSequenceNumber = number
+
+
+    def initFilenameSequenceNumber(self):
+        """  """
+        self._filenameSequenceNumber = 0
 
 
     filenameSequenceNumber = Property(int, getFilenameSequenceNumber, setFilenameSequenceNumber)
 
 
-    def _resetFilenameSequenceNumber(self):
-
-        self._filenameSequenceNumber = 0
-
-
     def _latestFilenameSequenceNumber(self, url):
-
+        """  """
         number = 0
 
-        subWindows = self.mdiArea().subWindowList() if self.mdiArea() else []
+        subWindows = self.mdiArea().subWindowList() if self.mdiArea() is not None else []
         for subWindow in subWindows:
-
-            document = subWindow.widget()
-            if document.getUrl().fileName() == url.fileName():
-
-                docWindow = subWindow
-                if docWindow.getFilenameSequenceNumber() > number:
-                    number = docWindow.getFilenameSequenceNumber()
+            if subWindow.widget().getUrl().fileName() == url.fileName():
+                if subWindow.getFilenameSequenceNumber() > number:
+                    number = subWindow.getFilenameSequenceNumber()
 
         return number
 
 
-    def documentUrlChanged(self, url):
-
-        self._resetFilenameSequenceNumber()
-        self.setFilenameSequenceNumber(self._latestFilenameSequenceNumber(url) + 1)
-
-        self._updateWindowTitle(self._actionShowPath.isChecked())
-
-        self._actionShowPath.setEnabled(not url.isEmpty())
-        self._actionCopyPath.setEnabled(not url.isEmpty())
-        self._actionCopyFilename.setEnabled(not url.isEmpty())
-
-
-    def documentModifiedChanged(self, modified):
-
-        self.setWindowModified(modified)
-        self._updateWindowIcon(modified)
-
-
-    def subWindowCountChanged(self, count):
-
-        self._enableActionCloseOther(count >= 2)
-
+    #
+    # Document window
+    #
 
     def windowCaption(self, pathVisible):
+        """  """
+        if self.widget() is None:
+            return None
 
         caption = self.tr("Untitled")
         url = self.widget().getUrl()
@@ -163,10 +150,8 @@ class MdiWindow(QMdiSubWindow):
 
             if pathVisible:
                 caption = url.toString(QUrl.FormattingOptions(QUrl.PreferLocalFile))
-
-                homePath = QDir.homePath()
-                if caption.startswith(homePath):
-                    caption = caption.replace(homePath, "~", 1)
+                if caption.startswith(QDir.homePath()):
+                    caption = caption.replace(QDir.homePath(), "~", 1)
 
             elif url.isLocalFile():
                 caption = url.fileName()
@@ -179,25 +164,50 @@ class MdiWindow(QMdiSubWindow):
 
 
     def _updateWindowTitle(self, pathVisible):
-
-        caption = self.windowCaption(pathVisible)
-        if caption != self.windowTitle:
-            self.setWindowTitle(caption)
+        """  """
+        self.setWindowTitle(self.windowCaption(pathVisible))
 
 
     def _updateWindowIcon(self, modified):
-
-        icon = QIcon()
-
-        if modified:
-            icon = QIcon.fromTheme("document-save", QIcon(":/icons/actions/16/document-save.svg"))
-
+        """  """
+        icon = QIcon.fromTheme("document-save", QIcon(":/icons/actions/16/document-save.svg")) if modified else QIcon()
         self.setWindowIcon(icon)
 
 
-    def _slotCloseOther(self):
+    #
+    # Document
+    #
 
-        count = len(self.mdiArea().subWindowList()) if self.mdiArea() else 0
+    def documentModifiedChanged(self, modified):
+        """  """
+        self.setWindowModified(modified)
+        self._updateWindowIcon(modified)
+
+
+    def documentUrlChanged(self, url):
+        """  """
+        self.initFilenameSequenceNumber()
+        self.setFilenameSequenceNumber(self._latestFilenameSequenceNumber(url) + 1)
+
+        self._updateWindowTitle(self._actionShowPath.isChecked())
+
+        self._actionShowPath.setEnabled(not url.isEmpty())
+        self._actionCopyPath.setEnabled(not url.isEmpty())
+        self._actionCopyFilename.setEnabled(not url.isEmpty())
+
+
+    def documentCountChanged(self, count):
+        """  """
+        self._enableActionCloseOther(count >= 2)
+
+
+    #
+    # Action slots
+    #
+
+    def _slotCloseOther(self):
+        """  """
+        count = len(self.mdiArea().subWindowList()) if self.mdiArea() is not None else 0
         if count >= 2:
 
             title = self.tr("Close all documents except this one")
@@ -207,23 +217,4 @@ class MdiWindow(QMdiSubWindow):
             default = QMessageBox.Yes
 
             if ConfirmationDialog.warning(self, title, text, buttons, default, "ConfirmCloseOtherDocuments") != QMessageBox.Cancel:
-                self.closeOtherSubWindows.emit(self)
-
-
-    def _slotShowPath(self):
-
-        self._updateWindowTitle(self._actionShowPath.isChecked())
-
-
-    def _slotCopyPath(self):
-
-        document = self.widget()
-        if document is not None:
-            document.copyPathToClipboard()
-
-
-    def _slotCopyFilename(self):
-
-        document = self.widget()
-        if document is not None:
-            document.copyFilenameToClipboard()
+                self.actionCloseOtherSubWindows.emit(self)
