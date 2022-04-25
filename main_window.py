@@ -28,9 +28,9 @@ from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QFileDialog, 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
 from confirmation_dialog import ConfirmationDialog
+from document_manager import DocumentManager
 from document_widget import DocumentWidget
 from document_window import DocumentWindow
-from mdi_area import MdiArea
 from message_box import MessageBox
 from preferences_dialog import PreferencesDialog
 
@@ -47,8 +47,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(QIcon(":/icons/apps/16/tabelo.svg"))
 
-        self._documentsArea = MdiArea()
-        self._documentsArea.setViewMode(MdiArea.TabbedView)
+        self._documentsArea = DocumentManager()
+        self._documentsArea.setViewMode(DocumentManager.TabbedView)
         self._documentsArea.setDocumentMode(True)
         self._documentsArea.setTabsClosable(True)
         self._documentsArea.setTabsMovable(True)

@@ -25,7 +25,7 @@ from PySide2.QtCore import Property, Signal, Qt, QSettings
 from PySide2.QtWidgets import QMdiArea, QTabBar, QTabWidget
 
 
-class MdiArea(QMdiArea):
+class DocumentManager(QMdiArea):
 
     def __init__(self, parent=None):
         """  """
