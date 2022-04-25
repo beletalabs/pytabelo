@@ -37,7 +37,7 @@ from preferences_dialog import PreferencesDialog
 import icons_rc
 
 
-class MainWindow(QMainWindow):
+class ApplicationWindow(QMainWindow):
 
     documentCountChanged = Signal(int)
 

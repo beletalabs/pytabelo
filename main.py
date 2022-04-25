@@ -26,7 +26,7 @@ import sys
 from PySide2.QtCore import QCommandLineParser, QDir, QUrl
 from PySide2.QtWidgets import QApplication
 
-from main_window import MainWindow
+from application_window import ApplicationWindow
 
 
 if __name__ == "__main__":
@@ -48,9 +48,9 @@ if __name__ == "__main__":
 
 
     #
-    # Main window
+    # Application window
 
-    window = MainWindow()
+    window = ApplicationWindow()
     window.show()
 
     urls = parser.positionalArguments()
