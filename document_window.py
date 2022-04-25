@@ -28,7 +28,7 @@ from PySide2.QtWidgets import QAction, QMdiSubWindow, QMessageBox
 from confirmation_dialog import ConfirmationDialog
 
 
-class MdiWindow(QMdiSubWindow):
+class DocumentWindow(QMdiSubWindow):
 
     actionCloseOtherSubWindows = Signal(object)
     actionCopyPath = Signal()

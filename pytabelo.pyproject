@@ -6,11 +6,11 @@
         "confirmation_dialog.py",
         "dialog_header_box.py",
         "document_widget.py",
+        "document_window.py",
         "icons.qrc",
         "main.py",
         "main_window.py",
         "mdi_area.py",
-        "mdi_window.py",
         "message_box.py",
         "preferences_dialog.py",
         "table_document.py"
