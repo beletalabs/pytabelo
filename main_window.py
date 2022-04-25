@@ -28,8 +28,8 @@ from PySide2.QtWidgets import QAction, QActionGroup, QApplication, QFileDialog, 
 from about_dialog import AboutDialog
 from colophon_dialog import ColophonDialog
 from confirmation_dialog import ConfirmationDialog
+from document_widget import DocumentWidget
 from mdi_area import MdiArea
-from mdi_document import MdiDocument
 from mdi_window import MdiWindow
 from message_box import MessageBox
 from preferences_dialog import PreferencesDialog
@@ -793,7 +793,7 @@ class MainWindow(QMainWindow):
 
     def _createDocument(self):
 
-        document = MdiDocument()
+        document = DocumentWidget()
 
         docWindow = MdiWindow()
         docWindow.setWidget(document)

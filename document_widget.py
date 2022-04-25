@@ -28,7 +28,7 @@ from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QApplication
 
 
-class MdiDocument(TableDocument):
+class DocumentWidget(TableDocument):
 
     def __init__(self, parent=None):
         """  """
