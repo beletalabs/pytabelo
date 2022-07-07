@@ -2,7 +2,7 @@
 #
 # Copyright 2022 naracanto <https://naracanto.github.io>.
 #
-# This file is part of PyTabelo <https://github.com/cutelabs/pytabelo>.
+# This file is part of PyTabelo <https://github.com/beletalabs/pytabelo>.
 #
 # PyTabelo is an open source table editor written in Python using
 # the Python bindings for the Qt framework.
