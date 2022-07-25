@@ -87,11 +87,15 @@ class DocumentWidget(TableDocument):
             self.urlChanged.emit(url)
 
 
+    def resetUrl(self):
+        """  """
+        self._url = QUrl()
+        self.urlChanged.emit(QUrl())
+
+
     def initUrl(self):
         """  """
-        url = QUrl()
-        self._url = url
-        self.urlChanged.emit(url)
+        self.urlChanged.emit(self._url)
 
 
     urlChanged = Signal(object)
