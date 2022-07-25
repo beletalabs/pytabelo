@@ -44,27 +44,31 @@ class DocumentWidget(TableDocument):
     # Property: modified
     #
 
-    def getModified(self):
+    def isModified(self):
         """  """
         return self._modified
 
 
     def setModified(self, modified):
         """  """
-        if modified != self.getModified:
+        if modified != self._modified:
             self._modified = modified
             self.modifiedChanged.emit(modified)
 
 
+    def resetModified(self):
+        """  """
+        self._modified = False
+        self.modifiedChanged.emit(False)
+
+
     def initModified(self):
         """  """
-        modified = False
-        self._modified = modified
-        self.modifiedChanged.emit(modified)
+        self.modifiedChanged.emit(self._modified)
 
 
     modifiedChanged = Signal(bool)
-    modified = Property(bool, getModified, setModified, notify=modifiedChanged)
+    modified = Property(bool, isModified, setModified, notify=modifiedChanged)
 
 
     #
