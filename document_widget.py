@@ -109,6 +109,15 @@ class DocumentWidget(TableDocument):
 
 
     #
+    # Document
+    #
+
+    def documentCountChanged(self, count):
+        """  """
+        self.slotAddTab(count)
+
+
+    #
     #
     #
 

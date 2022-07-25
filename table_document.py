@@ -27,9 +27,6 @@ from PySide2.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 class TableDocument(QWidget):
 
-    documentCountChanged = Signal(int)
-
-
     def __init__(self, parent=None):
         """  """
         super().__init__(parent=parent)
@@ -37,7 +34,7 @@ class TableDocument(QWidget):
         self._tabBox = QTabWidget()
         self._tabBox.setDocumentMode(True)
         self._tabBox.setMovable(True)
-        self._tabBox.setTabsClosable(True)
+#        self._tabBox.setTabsClosable(True)
         self._tabBox.tabCloseRequested.connect(self._slotCloseTab)
 
         self._loadSettings()
@@ -46,8 +43,6 @@ class TableDocument(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self._tabBox)
         self.setLayout(mainLayout)
-
-        self.documentCountChanged.connect(self._slotAddTab)
 
 
     def _loadSettings(self):
@@ -172,10 +167,10 @@ class TableDocument(QWidget):
 
 
     #
-    #
+    # Slots
     #
 
-    def _slotAddTab(self, count):
+    def slotAddTab(self, count):
         """  """
         if not self._tabBox.count():
             for i in range(1, count+1):
@@ -183,10 +178,17 @@ class TableDocument(QWidget):
                 widget.setAttribute(Qt.WA_DeleteOnClose)
                 self._tabBox.addTab(widget, self.tr("Sheet {0}").format(i))
 
+        if self._tabBox.count() > 1:
+            self._tabBox.setTabsClosable(True)
+
 
     def _slotCloseTab(self, index):
         """  """
-        widget = self._tabBox.widget(index)
-        if widget is not None:
-            widget.close()
-        self._tabBox.removeTab(index)
+        if self._tabBox.count() > 1:
+            widget = self._tabBox.widget(index)
+            if widget is not None:
+                widget.close()
+                self._tabBox.removeTab(index)
+
+        if self._tabBox.count() <= 1:
+            self._tabBox.setTabsClosable(False)
