@@ -69,6 +69,11 @@ class TableDocument(QWidget):
         self._tabBox.setTabBarAutoHide(hide)
 
 
+    def saveSettings(self):
+        """  """
+        settings = QSettings()
+
+
     #
     # Property helper functions
     #

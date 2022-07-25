@@ -40,6 +40,12 @@ class DocumentWidget(TableDocument):
         self.setAttribute(Qt.WA_DeleteOnClose)
 
 
+    def closeEvent(self, event):
+        """  """
+        self.saveSettings()
+        event.accept()
+
+
     #
     # Property: modified
     #
