@@ -31,6 +31,8 @@ class TableDocument(QWidget):
         """  """
         super().__init__(parent=parent)
 
+        self._tabBarVisible = True
+
         self._tabBox = QTabWidget()
         self._tabBox.setDocumentMode(True)
         self._tabBox.setMovable(True)
@@ -49,9 +51,9 @@ class TableDocument(QWidget):
         """  """
         settings = QSettings()
 
-        # Sheet Tabs Visible
-        visible = settings.value("Document/SheetTabsVisible", True, type=bool)
-        self._tabsVisible = visible
+        # Sheet Tab Bar Visible
+        visible = settings.value("Document/SheetTabBarVisible", True, type=bool)
+        self._tabBarVisible = visible
         self._setTabBarVisible(visible)
 
         # Sheet Tabs Position
@@ -68,49 +70,49 @@ class TableDocument(QWidget):
         """  """
         settings = QSettings()
 
+        # Sheet Tab Bar Visible
+        visible = self._tabBarVisible
+        settings.setValue("Document/SheetTabBarVisible", visible)
+
 
     #
-    # Property helper functions
+    # Property: tabBarVisible
     #
 
-    def _isTabBarVisible(self):
+    def isTabBarVisible(self):
         """  """
-        return self._tabBox.tabBar().isVisible()
+        return self._tabBarVisible
+
+
+    def setTabBarVisible(self, visible):
+        """  """
+        if visible != self._tabBarVisible:
+            self._tabBarVisible = visible
+            self._setTabBarVisible(self._tabBarVisible)
+            self.tabBarVisibleChanged.emit(self._tabBarVisible)
+
+
+    def resetTabBarVisible(self):
+        """  """
+        self._tabBarVisible = True
+        self._setTabBarVisible(self._tabBarVisible)
+        self.tabBarVisibleChanged.emit(self._tabBarVisible)
+
+
+    def initTabBarVisible(self):
+        """  """
+        self._setTabBarVisible(self._tabBarVisible)
+        self.tabBarVisibleChanged.emit(self._tabBarVisible)
+
+
+    tabBarVisibleChanged = Signal(bool)
+    tabBarVisible = Property(bool, isTabBarVisible, setTabBarVisible, notify=tabBarVisibleChanged)
 
 
     def _setTabBarVisible(self, visible):
         """  """
-        if not (self._tabBox.count() <= 1 and self.getTabsAutoHide()):
+        if not (self._tabBox.count() <= 1 and self._tabBox.tabBarAutoHide()):
             self._tabBox.tabBar().setVisible(visible)
-
-
-    #
-    # Property: tabsVisible
-    #
-
-    def getTabsVisible(self):
-        """  """
-        return self._tabsVisible
-
-
-    def setTabsVisible(self, visible):
-        """  """
-        if visible != self.getTabsVisible:
-            self._tabsVisible = visible
-            self._setTabBarVisible(visible)
-            self.tabsVisibleChanged.emit(visible)
-
-
-    def initTabsVisible(self):
-        """  """
-        visible = True
-        self._tabsVisible = visible
-        self._setTabBarVisible(visible)
-        self.tabsVisibleChanged.emit(visible)
-
-
-    tabsVisibleChanged = Signal(bool)
-    tabsVisible = Property(bool, getTabsVisible, setTabsVisible, notify=tabsVisibleChanged)
 
 
     #

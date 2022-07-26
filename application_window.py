@@ -800,7 +800,7 @@ class ApplicationWindow(QMainWindow):
         self._documentsArea.addSubWindow(docWindow)
 
         # Connections: Tabs
-        document.tabsVisibleChanged.connect(self._documentTabsVisibleChanged)
+        document.tabBarVisibleChanged.connect(self._documentTabsVisibleChanged)
         document.tabsPositionChanged.connect(self._documentTabsPositionChanged)
         document.tabsAutoHideChanged.connect(self._documentTabsAutoHideChanged)
         # Connections: Modified
@@ -819,7 +819,7 @@ class ApplicationWindow(QMainWindow):
         self.documentCountChanged.connect(docWindow.documentCountChanged)
 
         # Initialize
-        document.initTabsVisible()
+        document.initTabBarVisible()
         document.initTabsPosition()
         document.initTabsAutoHide()
         document.initModified()
@@ -893,7 +893,7 @@ class ApplicationWindow(QMainWindow):
         self._updateWindowModified()
         self._updateWindowTitle(self._actionShowPath.isChecked())
 
-        self._updateActionSheetTabsVisible(document.getTabsVisible() if document is not None else True)
+        self._updateActionSheetTabsVisible(document.isTabBarVisible() if document is not None else True)
         self._updateActionsSheetTabsPosition(document.getTabsPosition() if document is not None else QTabWidget.South)
         self._updateActionSheetTabsAutoHide(document.getTabsAutoHide() if document is not None else True)
 
@@ -1072,7 +1072,7 @@ class ApplicationWindow(QMainWindow):
     def _slotSheetTabsVisible(self, checked):
         """  """
         if self._hasActiveDocument():
-            self._activeDocument().tabsVisible = checked
+            self._activeDocument().setTabBarVisible(checked)
 
 
     def _slotSheetTabsPosition(self, action):
