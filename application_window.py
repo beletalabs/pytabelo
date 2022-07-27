@@ -801,7 +801,7 @@ class ApplicationWindow(QMainWindow):
 
         # Connections: Tabs
         document.tabBarVisibleChanged.connect(self._documentTabsVisibleChanged)
-        document.tabsPositionChanged.connect(self._documentTabsPositionChanged)
+        document.tabBarPositionChanged.connect(self._documentTabsPositionChanged)
         document.tabsAutoHideChanged.connect(self._documentTabsAutoHideChanged)
         # Connections: Modified
         document.modifiedChanged.connect(docWindow.documentModifiedChanged)
@@ -820,7 +820,7 @@ class ApplicationWindow(QMainWindow):
 
         # Initialize
         document.initTabBarVisible()
-        document.initTabsPosition()
+        document.initTabBarPosition()
         document.initTabsAutoHide()
         document.initModified()
         document.initUrl()
@@ -894,7 +894,7 @@ class ApplicationWindow(QMainWindow):
         self._updateWindowTitle(self._actionShowPath.isChecked())
 
         self._updateActionSheetTabsVisible(document.isTabBarVisible() if document is not None else True)
-        self._updateActionsSheetTabsPosition(document.getTabsPosition() if document is not None else QTabWidget.South)
+        self._updateActionsSheetTabsPosition(document.getTabBarPosition() if document is not None else QTabWidget.South)
         self._updateActionSheetTabsAutoHide(document.getTabsAutoHide() if document is not None else True)
 
         self._enableActions(document is not None)
@@ -1078,7 +1078,7 @@ class ApplicationWindow(QMainWindow):
     def _slotSheetTabsPosition(self, action):
         """  """
         if self._hasActiveDocument():
-            self._activeDocument().tabsPosition = QTabWidget.TabPosition(action.data())
+            self._activeDocument().setTabBarPosition(QTabWidget.TabPosition(action.data()))
 
 
     def _slotSheetTabsAutoHide(self, checked):

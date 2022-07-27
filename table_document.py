@@ -56,9 +56,10 @@ class TableDocument(QWidget):
         self._tabBarVisible = visible
         self._setTabBarVisible(visible)
 
-        # Sheet Tabs Position
-        value = settings.value("Document/SheetTabsPosition", QTabWidget.South, type=int)
-        position = QTabWidget.TabPosition(value) if QTabWidget.TabPosition(value) in [QTabWidget.North, QTabWidget.South] else QTabWidget.South
+        # Sheet Tab Bar Position
+        value = settings.value("Document/SheetTabBarPosition", QTabWidget.South, type=int)
+        values = (int(QTabWidget.North), int(QTabWidget.South))
+        position = QTabWidget.TabPosition(value) if value in values else QTabWidget.South
         self._tabBox.setTabPosition(position)
 
         # Sheet Tabs Auto Hide
@@ -116,30 +117,34 @@ class TableDocument(QWidget):
 
 
     #
-    # Property: tabsPosition
+    # Property: tabBarPosition
     #
 
-    def getTabsPosition(self):
+    def getTabBarPosition(self):
         """  """
         return self._tabBox.tabPosition()
 
 
-    def setTabsPosition(self, position):
+    def setTabBarPosition(self, position):
         """  """
-        if position != self.getTabsPosition():
+        if position != self.getTabBarPosition():
             self._tabBox.setTabPosition(position)
-            self.tabsPositionChanged.emit(position)
+            self.tabBarPositionChanged.emit(self.getTabBarPosition())
 
 
-    def initTabsPosition(self):
+    def resetTabBarPosition(self):
         """  """
-        position = QTabWidget.South
-        self._tabBox.setTabPosition(position)
-        self.tabsPositionChanged.emit(position)
+        self._tabBox.setTabPosition(QTabWidget.South)
+        self.tabsPositionChanged.emit(self.getTabBarPosition())
 
 
-    tabsPositionChanged = Signal(QTabWidget.TabPosition)
-    tabsPosition = Property(QTabWidget.TabPosition, getTabsPosition, setTabsPosition, notify=tabsPositionChanged)
+    def initTabBarPosition(self):
+        """  """
+        self.tabBarPositionChanged.emit(self.getTabBarPosition())
+
+
+    tabBarPositionChanged = Signal(QTabWidget.TabPosition)
+    tabBarPosition = Property(QTabWidget.TabPosition, getTabBarPosition, setTabBarPosition, notify=tabBarPositionChanged)
 
 
     #
